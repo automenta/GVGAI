@@ -121,7 +121,7 @@ public class ShootAvatar extends OrientedAvatar
     public void postProcess()
     {
         //Define actions here first.
-        if(actions.size()==0)
+        if(actions.isEmpty())
         {
             actions.add(Types.ACTIONS.ACTION_USE);
             actions.add(Types.ACTIONS.ACTION_LEFT);
@@ -168,7 +168,7 @@ public class ShootAvatar extends OrientedAvatar
     
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
         if(ammo != null) result.addAll(Arrays.asList(ammos));
     	if(stype != null) result.addAll(Arrays.asList(stypes));
     	

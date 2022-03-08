@@ -6,6 +6,7 @@ import ontology.Types;
 import tools.Vector2d;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 /**
  * Created by dperez on 14/01/16.
@@ -20,7 +21,7 @@ public class PathFinder {
     //All types are obstacles except the ones included in this array
     public ArrayList<Integer> obstacleItypes;
 
-    public ArrayList<Observation> grid[][];
+    public ArrayList<Observation>[][] grid;
 
 
     private static int[] x_arrNeig = null;
@@ -42,10 +43,10 @@ public class PathFinder {
 
         if(VERBOSE)
         {
-            for(Integer pathId : astar.pathCache.keySet())
+            for(Map.Entry<Integer, ArrayList<Node>> entry : astar.pathCache.entrySet())
             {
-                ArrayList<Node> nodes = astar.pathCache.get(pathId);
-                astar.printPath(pathId, nodes);
+                ArrayList<Node> nodes = entry.getValue();
+                astar.printPath(entry.getKey(), nodes);
             }
         }
     }
@@ -117,7 +118,7 @@ public class PathFinder {
     }
 
     public ArrayList<Node> getNeighbours(Node node) {
-        ArrayList<Node> neighbours = new ArrayList<Node>();
+        ArrayList<Node> neighbours = new ArrayList<>();
         int x = (int) (node.position.x);
         int y = (int) (node.position.y);
 

@@ -41,7 +41,7 @@ public class NullAvatar extends HorizontalAvatar
     public void postProcess()
     {
         //Define actions here first.
-        if(actions.size()==0)
+        if(actions.isEmpty())
         {
             actions.add(Types.ACTIONS.ACTION_NIL);
         }
@@ -64,8 +64,7 @@ public class NullAvatar extends HorizontalAvatar
     
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
-    	
-    	return result;
+
+        return new ArrayList<>();
     }
 }

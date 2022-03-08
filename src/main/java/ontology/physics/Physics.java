@@ -15,7 +15,7 @@ import java.awt.*;
  */
 public interface Physics
 {
-    public Types.MOVEMENT passiveMovement(VGDLSprite sprite);
-    public Types.MOVEMENT activeMovement(VGDLSprite sprite, Direction action, double speed);
-    public double distance(Rectangle r1, Rectangle r2);
+    Types.MOVEMENT passiveMovement(VGDLSprite sprite);
+    Types.MOVEMENT activeMovement(VGDLSprite sprite, Direction action, double speed);
+    double distance(Rectangle r1, Rectangle r2);
 }

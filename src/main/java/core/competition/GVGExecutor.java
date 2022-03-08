@@ -3,7 +3,6 @@ package core.competition;
 import tracks.ArcadeMachine;
 
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.util.ArrayList;
 import java.util.Random;
@@ -54,7 +53,7 @@ public class GVGExecutor {
                 "\t\t[Optional]\n" +
                 "\t\t[Default: 1 repetition.]\n" +
                 "\t\t[Ex: -rep 5]\n");
-        System.out.printf("\tComplete example:\n" +
+        System.out.print("\tComplete example:\n" +
                 "\t\tjava GVGExecutor -g examples/gridphysics/aliens.txt:examples/gridphysics/sokoban.txt -l examples/gridphysics/aliens_lvl0.txt;examples/gridphysics/aliens_lvl1.txt:examples/gridphysics/sokoban_lvl0.txt;examples/gridphysics/sokoban_lvl1.txt;examples/gridphysics/sokoban_lvl2.txt -ag tracks.singlePlayer.deprecated.sampleMCTS.Agent -res output_game1.txt:output_game2.txt -seed 1342:3513 -vis 1 -rep 5");
 
         //Other examples:
@@ -72,12 +71,12 @@ public class GVGExecutor {
             gameFiles = arg2.split(":");
         else if(arg1.equalsIgnoreCase("-l"))
         {
-            String allLevels[] = arg2.split(";");
+            String[] allLevels = arg2.split(";");
             levelFiles = new ArrayList[allLevels.length];
             for(int i = 0; i < allLevels.length; ++i)
             {
                 levelFiles[i] = new ArrayList<>();
-                String levels[] = allLevels[i].split(":");
+                String[] levels = allLevels[i].split(":");
                 for(String l : levels)
                     levelFiles[i].add(l);
             }
@@ -85,12 +84,12 @@ public class GVGExecutor {
         else if(arg1.equalsIgnoreCase("-ag"))
             agent = arg2;
         else if(arg1.equalsIgnoreCase("-act"))
-            saveActions = Integer.parseInt(arg2) == 0 ? false : true;
+            saveActions = Integer.parseInt(arg2) != 0;
         else if(arg1.equalsIgnoreCase("-res"))
             resultFiles = arg2.split(":");
         else if(arg1.equalsIgnoreCase("-sds"))
         {
-            String allSeeds [] = arg2.split(":");
+            String[] allSeeds = arg2.split(":");
             seeds = new int[allSeeds.length];
             for(int i = 0; i < seeds.length; ++i)
             {
@@ -98,12 +97,12 @@ public class GVGExecutor {
             }
         }
         else if(arg1.equalsIgnoreCase("-vis"))
-            visibility = Integer.parseInt(arg2) == 0 ? false : true;
+            visibility = Integer.parseInt(arg2) != 0;
         else if(arg1.equalsIgnoreCase("-rep"))
             repetitions = Integer.parseInt(arg2);
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         if(args.length < 6 || (args.length % 2 != 0))
         {
@@ -147,18 +146,18 @@ public class GVGExecutor {
                 String outputFile = resultFiles.length==1? resultFiles[0] : resultFiles[i];
 
                 if(resultFiles.length==1 && writer==null)
-                    writer = new BufferedWriter(new FileWriter(new File(outputFile)));
+                    writer = new BufferedWriter(new FileWriter(outputFile));
                 else if(resultFiles.length > 1)
                 {
                     if(writer != null)
                         writer.close();
-                    writer = new BufferedWriter(new FileWriter(new File(outputFile)));
+                    writer = new BufferedWriter(new FileWriter(outputFile));
                 }
 
 
                 String game = gameFiles[i];
                 int num_levels = levelFiles[i].size();
-                String levels[] = new String[num_levels];
+                String[] levels = new String[num_levels];
 
                 //For each level:
                 for (int j = 0; j < num_levels; ++j) {

@@ -11,6 +11,7 @@ import tools.Vector2d;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.Random;
 
@@ -50,8 +51,8 @@ public class AlternateChaser extends RandomNPC
     {
         super.loadDefaults();
         fleeing = false;
-        targets = new ArrayList<VGDLSprite>();
-        actions = new ArrayList<Direction>();
+        targets = new ArrayList<>();
+        actions = new ArrayList<>();
     }
 
     public void postProcess()
@@ -90,7 +91,7 @@ public class AlternateChaser extends RandomNPC
 
         //Choose randomly an action among the ones that allows me to chase.
         Direction act;
-        if(actions.size() == 0)
+        if(actions.isEmpty())
         {
             //unless, no actions really take me closer to anybody!
             act = (Direction) Utils.choice(Types.DBASEDIRS,game.getRandomGenerator());
@@ -132,11 +133,9 @@ public class AlternateChaser extends RandomNPC
 
         int targetSpriteId = -1;
         int numChasing = 0;
-        for (int i = 0; i < itype1.length; i++)
-            numChasing += game.getNumSprites(itype1[i]);
+        for (int k : itype1) numChasing += game.getNumSprites(k);
         int numFleeing = 0;
-        for (int i = 0; i < itype2.length; i++)
-            numChasing += game.getNumSprites(itype2[i]);
+        for (int j : itype2) numChasing += game.getNumSprites(j);
 
         if(numChasing > numFleeing)
         {
@@ -196,24 +195,22 @@ public class AlternateChaser extends RandomNPC
         targetSprite.stype2 = this.stype2;
         targetSprite.itype1 = this.itype1.clone();
         targetSprite.itype2 = this.itype2.clone();
-        targetSprite.targets = new ArrayList<VGDLSprite>();
-        targetSprite.actions = new ArrayList<Direction>();
+        targetSprite.targets = new ArrayList<>();
+        targetSprite.actions = new ArrayList<>();
         super.copyTo(targetSprite);
     }
 
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
         String[] stypes1 = stype1.split(",");
         String[] stypes2 = stype2.split(",");
 
     	if(stypes1.length > 0) {
-    	    for (String s : stypes1)
-    	        result.add(s);
+            result.addAll(Arrays.asList(stypes1));
         }
     	if(stypes2.length > 0) {
-            for (String s : stypes2)
-                result.add(s);
+            result.addAll(Arrays.asList(stypes2));
         }
     	
     	return result;

@@ -27,7 +27,7 @@ public class WallStop extends Effect
     public WallStop(InteractionContent cnt)
     {
         lastGameTime = -1;
-        spritesThisCycle = new ArrayList<VGDLSprite>();
+        spritesThisCycle = new ArrayList<>();
         this.parseParameters(cnt);
     }
 

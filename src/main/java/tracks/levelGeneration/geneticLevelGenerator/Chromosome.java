@@ -14,8 +14,8 @@ import tracks.levelGeneration.constraints.CombinedConstraints;
 
 import java.lang.reflect.Constructor;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 public class Chromosome implements Comparable<Chromosome>{
 
@@ -62,10 +62,10 @@ public class Chromosome implements Comparable<Chromosome>{
 		this.level = new ArrayList[height][width];
 		for(int y = 0; y < height; y++){
 			for(int x = 0; x < width; x++){
-				this.level[y][x] = new ArrayList<String>();
+				this.level[y][x] = new ArrayList<>();
 			}
 		}
-		this.fitness = new ArrayList<Double>();
+		this.fitness = new ArrayList<>();
 		this.calculated = false;
 		this.stateObs = null;
 	}
@@ -95,7 +95,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	private void constructAgent(){
 		try{
 			Class agentClass = Class.forName(SharedData.AGENT_NAME);
-			Constructor agentConst = agentClass.getConstructor(new Class[]{StateObservation.class, ElapsedCpuTimer.class});
+			Constructor agentConst = agentClass.getConstructor(StateObservation.class, ElapsedCpuTimer.class);
 			automatedAgent = (AbstractPlayer)agentConst.newInstance(getStateObservation().copy(), null);
 		}
 		catch(Exception e){
@@ -104,7 +104,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		
 		try{
 			Class agentClass = Class.forName(SharedData.NAIVE_AGENT_NAME);
-			Constructor agentConst = agentClass.getConstructor(new Class[]{StateObservation.class, ElapsedCpuTimer.class});
+			Constructor agentConst = agentClass.getConstructor(StateObservation.class, ElapsedCpuTimer.class);
 			naiveAgent = (AbstractPlayer)agentConst.newInstance(getStateObservation().copy(), null);
 		}
 		catch(Exception e){
@@ -113,7 +113,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		
 		try{
 			Class agentClass = Class.forName(SharedData.NAIVE_AGENT_NAME);
-			Constructor agentConst = agentClass.getConstructor(new Class[]{StateObservation.class, ElapsedCpuTimer.class});
+			Constructor agentConst = agentClass.getConstructor(StateObservation.class, ElapsedCpuTimer.class);
 			doNothingAgent = (AbstractPlayer)agentConst.newInstance(getStateObservation().copy(), null);
 		}
 		catch(Exception e){
@@ -159,7 +159,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	 * @return	the current children from the crossover process
 	 */
 	public ArrayList<Chromosome> crossOver(Chromosome c){
-		ArrayList<Chromosome> children = new ArrayList<Chromosome>();
+		ArrayList<Chromosome> children = new ArrayList<>();
 		children.add(new Chromosome(level[0].length, level.length));
 		children.add(new Chromosome(level[0].length, level.length));
 
@@ -210,7 +210,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		for(int i = 0; i < SharedData.MUTATION_AMOUNT; i++)
 		{
 			int solidFrame = 0;
-			if(SharedData.gameAnalyzer.getSolidSprites().size() > 0){
+			if(!SharedData.gameAnalyzer.getSolidSprites().isEmpty()){
 				solidFrame = 2;
 			}
 			int pointX = SharedData.random.nextInt(level[0].length - solidFrame) + solidFrame / 2;
@@ -218,7 +218,7 @@ public class Chromosome implements Comparable<Chromosome>{
 			//insert new random sprite to a new random free position
 			if(SharedData.random.nextDouble() < SharedData.INSERTION_PROB){
 				String spriteName = allSprites.get(SharedData.random.nextInt(allSprites.size())).name;
-				ArrayList<SpritePointData> freePositions = getFreePositions(new ArrayList<String>(Arrays.asList(new String[]{spriteName})));
+				ArrayList<SpritePointData> freePositions = getFreePositions(new ArrayList<>(List.of(spriteName)));
 				int index = SharedData.random.nextInt(freePositions.size());
 				level[freePositions.get(index).y][freePositions.get(index).x].add(spriteName);
 			}
@@ -248,7 +248,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	 * @return			list of all free position points
 	 */
 	private ArrayList<SpritePointData> getFreePositions(ArrayList<String> sprites){
-		ArrayList<SpritePointData> positions = new ArrayList<SpritePointData>();
+		ArrayList<SpritePointData> positions = new ArrayList<>();
 		
 		for(int y = 0; y < level.length; y++){
 			for(int x = 0; x < level[y].length; x++){
@@ -275,7 +275,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	 * @return			list of points that contains the sprites in the list
 	 */
 	private ArrayList<SpritePointData> getPositions(ArrayList<String> sprites){
-		ArrayList<SpritePointData> positions = new ArrayList<SpritePointData>();
+		ArrayList<SpritePointData> positions = new ArrayList<>();
 		
 		for(int y = 0; y < level.length; y++){
 			for(int x = 0; x < level[y].length; x++){
@@ -300,7 +300,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	private void FixPlayer(){
 		//get the list of all the avatar names
 		ArrayList<SpriteData> avatar = SharedData.gameDescription.getAvatar();
-		ArrayList<String> avatarNames = new ArrayList<String>();
+		ArrayList<String> avatarNames = new ArrayList<>();
 		for(SpriteData a:avatar){
 			avatarNames.add(a.name);
 		}
@@ -309,7 +309,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		ArrayList<SpritePointData> avatarPositions = getPositions(avatarNames);
 		
 		// if not avatar insert a new one 
-		if(avatarPositions.size() == 0){
+		if(avatarPositions.isEmpty()){
 			ArrayList<SpritePointData> freePositions = getFreePositions(avatarNames);
 			
 			int index = SharedData.random.nextInt(freePositions.size());
@@ -347,13 +347,13 @@ public class Chromosome implements Comparable<Chromosome>{
 		LevelMapping levelMapping = new LevelMapping(SharedData.gameDescription);
 		levelMapping.clearLevelMapping();
 		char c = 'a';
-		for(int y = 0; y < level.length; y++){
-			for(int x = 0; x < level[y].length; x++){
-				if(levelMapping.getCharacter(level[y][x]) == null){
-					levelMapping.addCharacterMapping(c, level[y][x]);
-					c += 1;
-				}
-			}
+		for (ArrayList<String>[] arrayLists : level) {
+            for (ArrayList<String> arrayList : arrayLists) {
+                if (levelMapping.getCharacter(arrayList) == null) {
+                    levelMapping.addCharacterMapping(c, arrayList);
+                    c += 1;
+                }
+            }
 		}
 		
 		return levelMapping;
@@ -368,10 +368,10 @@ public class Chromosome implements Comparable<Chromosome>{
 	 */
 	public String getLevelString(LevelMapping levelMapping){
 		String levelString = "";
-		for(int y = 0; y < level.length; y++){
-			for(int x = 0; x < level[y].length; x++){
-				levelString += levelMapping.getCharacter(level[y][x]);
-			}
+		for (ArrayList<String>[] arrayLists : level) {
+            for (ArrayList<String> arrayList : arrayLists) {
+                levelString += levelMapping.getCharacter(arrayList);
+            }
 			levelString += "\n";
 		}
 		
@@ -388,7 +388,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	private double getCoverPercentage(){
 		int objects = 0;
 		int borders = 0;
-		if(SharedData.gameAnalyzer.getSolidSprites().size() > 0){
+		if(!SharedData.gameAnalyzer.getSolidSprites().isEmpty()){
 			borders = 1;
 		}
 		for (int y = borders; y < level.length - borders; y++) {
@@ -422,7 +422,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	 * @return	a hashmap of the number of each object based on its name
 	 */
 	private HashMap<String, Integer> calculateNumberOfObjects(){
-		HashMap<String, Integer> objects = new HashMap<String, Integer>();
+		HashMap<String, Integer> objects = new HashMap<>();
 		ArrayList<SpriteData> allSprites = SharedData.gameDescription.getAllSpriteData();
 		
 
@@ -433,18 +433,16 @@ public class Chromosome implements Comparable<Chromosome>{
 		
 
 		//modify the hashmap to reflect the number of objects found in this level
-		for(int y = 0; y < level.length; y++){
-			for(int x = 0; x < level[y].length; x++){
-				ArrayList<String> sprites = level[y][x];
-				for(String stype:sprites){
-					if(objects.containsKey(stype)){
-						objects.put(stype, objects.get(stype) + 1);
-					}
-					else{
-						objects.put(stype, 1);
-					}
-				}
-			}
+		for (ArrayList<String>[] arrayLists : level) {
+            for (ArrayList<String> sprites : arrayLists) {
+                for (String stype : sprites) {
+                    if (objects.containsKey(stype)) {
+                        objects.put(stype, objects.get(stype) + 1);
+                    } else {
+                        objects.put(stype, 1);
+                    }
+                }
+            }
 		}
 		
 		return objects;
@@ -478,7 +476,7 @@ public class Chromosome implements Comparable<Chromosome>{
 
 		for(TerminationData t:SharedData.gameDescription.getTerminationConditions()){
 			String[] winners = t.win.split(",");
-			Boolean win = Boolean.parseBoolean(winners[0]);
+			boolean win = Boolean.parseBoolean(winners[0]);
 
 			for(String s:t.sprites){
 				if(!win & SharedData.gameDescription.getAvatar().contains(s)){
@@ -500,7 +498,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	 */
 	private double getUniqueRuleScore(StateObservation gameState, double minUniqueRule){
 		double unique = 0;
-		HashMap<Integer, Boolean> uniqueEvents = new HashMap<Integer, Boolean>();
+		HashMap<Integer, Boolean> uniqueEvents = new HashMap<>();
 		for(Event e:gameState.getEventsHistory()){
 			int code = e.activeTypeId + 10000 * e.passiveTypeId;
 			if(!uniqueEvents.containsKey(code)){
@@ -585,7 +583,7 @@ public class Chromosome implements Comparable<Chromosome>{
 			
 
 			//calculate the constrain fitness by applying all different constraints
-			HashMap<String, Object> parameters = new HashMap<String, Object>();
+			HashMap<String, Object> parameters = new HashMap<>();
 			parameters.put("solutionLength", bestSol.size());
 			parameters.put("minSolutionLength", SharedData.MIN_SOLUTION_LENGTH);
 			parameters.put("doNothingSteps", doNothingLength);
@@ -669,7 +667,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	 * helpful data structure to hold information about certain points in the level
 	 * @author AhmedKhalifa
 	 */
-	public class SpritePointData{
+	public static class SpritePointData{
 		public String name;
 		public int x;
 		public int y;
@@ -689,13 +687,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	@Override
 	public int compareTo(Chromosome o) {
 		if(this.constrainFitness < 1 || o.constrainFitness < 1){
-			if(this.constrainFitness < o.constrainFitness){
-				return 1;
-			}
-			if(this.constrainFitness > o.constrainFitness){
-				return -1;
-			}
-			return 0;
+			return Double.compare(o.constrainFitness, this.constrainFitness);
 		}
 		
 		double firstFitness = 0;
@@ -704,15 +696,8 @@ public class Chromosome implements Comparable<Chromosome>{
 			firstFitness += this.fitness.get(i);
 			secondFitness += o.fitness.get(i);
 		}
-		
-		if(firstFitness > secondFitness){
-			return -1;
-		}
-		
-		if(firstFitness < secondFitness){
-			return 1;
-		}
-		
-		return 0;
+
+		return Double.compare(secondFitness, firstFitness);
+
 	}
 }

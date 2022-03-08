@@ -8,6 +8,7 @@ import ontology.avatar.MovingAvatar;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 /**
@@ -84,12 +85,12 @@ public class GameDescription {
 	 */
 	public GameDescription(Game currentGame) {
 		this.currentGame = currentGame;
-		this.avatar = new ArrayList<SpriteData>();
-		this.npcList = new ArrayList<SpriteData>();
-		this.portalList = new ArrayList<SpriteData>();
-		this.resourceList = new ArrayList<SpriteData>();
-		this.staticList = new ArrayList<SpriteData>();
-		this.movingList = new ArrayList<SpriteData>();
+		this.avatar = new ArrayList<>();
+		this.npcList = new ArrayList<>();
+		this.portalList = new ArrayList<>();
+		this.resourceList = new ArrayList<>();
+		this.staticList = new ArrayList<>();
+		this.movingList = new ArrayList<>();
 		this.charMapping = currentGame.getCharMapping();
 
 		reset(currentGame);
@@ -98,10 +99,10 @@ public class GameDescription {
 	private boolean checkHaveInteraction(String stype) {
 		ArrayList<SpriteData> allSprites = currentGame.getSpriteData();
 		for (SpriteData sprite : allSprites) {
-			if (getInteraction(stype, sprite.name).size() > 0) {
+			if (!getInteraction(stype, sprite.name).isEmpty()) {
 				return true;
 			}
-			if (getInteraction(sprite.name, stype).size() > 0) {
+			if (!getInteraction(sprite.name, stype).isEmpty()) {
 				return true;
 			}
 		}
@@ -144,13 +145,13 @@ public class GameDescription {
 			}
 		}
 
-		for (int i = 0; i < avatar.size(); i++) {
-			MovingAvatar temp = (MovingAvatar) currentGame.getTempAvatar(avatar.get(i));
-			if (actions == null || actions.size() < temp.actions.size()) {
-				actionsNIL = temp.actionsNIL;
-				actions = temp.actions;
-			}
-		}
+        for (SpriteData spriteData : avatar) {
+            MovingAvatar temp = (MovingAvatar) currentGame.getTempAvatar(spriteData);
+            if (actions == null || actions.size() < temp.actions.size()) {
+                actionsNIL = temp.actionsNIL;
+                actions = temp.actions;
+            }
+        }
 
 		terminationData = currentGame.getTerminationData();
 	}
@@ -298,7 +299,7 @@ public class GameDescription {
 	 * @return an array of sprite data
 	 */
 	public ArrayList<SpriteData> getAllSpriteData() {
-		ArrayList<SpriteData> result = new ArrayList<SpriteData>();
+		ArrayList<SpriteData> result = new ArrayList<>();
 		result.addAll(avatar);
 		result.addAll(npcList);
 		result.addAll(resourceList);
@@ -379,19 +380,17 @@ public class GameDescription {
 		public boolean isStatic;
 
 		public SpriteData(HashMap<String, String> parameters) {
-			this.sprites = new ArrayList<String>();
-			this.parents = new ArrayList<String>();
-			this.parameters = new HashMap<String, String>();
-			for(String key:parameters.keySet()){
-			    this.parameters.put(key, parameters.get(key));
-			}
+			this.sprites = new ArrayList<>();
+			this.parents = new ArrayList<>();
+			this.parameters = new HashMap<>();
+			this.parameters.putAll(parameters);
 		}
 
 		@Override
 		public String toString() {
 			String reset = "";
-			for(String key:parameters.keySet()){
-				reset += " " + key + "=" + parameters.get(key);
+			for(Map.Entry<String, String> entry : parameters.entrySet()){
+				reset += " " + entry.getKey() + "=" + entry.getValue();
 			}
 			return name + " > " + type + " " + reset;
 		}
@@ -410,21 +409,19 @@ public class GameDescription {
 					sprites.set(i, newName);
 				}
 			}
-			for(String key:parameters.keySet()){
-				if(parameters.get(key).equalsIgnoreCase(oldName)){
-					parameters.put(key, newName);
+			for(Map.Entry<String, String> entry : parameters.entrySet()){
+				if(entry.getValue().equalsIgnoreCase(oldName)){
+					parameters.put(entry.getKey(), newName);
 				}
 			}
 		}
 
 		@Override
-		protected Object clone() throws CloneNotSupportedException {
+		protected Object clone() {
 			SpriteData s = new SpriteData(this.parameters);
 			s.type = type;
 			s.name = name;
-			for (int i = 0; i < sprites.size(); i++) {
-				s.sprites.add(sprites.get(i));
-			}
+            s.sprites.addAll(sprites);
 			s.isSingleton = isSingleton;
 			s.isAvatar = isAvatar;
 			s.isNPC = isNPC;
@@ -462,7 +459,7 @@ public class GameDescription {
 		public String win;
 
 		public TerminationData() {
-			sprites = new ArrayList<String>();
+			sprites = new ArrayList<>();
 		}
 
 		/**
@@ -499,7 +496,7 @@ public class GameDescription {
 		public ArrayList<String> sprites;
 
 		public InteractionData() {
-			sprites = new ArrayList<String>();
+			sprites = new ArrayList<>();
 		}
 
 		@Override

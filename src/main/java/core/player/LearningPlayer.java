@@ -60,12 +60,12 @@ public class LearningPlayer extends Player {
         try {
             SerializableStateObservation sso;
             switch (comm.getLastSsoType()) {
-                case JSON:
+                case JSON -> {
                     so.currentGameState = Types.GAMESTATES.ACT_STATE;
                     sso = new SerializableStateObservation(so);
                     comm.commSend(sso.serialize(null));
-                    break;
-                case IMAGE:
+                }
+                case IMAGE -> {
                     // Set the game state to the appropriate state and the millisecond counter, then send the serialized observation.
                     so.currentGameState = Types.GAMESTATES.ACT_STATE;
                     sso = new SerializableStateObservation(so, false);
@@ -73,16 +73,14 @@ public class LearningPlayer extends Player {
                     // Used for debugging
 //                    System.out.println(sso.toString());
                     comm.commSend(sso.serialize(null));
-                    break;
-                case BOTH:
+                }
+                case BOTH -> {
                     // Set the game state to the appropriate state and the millisecond counter, then send the serialized observation.
                     so.currentGameState = Types.GAMESTATES.ACT_STATE;
                     sso = new SerializableStateObservation(so, true);
                     comm.commSend(sso.serialize(null));
-                    break;
-                default:
-                    System.err.println("LearningPlayer: act(): This should never happen.");
-                    break;
+                }
+                default -> System.err.println("LearningPlayer: act(): This should never happen.");
             }
 
             // Receive the response and set ACTION_NIL as default action
@@ -104,8 +102,7 @@ public class LearningPlayer extends Player {
                 return Types.ACTIONS.ACTION_ESCAPE;
             }
 
-            Types.ACTIONS action = Types.ACTIONS.fromString(response);
-            return action;
+            return Types.ACTIONS.fromString(response);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -129,9 +126,7 @@ public class LearningPlayer extends Player {
             comm.commSend(sso.serialize(null));
             String initResponse = comm.commRecv();
 
-            if (initResponse.equals("INIT_FAILED"))
-                return false;
-            return true;
+            return !initResponse.equals("INIT_FAILED");
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -152,9 +147,8 @@ public class LearningPlayer extends Player {
      * @returns Level to be plated.
      */
     public int result(StateObservation stateObs) {
-        int result = this.comm.finishGame(stateObs);
-//        System.out.println("Client replied: " + result);
-        return result;
+        //        System.out.println("Client replied: " + result);
+        return this.comm.finishGame(stateObs);
     }
 
     /**
@@ -165,10 +159,7 @@ public class LearningPlayer extends Player {
     public boolean startPlayerCommunication() {
 
         //Initialize the controller.
-        if (!this.comm.startComm())
-            return false;
-
-        return true;
+        return this.comm.startComm();
     }
 
     /**
@@ -177,10 +168,7 @@ public class LearningPlayer extends Player {
     public boolean finishPlayerCommunication() {
 
         //Initialize the controller.
-        if (!this.comm.endComm())
-            return false;
-
-        return true;
+        return this.comm.endComm();
     }
 
     public Types.LEARNING_SSO_TYPE getLearningSsoType() {

@@ -34,7 +34,7 @@ public class PullWithIt extends Effect
     {
         pixelPerfect = false;
         lastGameTime = -1;
-        spritesThisCycle = new ArrayList<VGDLSprite>();
+        spritesThisCycle = new ArrayList<>();
         this.parseParameters(cnt);
     }
 

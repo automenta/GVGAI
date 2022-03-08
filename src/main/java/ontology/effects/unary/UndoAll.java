@@ -30,7 +30,7 @@ public class UndoAll extends Effect
     public UndoAll(InteractionContent cnt)
     {
         this.parseParameters(cnt);
-        int notItypesArray[] = VGDLRegistry.GetInstance().explode(notStype);
+        int[] notItypesArray = VGDLRegistry.GetInstance().explode(notStype);
         notItypes = new ArrayList<>();
         for(Integer it : notItypesArray)
             notItypes.add(it);
@@ -41,16 +41,12 @@ public class UndoAll extends Effect
     {
         int[] gameSpriteOrder = game.getSpriteOrder();
         int spriteOrderCount = gameSpriteOrder.length;
-        for(int i = 0; i < spriteOrderCount; ++i)
-        {
-            int spriteTypeInt = gameSpriteOrder[i];
-
-            if(notItypes.contains(spriteTypeInt))
+        for (int spriteTypeInt : gameSpriteOrder) {
+            if (notItypes.contains(spriteTypeInt))
                 continue;
 
             Iterator<VGDLSprite> spriteIt = game.getSpriteGroup(spriteTypeInt);
-            if(spriteIt != null) while(spriteIt.hasNext())
-            {
+            if (spriteIt != null) while (spriteIt.hasNext()) {
                 VGDLSprite sp = spriteIt.next();
                 sp.setRect(sp.lastrect);
             }

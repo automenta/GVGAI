@@ -61,7 +61,7 @@ public class TestGameSpace {
 
         //0.b: Creating a new individual with an int[]:
         //    Each parameter will take a value = "lower_bound + i*increment" as it is printed by printValues(...)
-        int[] individual = new int[]{2, 2, 0, 4, 8, 3, 9, 4};
+        int[] individual = {2, 2, 0, 4, 8, 3, 9, 4};
 
         //We can print a report with the parameters and values:
         dm.printValues(individual);

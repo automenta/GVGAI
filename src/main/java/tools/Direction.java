@@ -39,9 +39,7 @@ public class Direction
     {
         Vector2d aV = new Vector2d(a.x(), a.y());
         Vector2d bV = new Vector2d(b.x(), b.y());
-        if(aV.dot(bV) == 0)
-            return true;
-        return false;
+        return aV.dot(bV) == 0;
     }
 
     /**
@@ -51,8 +49,7 @@ public class Direction
      */
     @Override
     public boolean equals(Object d) {
-        if (d instanceof Direction) {
-            Direction dir = (Direction) d;
+        if (d instanceof Direction dir) {
             return xDir == dir.x() && yDir == dir.y();
         } else {
             return false;

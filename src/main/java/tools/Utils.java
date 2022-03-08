@@ -198,7 +198,7 @@ public class Utils
         for(String line : lines)
         {
             String path = line.split(",")[1];
-            int loc = path.lastIndexOf("/");
+            int loc = path.lastIndexOf('/');
             String gameName = path.substring(loc + 1, path.length() - 4);
 
             allGames[idx][0] = path;

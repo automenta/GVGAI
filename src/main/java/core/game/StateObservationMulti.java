@@ -185,8 +185,7 @@ public class StateObservationMulti extends StateObservation {
 
 
     public StateObservationMulti copy() {
-        StateObservationMulti copyObs = new StateObservationMulti(model.copy(), this.playerID);
-        return copyObs;
+        return new StateObservationMulti(model.copy(), this.playerID);
     }
 
     /**

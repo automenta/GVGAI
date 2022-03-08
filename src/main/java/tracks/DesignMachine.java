@@ -118,7 +118,7 @@ public class DesignMachine {
 			names = newNames;
 		}
 
-		boolean humans[] = new boolean[no_players];
+		boolean[] humans = new boolean[no_players];
 		boolean anyHuman = false;
 
 		// System.out.println("Number of players: " + no_players);

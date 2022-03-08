@@ -32,8 +32,7 @@ public class Vector2d
      */
     @Override
 	public boolean equals(Object o) {
-        if (o instanceof Vector2d) {
-            Vector2d v = (Vector2d) o;
+        if (o instanceof Vector2d v) {
             return x == v.x && y == v.y;
         } else {
             return false;
@@ -288,8 +287,7 @@ public class Vector2d
      * @return the dot product between these two vectors.
      */
     public double dot(Vector2d v) {
-        double tot = this.x * v.x + this.y * v.y;
-        return tot;
+        return this.x * v.x + this.y * v.y;
     }
 
     public Vector2d unitVector()
@@ -303,4 +301,3 @@ public class Vector2d
     }
 
 }
-

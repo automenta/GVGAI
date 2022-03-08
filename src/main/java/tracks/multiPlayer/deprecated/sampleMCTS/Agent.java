@@ -72,8 +72,8 @@ public class Agent extends AbstractMultiPlayer {
      */
     public Types.ACTIONS act(StateObservationMulti stateObs, ElapsedCpuTimer elapsedTimer) {
 
-        ArrayList<Observation> obs[] = stateObs.getFromAvatarSpritesPositions();
-        ArrayList<Observation> grid[][] = stateObs.getObservationGrid();
+        ArrayList<Observation>[] obs = stateObs.getFromAvatarSpritesPositions();
+        ArrayList<Observation>[][] grid = stateObs.getObservationGrid();
 
         //Set the state observation object as the new root of the tree.
         mctsPlayer.init(stateObs);

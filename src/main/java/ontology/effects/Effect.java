@@ -12,7 +12,6 @@ import tools.Vector2d;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Comparator;
 
 /**
@@ -39,7 +38,7 @@ public abstract class Effect{
     //Count something
     public boolean count = true;
     public String counter = "0";
-    
+
     //Count something else
     public boolean countElse = true;
     public String counterElse = "0";
@@ -156,18 +155,11 @@ public abstract class Effect{
     private void sortByProximity(VGDLSprite sprite1, ArrayList<VGDLSprite> sprite2list)
     {
         final Vector2d spCompareCenter = new Vector2d(sprite1.lastrect.getCenterX(), sprite1.lastrect.getCenterY());
-        Collections.sort(sprite2list, new Comparator<VGDLSprite>() {
-            @Override
-            public int compare(VGDLSprite o1, VGDLSprite o2) {
-
-                Vector2d s1Center = new Vector2d(o1.lastrect.getCenterX(), o1.lastrect.getCenterY());
-                Vector2d s2Center = new Vector2d(o2.lastrect.getCenterX(), o2.lastrect.getCenterY());
-
-                if(spCompareCenter.dist(s1Center) < spCompareCenter.dist(s2Center))  		return -1;
-                else if(spCompareCenter.dist(s1Center) > spCompareCenter.dist(s2Center))	return 1;
-                return 0;
-            }
-        });
+        sprite2list.sort(Comparator.comparingDouble(
+                o -> spCompareCenter.dist(
+                        new Vector2d(
+                                o.lastrect.getCenterX(),
+                                o.lastrect.getCenterY()))));
     }
 
     /**
@@ -249,20 +241,20 @@ public abstract class Effect{
             return 0;
         }
     }
-    
-    public int getCounterElse(int idx) {		
-    	String[] scores = counterElse.split(",");
-    	try{
-    	    return idx < scores.length ? Integer.parseInt(scores[idx]) : Integer.parseInt(scores[0]);	
-    	}
-    	catch(Exception e){
+
+    public int getCounterElse(int idx) {
+        String[] scores = counterElse.split(",");
+        try{
+            return idx < scores.length ? Integer.parseInt(scores[idx]) : Integer.parseInt(scores[0]);
+        }
+        catch(Exception e){
             Logger.getInstance().addMessage(new Message(Message.WARNING, "counterElse must be an integer number not " + counterElse + "."));
             return 0;
         }
     }
-    
+
     public ArrayList<String> getEffectSprites(){
-    	return new ArrayList<String>();
+        return new ArrayList<>();
     }
 
 

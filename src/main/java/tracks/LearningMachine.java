@@ -41,12 +41,11 @@ public class LearningMachine {
         System.out.println(" ** Playing game " + game_file + ", level " + level_file + " **");
 
         //1. Create the player.
-        LearningPlayer player = LearningMachine.createPlayer(cmd);
+        LearningPlayer player = createPlayer(cmd);
 //
         //2. Play the training games.
-        double[] finalScore = playOnce(player, actionFile, game_file, level_file, visuals, randomSeed);
 
-        return finalScore;
+        return playOnce(player, actionFile, game_file, level_file, visuals, randomSeed);
     }
 
     /**
@@ -59,12 +58,12 @@ public class LearningMachine {
      * @param actionFiles filename of the file where the actions of this player, for this game, should be recorded.
      */
     public static void runMultipleGames(String game_file, String[] level_files,
-                                        String cmd[], String[] actionFiles, boolean visuals) throws IOException {
+                                        String[] cmd, String[] actionFiles, boolean visuals) throws IOException {
         VGDLFactory.GetInstance().init(); //This always first thing to do.
         VGDLRegistry.GetInstance().init();
         CompetitionParameters.IS_LEARNING = true;
         //Create the player.
-        LearningPlayer player = LearningMachine.createPlayer(cmd);
+        LearningPlayer player = createPlayer(cmd);
 
         // Play the training games.
         runGames(game_file, level_files, 1, player, actionFiles, visuals);
@@ -79,16 +78,15 @@ public class LearningMachine {
      * @param visuals
      * @param randomSeed
      * @return Score of players in the game (one player in a single player case)
-     * @throws IOException
      */
     private static double[] playOnce(LearningPlayer player, String actionFile, String game_file, String level_file,
-                                     boolean visuals, int randomSeed) throws IOException {
+                                     boolean visuals, int randomSeed) {
         //Create the game.
         Game toPlay = new VGDLParser().parseGame(game_file);
         toPlay.buildLevel(level_file, randomSeed);
 
         //Init the player for the game.
-        if (player == null || LearningMachine.initPlayer(player, actionFile, randomSeed, false, toPlay.getObservation()) == null) {
+        if (player == null || initPlayer(player, actionFile, randomSeed, false, toPlay.getObservation()) == null) {
             //Something went wrong in the constructor, controller disqualified
             toPlay.disqualify();
             //Get the score for the result.
@@ -98,14 +96,14 @@ public class LearningMachine {
         //Then, play the game.
         double[] score;
 
-        Player[] players = new Player[]{player};
+        Player[] players = {player};
         if (visuals)
             score = toPlay.playGame(players, randomSeed, true, 0);
         else
             score = toPlay.runGame(players, randomSeed);
 
         //Finally, when the game is over, we need to tear the player down.
-        LearningMachine.tearPlayerDown(player, toPlay);
+        tearPlayerDown(player, toPlay);
 
         return score;
     }
@@ -145,7 +143,7 @@ public class LearningMachine {
         performance = new StatSummary();
 
         // Player array to hold the single player
-        LearningPlayer[] players = new LearningPlayer[]{player};
+        LearningPlayer[] players = {player};
 
         // Initialize the player
         boolean initSuccesful = players[0].startPlayerCommunication();
@@ -249,11 +247,10 @@ public class LearningMachine {
      * @param scores Array of scores to be modified. Is modified at the end of the level.
      * @param victories Array of victories to be modified. Is modified at the end of the level.
      * @return Next level to be played as chosen by the player, or a random substituent.
-     * @throws IOException
      */
     public static int playOneLevel(String game_file, String level_file, int level_time, boolean isValidation, boolean isVisual, boolean recordActions,
                                    int levelIdx, LearningPlayer[] players, String[] actionFiles, Game toPlay, StatSummary[] scores,
-                                   StatSummary[] victories) throws IOException{
+                                   StatSummary[] victories) {
         if (VERBOSE)
             System.out.println(" ** Playing game " + game_file + ", level " + level_file + " (" + level_time + ") **");
 
@@ -269,7 +266,7 @@ public class LearningMachine {
         double[] score;
 
         // Initialize the new learningPlayer instance.
-        LearningPlayer learningPlayer = LearningMachine.initPlayer(players[0], actionFiles[0], randomSeed, isValidation, toPlay.getObservation());
+        LearningPlayer learningPlayer = initPlayer(players[0], actionFiles[0], randomSeed, isValidation, toPlay.getObservation());
 
         // If the player cannot be initialized, disqualify the controller
         if (learningPlayer == null) {
@@ -293,7 +290,7 @@ public class LearningMachine {
         toPlay.printLearningResult(levelIdx, isValidation);
 
         //Finally, when the game is over, we need to tear the player down.
-        LearningMachine.tearPlayerDown(players[0], toPlay);
+        tearPlayerDown(players[0], toPlay);
 
         //Get player stats
         if (players[0] != null) {
@@ -387,7 +384,7 @@ public class LearningMachine {
      *
      * @param player player to be closed.
      */
-    private static void tearPlayerDown(LearningPlayer player, Game toPlay) throws IOException {
+    private static void tearPlayerDown(LearningPlayer player, Game toPlay) {
         player.teardown(toPlay);
     }
 
@@ -397,7 +394,7 @@ public class LearningMachine {
      * Not useful for singleLearning
      * @param players list of players to be closed.
      */
-    private static boolean tearMultiPlayerDown(Player[] players, Game toPlay) throws IOException {
+    private static boolean tearMultiPlayerDown(Player[] players, Game toPlay) {
         for (Player p : players) {
             //Determine the time due for the controller close up.
             ElapsedCpuTimer ect = new ElapsedCpuTimer();

@@ -346,11 +346,7 @@ public class ForwardModel extends Game {
     private Observation getSpriteObservation(VGDLSprite sprite) {
         int spriteId = sprite.spriteID;
         Observation obs = observations.get(spriteId);
-        if (obs != null) {
-            return obs;
-        } else {
-            return createSpriteObservation(sprite);
-        }
+        return obs != null ? obs : createSpriteObservation(sprite);
     }
 
     /**
@@ -362,7 +358,7 @@ public class ForwardModel extends Game {
     private void checkSpriteFeatures(VGDLSprite sp, int itype) {
         int category = getSpriteCategory(sp);
         switch (category) {
-            case Types.TYPE_AVATAR:
+            case Types.TYPE_AVATAR -> {
 
                 //update avatar sprite.
                 MovingAvatar a = (MovingAvatar) sp;
@@ -370,24 +366,13 @@ public class ForwardModel extends Game {
                     this.avatars[a.getPlayerID()] = a;
                 }
                 playerList[itype] = true; //maybe use this
-                break;
-            case Types.TYPE_RESOURCE:
-                resList[itype] = true;
-                break;
-            case Types.TYPE_PORTAL:
-                portalList[itype] = true;
-                break;
-            case Types.TYPE_NPC:
-                npcList[itype] = true;
-                break;
-            case Types.TYPE_STATIC:
-                immList[itype] = true;
-                break;
-            case Types.TYPE_FROMAVATAR:
-                fromAvatar[itype] = true;
-                break;
-            case Types.TYPE_MOVABLE:
-                movList[itype] = true;
+            }
+            case Types.TYPE_RESOURCE -> resList[itype] = true;
+            case Types.TYPE_PORTAL -> portalList[itype] = true;
+            case Types.TYPE_NPC -> npcList[itype] = true;
+            case Types.TYPE_STATIC -> immList[itype] = true;
+            case Types.TYPE_FROMAVATAR -> fromAvatar[itype] = true;
+            case Types.TYPE_MOVABLE -> movList[itype] = true;
         }
         unknownList[itype] = true;
 

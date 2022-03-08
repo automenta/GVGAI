@@ -69,9 +69,8 @@ public class ContinuousPhysics extends GridPhysics
         }
 
         dir.normalise();
-        Direction d = new Direction(dir.x, dir.y);
 
-        sprite.orientation = d;
+        sprite.orientation = new Direction(dir.x, dir.y);
         sprite.speed = speedD;
 
         if(action.equals(Types.DNONE))

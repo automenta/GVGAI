@@ -71,7 +71,7 @@ public class TransformTo extends Effect {
                     sprite1.lastrect.width, sprite1.lastrect.height);
 
             //Copy resources
-            if(sprite1.resources.size() > 0)
+            if(!sprite1.resources.isEmpty())
             {
                 Set<Map.Entry<Integer, Integer>> entries = sprite1.resources.entrySet();
                 for(Map.Entry<Integer, Integer> entry : entries)
@@ -118,7 +118,7 @@ public class TransformTo extends Effect {
 
     @Override
     public ArrayList<String> getEffectSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(stype!=null) result.add(stype);
     	
     	return result;

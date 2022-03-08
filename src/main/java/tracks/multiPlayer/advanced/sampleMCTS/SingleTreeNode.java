@@ -19,7 +19,7 @@ public class SingleTreeNode
     public int nVisits;
     public Random m_rnd;
     public int m_depth;
-    protected double[] bounds = new double[]{Double.MAX_VALUE, -Double.MAX_VALUE};
+    protected double[] bounds = {Double.MAX_VALUE, -Double.MAX_VALUE};
     public int childIdx;
 
     public int MCTS_ITERATIONS = 100;
@@ -92,8 +92,7 @@ public class SingleTreeNode
                 return cur.expand(state);
 
             } else {
-                SingleTreeNode next = cur.uct(state);
-                cur = next;
+                cur = cur.uct(state);
             }
         }
 
@@ -230,10 +229,8 @@ public class SingleTreeNode
         if(depth >= ROLLOUT_DEPTH)      //rollout end condition.
             return true;
 
-        if(rollerState.isGameOver())               //end of game
-            return true;
-
-        return false;
+        //end of game
+        return rollerState.isGameOver();
     }
 
     public void backUp(SingleTreeNode node, double result)

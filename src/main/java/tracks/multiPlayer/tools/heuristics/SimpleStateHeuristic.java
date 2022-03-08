@@ -60,7 +60,7 @@ public class SimpleStateHeuristic extends StateHeuristicMulti {
         int npcCounter = 0;
         if (npcPositions != null) {
             for (ArrayList<Observation> npcs : npcPositions) {
-                if(npcs.size() > 0)
+                if(!npcs.isEmpty())
                 {
                     minObject   = npcs.get(0).position; //This is the closest guy
                     minDistance = npcs.get(0).sqDist;   //This is the (square) distance to the closest NPC.
@@ -86,7 +86,7 @@ public class SimpleStateHeuristic extends StateHeuristicMulti {
         double minDistancePortal = Double.POSITIVE_INFINITY;
         Vector2d minObjectPortal = null;
         for (ArrayList<Observation> portals : portalPositions) {
-            if(portals.size() > 0)
+            if(!portals.isEmpty())
             {
                 minObjectPortal   =  portals.get(0).position; //This is the closest portal
                 minDistancePortal =  portals.get(0).sqDist;   //This is the (square) distance to the closest portal
@@ -106,5 +106,3 @@ public class SimpleStateHeuristic extends StateHeuristicMulti {
 
 
 }
-
-

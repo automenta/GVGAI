@@ -1,7 +1,7 @@
 package core.game;
 
+import com.google.gson.Gson;
 import ontology.Types;
-import tools.com.google.gson.Gson;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;

@@ -124,7 +124,7 @@ public class Agent extends AbstractPlayer {
 				return firstInputs;
 			}
 			// Copy the input values into the first layer of neurons
-			for (int i = 0; i < firstInputs.length; i++) inputs[i] = firstInputs[i]; 
+			System.arraycopy(firstInputs, 0, inputs, 0, firstInputs.length); 
 			// clear the values at the hidden and output layer
 			resetLayer(hiddenLayer);
 			resetLayer(outputs);
@@ -146,7 +146,9 @@ public class Agent extends AbstractPlayer {
 		}
 
 		// Clear all the stored values at a specific layer
-		public void resetLayer (double[] array) { for (int i = 0; i < array.length; i++) array[i] = 0; }
+		public void resetLayer (double[] array) {
+			Arrays.fill(array, 0);
+		}
 
 		// Using all of the inputs to a layer, as well as the weights given to each input
 		// for each neuron, compute the linear combination of values for each neuron
@@ -184,14 +186,18 @@ public class Agent extends AbstractPlayer {
 		ArrayList<Observation>[] resources = states.getResourcesPositions(myPosition);
 		int noResource = 0;
 		if (resources != null)
-			for (int i = 0; i < resources.length; i++) { noResource += resources[i].size(); }
+            for (ArrayList<Observation> resource : resources) {
+                noResource += resource.size();
+            }
 		origResourceNo = noResource;
 		//System.out.println("Number of Resources: " + noResource);
 		// get number of NPCs at the start of the game
 		ArrayList<Observation>[] npcs = states.getNPCPositions(myPosition);
 		int noNPC = 0;
 		if (npcs != null)
-			for (int i = 0; i < npcs.length; i++) { noNPC += npcs[i].size(); }
+            for (ArrayList<Observation> npc : npcs) {
+                noNPC += npc.size();
+            }
 		origNPCNo = noNPC;
 		//System.out.println("Number of NPCs: " + noNPC);
 		// create the first neural net
@@ -220,8 +226,10 @@ public class Agent extends AbstractPlayer {
 		int noNPC = 0;
 		double distanceNPC = 0;
 		if (npcPositions != null) {
-			for (int i = 0; i < npcPositions.length; i++) { noNPC += npcPositions[i].size(); }
-			if (npcPositions[0].size() != 0) {
+            for (ArrayList<Observation> npcPosition : npcPositions) {
+                noNPC += npcPosition.size();
+            }
+			if (!npcPositions[0].isEmpty()) {
 				Vector2d closestNPC = npcPositions[0].get(0).position;
 				distanceNPC = myPosition.dist(closestNPC);
 			}
@@ -236,7 +244,7 @@ public class Agent extends AbstractPlayer {
 		ArrayList<Observation>[] portalPositions = thisState.getPortalsPositions(myPosition);
 		double distancePortal = 0;
 		if (portalPositions != null) {
-			if (portalPositions[0].size() != 0) {
+			if (!portalPositions[0].isEmpty()) {
 				Vector2d closestPortal = portalPositions[0].get(0).position;
 				distancePortal = myPosition.dist(closestPortal);
 			}
@@ -247,7 +255,7 @@ public class Agent extends AbstractPlayer {
 		ArrayList<Observation>[] movePositions = thisState.getMovablePositions(myPosition);
 		double distanceMove = 0;
 		if (movePositions != null) {
-			if (movePositions[0].size() != 0) {
+			if (!movePositions[0].isEmpty()) {
 				Vector2d closestMove = movePositions[0].get(0).position;
 				distanceMove = myPosition.dist(closestMove);
 			}
@@ -260,8 +268,10 @@ public class Agent extends AbstractPlayer {
 		int noResource = 0;
 		double distanceResource = 0;
 		if (resourcesPositions != null) {
-			for (int i = 0; i < resourcesPositions .length; i++) { noResource += resourcesPositions [i].size(); }
-			if (resourcesPositions [0].size() != 0) {
+            for (ArrayList<Observation> resourcesPosition : resourcesPositions) {
+                noResource += resourcesPosition.size();
+            }
+			if (!resourcesPositions[0].isEmpty()) {
 				Vector2d closestResource = resourcesPositions[0].get(0).position;
 				distanceResource = myPosition.dist(closestResource);
 			}
@@ -298,7 +308,9 @@ public class Agent extends AbstractPlayer {
 			ArrayList<Observation>[] resources = origState.getResourcesPositions(myPosition);
 			int noResource = 0;
 			if (resources != null)
-				for (int i = 0; i < resources.length; i++) { noResource += resources[i].size(); }
+                for (ArrayList<Observation> resource : resources) {
+                    noResource += resource.size();
+                }
 			double resourceSpec = 1 - noResource/origResourceNo; // the less resources, the higher the number
 			value += resourceSpec * 2; // can multiply this to weight it
 		}
@@ -309,7 +321,9 @@ public class Agent extends AbstractPlayer {
 			ArrayList<Observation>[] npcs = origState.getNPCPositions(myPosition);
 			int noNPC = 0;
 			if (npcs != null)
-				for (int i = 0; i < npcs.length; i++) { noNPC += npcs[i].size(); }
+                for (ArrayList<Observation> npc : npcs) {
+                    noNPC += npc.size();
+                }
 			double npcSpec = 1 - noNPC/origNPCNo; // the less NPCs, the higher the number
 			value += npcSpec * 0.5; // can multiply this to weight it
 		}

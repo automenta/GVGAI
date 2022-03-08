@@ -8,6 +8,7 @@ import core.vgdl.VGDLRegistry;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class SLDescription {
@@ -108,7 +109,7 @@ public class SLDescription {
 					this.currentLevel[i][j] = "";
 				} else {
 					ArrayList<String> tempSprites = levelMapping.get(level[i].charAt(j));
-					if (tempSprites == null || tempSprites.size() == 0) {
+					if (tempSprites == null || tempSprites.isEmpty()) {
 						// empty location
 						this.currentLevel[i][j] = "";
 					} else {
@@ -132,11 +133,11 @@ public class SLDescription {
 	 */
 	private int getWidth(String[] level) {
 		int width = 0;
-		for (int i = 0; i < level.length; i++) {
-			if (level[i].length() > width) {
-				width = level[i].length();
-			}
-		}
+        for (String s : level) {
+            if (s.length() > width) {
+                width = s.length();
+            }
+        }
 
 		return width;
 	}
@@ -209,12 +210,8 @@ public class SLDescription {
 	public SpriteData[] getGameSprites() {
 		SpriteData[] result = new SpriteData[this.gameSprites.length];
 		for (int i = 0; i < result.length; i++) {
-			try {
-				result[i] = (SpriteData) this.gameSprites[i].clone();
-			} catch (CloneNotSupportedException e) {
-				e.printStackTrace();
-			}
-			result[i].changeSpriteName(result[i].name, this.encodeName(this.gameSprites[i].name, this.shift));
+            result[i] = (SpriteData) this.gameSprites[i].clone();
+            result[i].changeSpriteName(result[i].name, this.encodeName(this.gameSprites[i].name, this.shift));
 			for (int j = 0; j < result[i].sprites.size(); j++) {
 				result[i].changeSpriteName(result[i].sprites.get(j), this.encodeName(this.gameSprites[i].sprites.get(j), this.shift));
 			}
@@ -244,48 +241,46 @@ public class SLDescription {
 	 * @return return decoded interaction and termination rules
 	 */
 	public String[][] modifyRules(String[] rules, String[] wins, int seed) {
-		ArrayList<String> modifiedRules = new ArrayList<String>();
-		for (int i = 0; i < rules.length; i++) {
-			String[] parts = rules[i].split(" ");
-			modifiedRules.add("");
-			for (int j = 0; j < parts.length; j++) {
-				if (parts[j].toLowerCase().contains(KEYWORD + "_")) {
-					String[] temp = parts[j].split(KEYWORD + "_");
-					String spriteName = this.decodeIndex(Integer.parseInt(temp[1]), seed);
-					if(spriteName.length() > 0){
-						modifiedRules.set(modifiedRules.size() - 1, modifiedRules.get(modifiedRules.size() - 1) + temp[0] + spriteName + " ");
-					}
-					else{
-						Logger.getInstance().addMessage(new Message(Message.WARNING, parts[j] + " is undefined in the game."));
-					}
+		ArrayList<String> modifiedRules = new ArrayList<>();
+        for (String rule : rules) {
+            String[] parts = rule.split(" ");
+            modifiedRules.add("");
+            for (String part : parts) {
+                if (part.toLowerCase().contains(KEYWORD + "_")) {
+                    String[] temp = part.split(KEYWORD + "_");
+                    String spriteName = this.decodeIndex(Integer.parseInt(temp[1]), seed);
+                    if (!spriteName.isEmpty()) {
+                        modifiedRules.set(modifiedRules.size() - 1, modifiedRules.get(modifiedRules.size() - 1) + temp[0] + spriteName + " ");
+                    } else {
+                        Logger.getInstance().addMessage(new Message(Message.WARNING, part + " is undefined in the game."));
+                    }
 
-				} else {
-					modifiedRules.set(modifiedRules.size() - 1, modifiedRules.get(modifiedRules.size() - 1) + parts[j] + " ");
-				}
-			}
-		}
+                } else {
+                    modifiedRules.set(modifiedRules.size() - 1, modifiedRules.get(modifiedRules.size() - 1) + part + " ");
+                }
+            }
+        }
 
-		ArrayList<String> modifiedWins = new ArrayList<String>();
-		for (int i = 0; i < wins.length; i++) {
-			String[] parts = wins[i].split(" ");
-			modifiedWins.add("");
-			for (int j = 0; j < parts.length; j++) {
-				if (parts[j].toLowerCase().contains(KEYWORD + "_")) {
-					String[] temp = parts[j].split(KEYWORD + "_");
-					String spriteName = this.decodeIndex(Integer.parseInt(temp[1]), seed);
-					if(spriteName.length() > 0){
-						modifiedWins.set(modifiedWins.size() - 1, modifiedWins.get(modifiedWins.size() - 1) + temp[0] + spriteName + " ");
-					}
-					else{
-						Logger.getInstance().addMessage(new Message(Message.WARNING, parts[j] + " is undefined in the game."));
-					}
-				} else {
-					modifiedWins.set(modifiedWins.size() - 1, modifiedWins.get(modifiedWins.size() - 1) + parts[j] + " ");
-				}
-			}
-		}
+		ArrayList<String> modifiedWins = new ArrayList<>();
+        for (String win : wins) {
+            String[] parts = win.split(" ");
+            modifiedWins.add("");
+            for (String part : parts) {
+                if (part.toLowerCase().contains(KEYWORD + "_")) {
+                    String[] temp = part.split(KEYWORD + "_");
+                    String spriteName = this.decodeIndex(Integer.parseInt(temp[1]), seed);
+                    if (!spriteName.isEmpty()) {
+                        modifiedWins.set(modifiedWins.size() - 1, modifiedWins.get(modifiedWins.size() - 1) + temp[0] + spriteName + " ");
+                    } else {
+                        Logger.getInstance().addMessage(new Message(Message.WARNING, part + " is undefined in the game."));
+                    }
+                } else {
+                    modifiedWins.set(modifiedWins.size() - 1, modifiedWins.get(modifiedWins.size() - 1) + part + " ");
+                }
+            }
+        }
 
-		return new String[][] { modifiedRules.toArray(new String[modifiedRules.size()]), modifiedWins.toArray(new String[modifiedWins.size()]) };
+		return new String[][] { modifiedRules.toArray(new String[0]), modifiedWins.toArray(new String[0]) };
 	}
 
 	/**
@@ -322,17 +317,18 @@ public class SLDescription {
 		Logger.getInstance().flushMessages();
 
 		String[][] rw = this.modifyRules(rules, wins, this.shift);
-		HashMap<String, String> msprites = new HashMap<String, String>();
-		for(int i=0; i<this.gameSprites.length; i++){
-			msprites.put(this.gameSprites[i].name, this.gameSprites[i].toString());
-		}
-		HashMap<String, ArrayList<String>> msetStructure = new HashMap<String, ArrayList<String>>();
+		HashMap<String, String> msprites = new HashMap<>();
+        for (SpriteData gameSprite : this.gameSprites) {
+            msprites.put(gameSprite.name, gameSprite.toString());
+        }
+		HashMap<String, ArrayList<String>> msetStructure = new HashMap<>();
 		if(spriteSetStructure != null){
-			for(String key:spriteSetStructure.keySet()){
-				msetStructure.put(key, new ArrayList<String>());
-				for(int i=0; i<spriteSetStructure.get(key).size(); i++){
-					if(spriteSetStructure.get(key).get(i).contains(KEYWORD + "_")){
-						String[] parts = spriteSetStructure.get(key).get(i).split(KEYWORD + "_");
+			for(Map.Entry<String, ArrayList<String>> entry : spriteSetStructure.entrySet()){
+				String key = entry.getKey();
+				msetStructure.put(key, new ArrayList<>());
+				for(int i = 0; i< entry.getValue().size(); i++){
+					if(entry.getValue().get(i).contains(KEYWORD + "_")){
+						String[] parts = entry.getValue().get(i).split(KEYWORD + "_");
 						msetStructure.get(key).add(this.decodeIndex(Integer.parseInt(parts[1]), this.shift));
 					}
 				}

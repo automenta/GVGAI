@@ -260,12 +260,12 @@ public abstract class Game {
 	 */
 	public Game() {
 		// data structures to hold the game definition.
-		definedEffects = new ArrayList<Pair<Integer, Integer>>();
-		definedEOSEffects = new ArrayList<Integer>();
-		charMapping = new HashMap<Character, ArrayList<String>>();
-		terminations = new ArrayList<Termination>();
-		historicEvents = new TreeSet<Event>();
-		timeEffects = new TreeSet<TimeEffect>();
+		definedEffects = new ArrayList<>();
+		definedEOSEffects = new ArrayList<>();
+		charMapping = new HashMap<>();
+		terminations = new ArrayList<>();
+		historicEvents = new TreeSet<>();
+		timeEffects = new TreeSet<>();
 
 		// Game attributes:
 		size = new Dimension();
@@ -336,7 +336,7 @@ public abstract class Game {
 	@SuppressWarnings("unchecked")
 	public void initSprites(ArrayList<Integer> spOrder, ArrayList<Integer> sings,
 							HashMap<Integer, SpriteContent> constructors) {
-		ArrayList<Resource> resources = new ArrayList<Resource>();
+		ArrayList<Resource> resources = new ArrayList<>();
 
 		// We need here the default 2 sprites:
 		avatarId = VGDLRegistry.GetInstance().getRegisteredSpriteValue("avatar");
@@ -357,14 +357,14 @@ public abstract class Game {
 		templateSprites = new VGDLSprite[classConst.length];
 
 		// By default, we have 2 constructors:
-		Content wallConst = new SpriteContent("wall", "Immovable");
+		SpriteContent wallConst = new SpriteContent("wall", "Immovable");
 		wallConst.parameters.put("color", "DARKGRAY");
 		wallConst.parameters.put("solid", "True");
-		((SpriteContent) wallConst).itypes.add(wallId);
+		wallConst.itypes.add(wallId);
 		classConst[wallId] = wallConst;
 
-		Content avatarConst = new SpriteContent("avatar", "MovingAvatar");
-		((SpriteContent) avatarConst).itypes.add(avatarId);
+		SpriteContent avatarConst = new SpriteContent("avatar", "MovingAvatar");
+		avatarConst.itypes.add(avatarId);
 		classConst[avatarId] = avatarConst;
 
 		// Now, the other constructors.
@@ -398,8 +398,8 @@ public abstract class Game {
 			// Create the space for the sprites and effects of this type.
 			spriteGroups[j] = new SpriteGroup(j);
 			shieldedEffects[j] = new ArrayList<>();
-			eosEffects[j] = new ArrayList<Effect>();
-			timeEffects = new TreeSet<TimeEffect>();
+			eosEffects[j] = new ArrayList<>();
+			timeEffects = new TreeSet<>();
 			bucketList[j] = new Bucket();
 
 			// Declare the extended types list of this sprite type.
@@ -408,7 +408,7 @@ public abstract class Game {
 			for (int k = 0; k < spriteGroups.length; ++k) {
 				// Create the array list of collision effects for each pair of
 				// sprite types.
-				collisionEffects[j][k] = new ArrayList<Effect>();
+				collisionEffects[j][k] = new ArrayList<>();
 			}
 
 		}
@@ -422,8 +422,7 @@ public abstract class Game {
 
 		// Resources: use the list of resources created before to store limit
 		// and color of each resource.
-		for (int i = 0; i < resources.size(); ++i) {
-			Resource r = resources.get(i);
+		for (Resource r : resources) {
 			resources_limits[r.resource_type] = r.limit;
 			resources_colors[r.resource_type] = r.color;
 		}
@@ -452,8 +451,7 @@ public abstract class Game {
 	private ArrayList<Integer> parentNodes(int itype) {
 		SpriteContent sc = (SpriteContent) classConst[itype];
 
-		ArrayList<Integer> parents = new ArrayList<Integer>();
-		parents.addAll(sc.itypes);
+		ArrayList<Integer> parents = new ArrayList<>(sc.itypes);
 		parents.remove(parents.size() - 1);
 
 		return parents;
@@ -467,9 +465,9 @@ public abstract class Game {
 	 * @return a list of all leaf children under the hierarchy of itype sprite
 	 */
 	private ArrayList<String> expandNonLeafNode(int itype) {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		boolean[] visited = new boolean[classConst.length];
-		ArrayList<Integer> queue = new ArrayList<Integer>();
+		ArrayList<Integer> queue = new ArrayList<>();
 		queue.add(itype);
 
 		while (!queue.isEmpty()) {
@@ -564,21 +562,11 @@ public abstract class Game {
 
 		VGDLSprite sprite = VGDLFactory.GetInstance().createSprite(this, sc, new Vector2d(), new Dimension(1, 1));
 		switch (getSpriteCategory(sprite)) {
-			case Types.TYPE_NPC:
-				data.isNPC = true;
-				break;
-			case Types.TYPE_AVATAR:
-				data.isAvatar = true;
-				break;
-			case Types.TYPE_PORTAL:
-				data.isPortal = true;
-				break;
-			case Types.TYPE_RESOURCE:
-				data.isResource = true;
-				break;
-			case Types.TYPE_STATIC:
-				data.isStatic = true;
-				break;
+			case Types.TYPE_NPC -> data.isNPC = true;
+			case Types.TYPE_AVATAR -> data.isAvatar = true;
+			case Types.TYPE_PORTAL -> data.isPortal = true;
+			case Types.TYPE_RESOURCE -> data.isResource = true;
+			case Types.TYPE_STATIC -> data.isStatic = true;
 		}
 
 		ArrayList<String> dependentSprites = sprite.getDependentSprites();
@@ -597,7 +585,7 @@ public abstract class Game {
 	 * @return Array of sprite data
 	 */
 	public ArrayList<SpriteData> getSpriteData() {
-		ArrayList<SpriteData> result = new ArrayList<SpriteData>();
+		ArrayList<SpriteData> result = new ArrayList<>();
 
 		for (int i = 0; i < classConst.length; i++) {
 			SpriteContent sc = (SpriteContent) classConst[i];
@@ -619,9 +607,7 @@ public abstract class Game {
 		if (((SpriteContent) classConst[avatarId]).referenceClass != null) {
 			VGDLSprite result = VGDLFactory.GetInstance().createSprite(this, (SpriteContent) classConst[avatarId],
 					new Vector2d(), new Dimension(1, 1));
-			if (result != null) {
-				return result;
-			}
+			return result;
 		}
 
 		return null;
@@ -634,7 +620,7 @@ public abstract class Game {
 	 * @return array of Termination Data objects
 	 */
 	public ArrayList<TerminationData> getTerminationData() {
-		ArrayList<TerminationData> result = new ArrayList<TerminationData>();
+		ArrayList<TerminationData> result = new ArrayList<>();
 
 		TerminationData td;
 		for (Termination tr : terminations) {
@@ -671,10 +657,10 @@ public abstract class Game {
 	 * @return array of interaction data objects.
 	 */
 	public ArrayList<InteractionData> getInteractionData(int itype1, int itype2) {
-		ArrayList<InteractionData> results = new ArrayList<InteractionData>();
+		ArrayList<InteractionData> results = new ArrayList<>();
 
-		ArrayList<Integer> parent1 = new ArrayList<Integer>();
-		ArrayList<Integer> parent2 = new ArrayList<Integer>();
+		ArrayList<Integer> parent1 = new ArrayList<>();
+		ArrayList<Integer> parent2 = new ArrayList<>();
 
 		if (itype1 != -1) {
 			parent1.addAll(parentNodes(itype1));
@@ -686,19 +672,19 @@ public abstract class Game {
 			parent2.add(itype2);
 		}
 
-		ArrayList<Effect> effects = new ArrayList<Effect>();
-		if (parent1.size() > 0 && parent2.size() > 0) {
+		ArrayList<Effect> effects = new ArrayList<>();
+		if (!parent1.isEmpty() && !parent2.isEmpty()) {
 			for (int p1 : parent1) {
 				for (int p2 : parent2) {
 					effects.addAll(getCollisionEffects(p1, p2));
 				}
 			}
-		} else if (parent1.size() > 0) {
+		} else if (!parent1.isEmpty()) {
 			for (int p1 : parent1) {
 				effects.addAll(getEosEffects(p1));
 
 			}
-		} else if (parent2.size() > 0) {
+		} else if (!parent2.isEmpty()) {
 			for (int p2 : parent2) {
 				effects.addAll(getEosEffects(p2));
 			}
@@ -738,9 +724,9 @@ public abstract class Game {
 			avatarLastAction[i] = Types.ACTIONS.ACTION_NIL;
 
 		// For each sprite type...
-		for (int i = 0; i < spriteGroups.length; ++i) {
+		for (SpriteGroup spriteGroup : spriteGroups) {
 			// Create the space for the sprites and effects of this type.
-			spriteGroups[i].clear();
+			spriteGroup.clear();
 		}
 
 		if (kill_list != null) {
@@ -750,9 +736,7 @@ public abstract class Game {
 			bucketList[j].clear();
 		}
 
-		for (int i = 0; i < templateSprites.length; ++i) {
-			templateSprites[i] = null;
-		}
+		Arrays.fill(templateSprites, null);
 
 		historicEvents.clear();
 
@@ -961,7 +945,7 @@ public abstract class Game {
 							sb += "Player " + i + "; ";
 						}
 					}
-					if (sb.equals(""))
+					if (sb.isEmpty())
 						sb = "NONE";
 					JOptionPane.showMessageDialog(frame, "GAMEOVER - WINNER: " + sb);
 				}
@@ -1119,16 +1103,16 @@ public abstract class Game {
 	 */
 	public double[] handleResult() {
 		// check all players disqualified and set scores
-		for (int i = 0; i < avatars.length; i++) {
-			if (avatars[i] != null) {
-				if (avatars[i].is_disqualified()) {
-					avatars[i].setWinState(Types.WINNER.PLAYER_DISQ);
-					avatars[i].setScore(Types.SCORE_DISQ);
+		for (MovingAvatar avatar : avatars) {
+			if (avatar != null) {
+				if (avatar.is_disqualified()) {
+					avatar.setWinState(Types.WINNER.PLAYER_DISQ);
+					avatar.setScore(Types.SCORE_DISQ);
 				}
 				// For sanity: winning a game always gives a positive score
-				else if (avatars[i].getWinState() == Types.WINNER.PLAYER_WINS)
-					if (avatars[i].getScore() <= 0)
-						avatars[i].setScore(1);
+				else if (avatar.getWinState() == Types.WINNER.PLAYER_WINS)
+					if (avatar.getScore() <= 0)
+						avatar.setScore(1);
 			}
 		}
 
@@ -1390,10 +1374,10 @@ public abstract class Game {
 	protected void eventHandling() {
 		// Array to indicate that the sprite type has no representative in
 		// collisions.
-		boolean noSprites[] = new boolean[spriteGroups.length];
+		boolean[] noSprites = new boolean[spriteGroups.length];
 
 		// First, check the effects that are triggered in a timely manner.
-		while (timeEffects.size() > 0 && timeEffects.first().nextExecution <= gameTick) {
+		while (!timeEffects.isEmpty() && timeEffects.first().nextExecution <= gameTick) {
 			TimeEffect ef = timeEffects.pollFirst();
 			if (ef.enabled) {
 				int intId = ef.itype;
@@ -1483,13 +1467,13 @@ public abstract class Game {
 			for (Effect ef : collisionEffects[p.first][p.second]) {
 				if (ef.enabled) {
 
-					if (shieldedEffects[p.first].size() > 0) {
+					if (!shieldedEffects[p.first].isEmpty()) {
 						if (shieldedEffects[p.first].contains(new Pair(p.second, ef.hashCode)))
 							continue;
 					}
 
-					ArrayList<VGDLSprite> firstx = new ArrayList<VGDLSprite>();
-					ArrayList<VGDLSprite> secondx = new ArrayList<VGDLSprite>();
+					ArrayList<VGDLSprite> firstx = new ArrayList<>();
+					ArrayList<VGDLSprite> secondx = new ArrayList<>();
 
 					ArrayList<Integer> allTypes1 = iSubTypes[p.first];
 					for (int i : allTypes1) {
@@ -1500,10 +1484,10 @@ public abstract class Game {
 						secondx.addAll(getSprites(j));
 					}
 
-					ArrayList<VGDLSprite> new_secondx = new ArrayList<VGDLSprite>();
+					ArrayList<VGDLSprite> new_secondx = new ArrayList<>();
 
 					for (VGDLSprite s1 : firstx) {
-						new_secondx = new ArrayList<VGDLSprite>();
+						new_secondx = new ArrayList<>();
 
 						for (VGDLSprite s2 : secondx) {
 							if ((s1 != s2 && s1.intersects(s2))) {
@@ -1511,14 +1495,14 @@ public abstract class Game {
 							}
 						}
 
-						if(new_secondx.size() > 0) {
+						if(!new_secondx.isEmpty()) {
 							if (ef.inBatch) {
 								executeEffectBatch(ef, s1, new_secondx);
 							} else {
 
-								for (int i = 0; i < new_secondx.size(); i++) {
-									if (!kill_list.contains(s1) && s1 != new_secondx.get(i) && s1.intersects(new_secondx.get(i))) {
-										executeEffect(ef, s1, new_secondx.get(i));
+								for (VGDLSprite newSecondx : new_secondx) {
+									if (!kill_list.contains(s1) && s1 != newSecondx && s1.intersects(newSecondx)) {
+										executeEffect(ef, s1, newSecondx);
 									}
 								}
 							}
@@ -1625,10 +1609,7 @@ public abstract class Game {
 	 */
 	private boolean isAtEdge(Rectangle rect) {
 		Rectangle r = new Rectangle(screenSize);
-		if (!r.contains(rect)) {
-			return true;
-		}
-		return false;
+		return !r.contains(rect);
 	}
 
 	/**
@@ -1694,8 +1675,7 @@ public abstract class Game {
 	 * Cleans the array of shielded effects.
 	 */
 	private void resetShieldEffects() {
-		for (int i = 0; i < shieldedEffects.length; ++i)
-			shieldedEffects[i].clear();
+		for (ArrayList<Pair<Integer, Long>> shieldedEffect : shieldedEffects) shieldedEffect.clear();
 	}
 
 	/**
@@ -2118,15 +2098,15 @@ public abstract class Game {
 		this.terminations.clear();
 
 		this.definedEffects.clear();
-		for (int i = 0; i < this.collisionEffects.length; i++) {
-			for (int j = 0; j < this.collisionEffects[i].length; j++) {
-				this.collisionEffects[i][j].clear();
+		for (ArrayList<Effect>[] collisionEffect : this.collisionEffects) {
+			for (ArrayList<Effect> effects : collisionEffect) {
+				effects.clear();
 			}
 		}
 
 		this.definedEOSEffects.clear();
-		for (int i = 0; i < this.eosEffects.length; i++) {
-			this.eosEffects[i].clear();
+		for (ArrayList<Effect> eosEffect : this.eosEffects) {
+			eosEffect.clear();
 		}
 
 		this.timeEffects.clear();
@@ -2260,14 +2240,14 @@ public abstract class Game {
 	/**
 	 * Class for helping collision detection.
 	 */
-	protected class Bucket {
+	protected static class Bucket {
 		ArrayList<VGDLSprite> allSprites;
 		HashMap<Integer, ArrayList<VGDLSprite>> spriteLists;
 		int totalNumSprites;
 
 		public Bucket() {
-			allSprites = new ArrayList<VGDLSprite>();
-			spriteLists = new HashMap<Integer, ArrayList<VGDLSprite>>();
+			allSprites = new ArrayList<>();
+			spriteLists = new HashMap<>();
 			totalNumSprites = 0;
 		}
 
@@ -2279,11 +2259,7 @@ public abstract class Game {
 
 		public void add(VGDLSprite sp) {
 			int bucket = sp.bucket;
-			ArrayList<VGDLSprite> sprites = spriteLists.get(bucket);
-			if (sprites == null) {
-				sprites = new ArrayList<VGDLSprite>();
-				spriteLists.put(bucket, sprites);
-			}
+			ArrayList<VGDLSprite> sprites = spriteLists.computeIfAbsent(bucket, k -> new ArrayList<>());
 			sprites.add(sp);
 			allSprites.add(sp);
 			totalNumSprites++;

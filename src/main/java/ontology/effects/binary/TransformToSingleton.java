@@ -100,7 +100,7 @@ public class TransformToSingleton extends Effect {
                 oldSprite.lastrect.width, oldSprite.lastrect.height);
 
         //Copy resources
-        if(oldSprite.resources.size() > 0)
+        if(!oldSprite.resources.isEmpty())
         {
             Set<Map.Entry<Integer, Integer>> entries = oldSprite.resources.entrySet();
             for(Map.Entry<Integer, Integer> entry : entries)
@@ -139,7 +139,7 @@ public class TransformToSingleton extends Effect {
     
     @Override
     public ArrayList<String> getEffectSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(stype!=null) result.add(stype);
     	if(stype_other!=null) result.add(stype_other);
     	

@@ -70,7 +70,7 @@ public class BirdAvatar extends OrientedAvatar
     public void postProcess()
     {
         //Define actions here first.
-        if(actions.size()==0)
+        if(actions.isEmpty())
         {
             actions.add(Types.ACTIONS.ACTION_USE);
         }

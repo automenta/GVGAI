@@ -47,6 +47,6 @@ public class Message {
      * @return a string explaining the whole error/warning
      */
     public String toString() {
-        return (this.type == Message.ERROR? "Error: ": "Warning: ") + this.content;
+        return (this.type == ERROR? "Error: ": "Warning: ") + this.content;
     }
 }

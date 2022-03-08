@@ -126,7 +126,7 @@ public class SpawnPoint extends SpriteProducer
 
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(stype != null) result.add(stype);
     	
     	return result;

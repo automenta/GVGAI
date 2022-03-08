@@ -49,7 +49,7 @@ public class ShootOnlyAvatar extends ShootAvatar
         actions.clear();
 
         //Define actions here first.
-        if(actions.size()==0)
+        if(actions.isEmpty())
         {
             actions.add(Types.ACTIONS.ACTION_LEFT);
             actions.add(Types.ACTIONS.ACTION_UP);
@@ -99,8 +99,7 @@ public class ShootOnlyAvatar extends ShootAvatar
     
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
-    	
-    	return result;
+
+        return new ArrayList<>();
     }
 }

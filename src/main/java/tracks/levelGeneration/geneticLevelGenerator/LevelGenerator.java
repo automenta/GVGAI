@@ -53,16 +53,16 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	 * @return				array of the new chromosomes at the new population
 	 */
 	private ArrayList<Chromosome> getNextPopulation(ArrayList<Chromosome> fPopulation, ArrayList<Chromosome> iPopulation){
-		ArrayList<Chromosome> newPopulation = new ArrayList<Chromosome>();
+		ArrayList<Chromosome> newPopulation = new ArrayList<>();
 		
 		//collect some statistics about the current generation
-		ArrayList<Double> fitnessArray = new ArrayList<Double>();
-		for(int i=0;i<fPopulation.size();i++){
-			fitnessArray.add(fPopulation.get(i).getFitness().get(0));
-		}
+		ArrayList<Double> fitnessArray = new ArrayList<>();
+        for (Chromosome chromosome : fPopulation) {
+            fitnessArray.add(chromosome.getFitness().get(0));
+        }
 
 		Collections.sort(fitnessArray);
-		if(fitnessArray.size() > 0){
+		if(!fitnessArray.isEmpty()){
 			bestFitness.add(fitnessArray.get(fitnessArray.size() - 1));
 		}
 		else{
@@ -232,14 +232,14 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	@Override
 	public String generateLevel(GameDescription game, ElapsedCpuTimer elapsedTimer) {
 		//initialize the statistics objects
-		bestFitness = new ArrayList<Double>();
-		numOfFeasible = new ArrayList<Integer>();
-		numOfInFeasible = new ArrayList<Integer>();
+		bestFitness = new ArrayList<>();
+		numOfFeasible = new ArrayList<>();
+		numOfInFeasible = new ArrayList<>();
 		
 		SharedData.gameDescription = game;
 		
 		int size = 0;
-		if(SharedData.gameAnalyzer.getSolidSprites().size() > 0){
+		if(!SharedData.gameAnalyzer.getSolidSprites().isEmpty()){
 			size = 2;
 		}
 		
@@ -251,8 +251,8 @@ public class LevelGenerator extends AbstractLevelGenerator{
 		height = (int)Math.min(height, SharedData.MAX_SIZE + size);
 		
 		System.out.println("Generation #1: ");
-		ArrayList<Chromosome> fChromosomes = new ArrayList<Chromosome>();
-		ArrayList<Chromosome> iChromosomes = new ArrayList<Chromosome>();
+		ArrayList<Chromosome> fChromosomes = new ArrayList<>();
+		ArrayList<Chromosome> iChromosomes = new ArrayList<>();
 		for(int i =0; i < SharedData.POPULATION_SIZE; i++){
 
 			//initialize the population using either randomly or using contructive level generator
@@ -313,9 +313,9 @@ public class LevelGenerator extends AbstractLevelGenerator{
 
 		//return the best infeasible chromosome
 		if(fChromosomes.isEmpty()){
-			for(int i=0;i<iChromosomes.size();i++){
-				iChromosomes.get(i).calculateFitness(SharedData.EVALUATION_TIME);
-			}
+            for (Chromosome iChromosome : iChromosomes) {
+                iChromosome.calculateFitness(SharedData.EVALUATION_TIME);
+            }
 
 			Collections.sort(iChromosomes);
 			bestChromosomeLevelMapping = iChromosomes.get(0).getLevelMapping();
@@ -324,9 +324,9 @@ public class LevelGenerator extends AbstractLevelGenerator{
 		}
 		
 		//return the best feasible chromosome otherwise and print some statistics
-		for(int i=0;i<fChromosomes.size();i++){
-			fChromosomes.get(i).calculateFitness(SharedData.EVALUATION_TIME);
-		}
+        for (Chromosome fChromosome : fChromosomes) {
+            fChromosome.calculateFitness(SharedData.EVALUATION_TIME);
+        }
 		Collections.sort(fChromosomes);
 		bestChromosomeLevelMapping = fChromosomes.get(0).getLevelMapping();
 		System.out.println("Best Chromosome Fitness: " + fChromosomes.get(0).getFitness());

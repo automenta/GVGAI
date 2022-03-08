@@ -22,7 +22,7 @@ public class LevelData {
 	 */
 	public LevelData(int width, int length){
 		level = new String[width][length];
-		levelMapping = new HashMap<String, Character>();
+		levelMapping = new HashMap<>();
 	}
 	
 
@@ -35,18 +35,17 @@ public class LevelData {
 		char mapChar = 'a';
 		
 		for(int y=0; y<level[0].length; y++){
-			for(int x=0; x<level.length; x++){
-				if(level[x][y] == null){
-					result += " ";
-				}
-				else{
-					if(!levelMapping.containsKey(level[x][y])){
-						levelMapping.put(level[x][y], mapChar);
-						mapChar += 1;
-					}
-					result += levelMapping.get(level[x][y]);
-				}
-			}
+            for (String[] strings : level) {
+                if (strings[y] == null) {
+                    result += " ";
+                } else {
+                    if (!levelMapping.containsKey(strings[y])) {
+                        levelMapping.put(strings[y], mapChar);
+                        mapChar += 1;
+                    }
+                    result += levelMapping.get(strings[y]);
+                }
+            }
 			result += "\n";
 		}
 		result = result.substring(0, result.length() - 1);
@@ -107,25 +106,25 @@ public class LevelData {
 		if(level[x1][y1] != null || level[x2][y2] != null){
 			return false;
 		}
-		ArrayList<Point> queue = new ArrayList<Point>();
+		ArrayList<Point> queue = new ArrayList<>();
 		boolean[][] visited = new boolean[getWidth()][getHeight()];
-		Point[] directions = new Point[]{new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)};
+		Point[] directions = {new Point(0, 1), new Point(1, 0), new Point(0, -1), new Point(-1, 0)};
 		queue.add(new Point(x1, y1));
-		while(queue.size() > 0){
+		while(!queue.isEmpty()){
 			Point current = queue.remove(0);
 			if(current.x == x2 && current.y == y2){
 				return true;
 			}
-			for(int i=0; i<directions.length; i++){
-				Point newPoint = new Point(current.x + directions[i].x, current.y + directions[i].y);
-				if(!checkInLevel(newPoint.x, newPoint.y)){
-					continue;
-				}
-				if(!visited[newPoint.x][newPoint.y] && level[newPoint.x][newPoint.y] == null){
-					visited[newPoint.x][newPoint.y] = true;
-					queue.add(newPoint);
-				}
-			}
+            for (Point direction : directions) {
+                Point newPoint = new Point(current.x + direction.x, current.y + direction.y);
+                if (!checkInLevel(newPoint.x, newPoint.y)) {
+                    continue;
+                }
+                if (!visited[newPoint.x][newPoint.y] && level[newPoint.x][newPoint.y] == null) {
+                    visited[newPoint.x][newPoint.y] = true;
+                    queue.add(newPoint);
+                }
+            }
 		}
 		return false;
 	}
@@ -167,7 +166,7 @@ public class LevelData {
 	 * @return	array of points contains all empty locations
 	 */
 	public ArrayList<Point> getAllFreeSpots(){
-		ArrayList<Point> result = new ArrayList<Point>();
+		ArrayList<Point> result = new ArrayList<>();
 		for(int x=0; x<level.length; x++){
 			for(int y=0; y<level[0].length; y++){
 				if(level[x][y] == null){
@@ -185,9 +184,9 @@ public class LevelData {
 	 * @return	the used hashmap for constructing the level
 	 */
 	public HashMap<Character, ArrayList<String>> getLevelMapping(){
-		HashMap<Character, ArrayList<String>> result = new HashMap<Character, ArrayList<String>>();
+		HashMap<Character, ArrayList<String>> result = new HashMap<>();
 		for(Entry<String,Character> entry:levelMapping.entrySet()){
-			ArrayList<String> list = new ArrayList<String>();
+			ArrayList<String> list = new ArrayList<>();
 			list.add(entry.getKey());
 			result.put(entry.getValue(), list);
 		}
@@ -220,7 +219,7 @@ public class LevelData {
 		 * @return	array of the 4 neighboring points
 		 */
 		public ArrayList<Point> getSurroundingPoints(){
-			ArrayList<Point> result = new ArrayList<Point>();
+			ArrayList<Point> result = new ArrayList<>();
 			result.add(new Point(this.x + 1, this.y));
 			result.add(new Point(this.x - 1, this.y));
 			result.add(new Point(this.x, this.y + 1));

@@ -1,9 +1,9 @@
 package core.game;
 
+import com.google.gson.Gson;
 import core.competition.CompetitionParameters;
 import ontology.Types;
 import tools.ElapsedCpuTimer;
-import tools.com.google.gson.Gson;
 
 import javax.imageio.ImageIO;
 import java.io.ByteArrayOutputStream;
@@ -176,7 +176,7 @@ public class SerializableStateObservation {
             for (int i = 0; i < observationGridNum; i++) {
                 for (int j = 0; j < observationGridMaxRow; j++) {
                     row = s.getObservationGrid()[i][j];
-                    observationGrid[i][j] = row.toArray(new Observation[row.size()]);
+                    observationGrid[i][j] = row.toArray(new Observation[0]);
                 }
             }
         }
@@ -194,7 +194,7 @@ public class SerializableStateObservation {
             NPCPositions = new Observation[NPCPositionsNum][NPCPositionsMaxRow];
             for (int i = 0; i < NPCPositionsNum; i++) {
                 row = s.getNPCPositions()[i];
-                NPCPositions[i] = row.toArray(new Observation[row.size()]);
+                NPCPositions[i] = row.toArray(new Observation[0]);
             }
         }
 
@@ -211,7 +211,7 @@ public class SerializableStateObservation {
             immovablePositions = new Observation[immovablePositionsNum][immovablePositionsMaxRow];
             for (int i = 0; i < s.getImmovablePositions().length; i++) {
                 row = s.getImmovablePositions()[i];
-                immovablePositions[i] = row.toArray(new Observation[row.size()]);
+                immovablePositions[i] = row.toArray(new Observation[0]);
             }
         }
 
@@ -228,7 +228,7 @@ public class SerializableStateObservation {
             movablePositions = new Observation[movablePositionsNum][movablePositionsMaxRow];
             for (int i = 0; i < movablePositionsNum; i++) {
                 row = s.getMovablePositions()[i];
-                movablePositions[i] = row.toArray(new Observation[row.size()]);
+                movablePositions[i] = row.toArray(new Observation[0]);
             }
         }
 
@@ -245,7 +245,7 @@ public class SerializableStateObservation {
             resourcesPositions = new Observation[resourcesPositionsNum][resourcesPositionsMaxRow];
             for (int i = 0; i < resourcesPositionsNum; i++) {
                 row = s.getResourcesPositions()[i];
-                resourcesPositions[i] = row.toArray(new Observation[row.size()]);
+                resourcesPositions[i] = row.toArray(new Observation[0]);
             }
         }
 
@@ -262,7 +262,7 @@ public class SerializableStateObservation {
             portalsPositions = new Observation[portalsPositionsNum][portalsPositionsMaxRow];
             for (int i = 0; i < portalsPositionsNum; i++) {
                 row = s.getPortalsPositions()[i];
-                portalsPositions[i] = row.toArray(new Observation[row.size()]);
+                portalsPositions[i] = row.toArray(new Observation[0]);
             }
         }
 
@@ -279,7 +279,7 @@ public class SerializableStateObservation {
             fromAvatarSpritesPositions = new Observation[fromAvatarSpritesPositionsNum][fromAvatarSpritesPositionsMaxRow];
             for (int i = 0; i < fromAvatarSpritesPositionsNum; i++) {
                 row = s.getFromAvatarSpritesPositions()[i];
-                fromAvatarSpritesPositions[i] = row.toArray(new Observation[row.size()]);
+                fromAvatarSpritesPositions[i] = row.toArray(new Observation[0]);
             }
         }
     }
@@ -341,9 +341,9 @@ public class SerializableStateObservation {
     public String toString() {
         String observation = "ObservationGrid{\n";
         if (observationGrid != null) {
-            for (int i = 0; i < observationGrid.length; i++) {
-                for (int j = 0; j < observationGrid[i].length; j++) {
-                    for (Observation obs : observationGrid[i][j]) {
+            for (Observation[][] observations : observationGrid) {
+                for (Observation[] value : observations) {
+                    for (Observation obs : value) {
                         observation += obs.toString();
                     }
                 }

@@ -28,7 +28,7 @@ public class BomberRandomMissile extends SpawnPoint
         //Parse the arguments.
         this.parseParameters(cnt);
 
-        int notItypesArray[] = VGDLRegistry.GetInstance().explode(stypeMissile);
+        int[] notItypesArray = VGDLRegistry.GetInstance().explode(stypeMissile);
         itypesMissile = new ArrayList<>();
         for(Integer it : notItypesArray)
             itypesMissile.add(it);
@@ -78,8 +78,7 @@ public class BomberRandomMissile extends SpawnPoint
         BomberRandomMissile targetSprite = (BomberRandomMissile) target;
 
         targetSprite.itypesMissile = new ArrayList<>();
-        for(Integer it : this.itypesMissile)
-            targetSprite.itypesMissile.add(it);
+        targetSprite.itypesMissile.addAll(this.itypesMissile);
         
         super.copyTo(targetSprite);
     }

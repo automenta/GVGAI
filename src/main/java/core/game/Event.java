@@ -87,17 +87,14 @@ public class Event implements Comparable<Event>
         if(!this.fromAvatar && o.fromAvatar) return 1;
         if(this.passiveTypeId < o.passiveTypeId)     return -1;   //Third tie break: against what.
         if(this.passiveTypeId > o.passiveTypeId)     return 1;
-        if(this.activeTypeId < o.activeTypeId)       return -1;   //Fourth tie break: who triggered it
-        if(this.activeTypeId > o.activeTypeId)       return 1;
-        return 0;
+        return Integer.compare(this.activeTypeId, o.activeTypeId);   //Fourth tie break: who triggered it
     }
 
     @Override
     public boolean equals(Object o)
     {
         if(this == o) return true;
-        if(!(o instanceof Event)) return false;
-        Event other = (Event)o;
+        if(!(o instanceof Event other)) return false;
 
         if(this.gameStep != other.gameStep) return false;
         if(this.fromAvatar != other.fromAvatar) return false;
@@ -105,7 +102,6 @@ public class Event implements Comparable<Event>
         if(this.passiveTypeId != other.passiveTypeId) return false;
         if(this.activeSpriteId != other.activeSpriteId) return false;
         if(this.passiveSpriteId != other.passiveSpriteId) return false;
-        if(! this.position.equals(other.position)) return false;
-        return true;
+        return this.position.equals(other.position);
     }
 }

@@ -16,7 +16,7 @@ public class CombinedConstraints extends AbstractConstraint{
 	 * 
 	 */
 	public CombinedConstraints(){
-		constraints = new ArrayList<AbstractConstraint>();
+		constraints = new ArrayList<>();
 	}
 	
 

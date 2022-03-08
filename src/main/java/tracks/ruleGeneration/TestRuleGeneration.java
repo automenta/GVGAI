@@ -6,7 +6,7 @@ import java.util.Random;
  * Created by dperez on 19/03/2017.
  */
 public class TestRuleGeneration {
-    public static void main(String[] args) throws Exception {
+    public static void main(String[] args) {
 	//Available Controllers
 	String sampleMCTSController = "tracks.singlePlayer.advanced.sampleMCTS.Agent";
 
@@ -18,10 +18,9 @@ public class TestRuleGeneration {
         // Available games:
         String gamesPath = "examples/gridphysics/";
         String physicsGamesPath = "examples/contphysics/";
-        String generateRulePath = gamesPath;
 
         // All public games (gridphysics)
-        String[] games = new String[]{"aliens", "angelsdemons", "assemblyline", "avoidgeorge", "bait", // 0-4
+        String[] games = {"aliens", "angelsdemons", "assemblyline", "avoidgeorge", "bait", // 0-4
                 "beltmanager", "blacksmoke", "boloadventures", "bomber", "bomberman", // 5-9
                 "boulderchase", "boulderdash", "brainman", "butterflies", "cakybaky", // 10-14
                 "camelRace", "catapults", "chainreaction", "chase", "chipschallenge", // 15-19
@@ -52,9 +51,9 @@ public class TestRuleGeneration {
         int seed = new Random().nextInt();
         int gameIdx = 0;
         int levelIdx = 0; // level names from 0 to 4 (game_lvlN.txt).
-        String game = generateRulePath + games[gameIdx] + ".txt";
+        String game = gamesPath + games[gameIdx] + ".txt";
         String level1 = gamesPath + games[gameIdx] + "_lvl" + levelIdx + ".txt";
-        String recordGameFile = generateRulePath + games[gameIdx] + "_ggame.txt";
+        String recordGameFile = gamesPath + games[gameIdx] + "_ggame.txt";
 
         // 1. Generate rules (Interaction and Terminations) for a fixed level
         if(RuleGenMachine.generateRules(game, level1, randomRuleGenerator, recordGameFile, seed)){
@@ -63,4 +62,3 @@ public class TestRuleGeneration {
         }
     }
 }
-

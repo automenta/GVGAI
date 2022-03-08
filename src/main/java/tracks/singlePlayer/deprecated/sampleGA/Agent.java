@@ -10,6 +10,7 @@ import tracks.singlePlayer.tools.Heuristics.StateHeuristic;
 import tracks.singlePlayer.tools.Heuristics.WinScoreHeuristic;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
@@ -34,7 +35,7 @@ public class Agent extends AbstractPlayer {
 
     private ElapsedCpuTimer timer;
 
-    private int genome[][][];
+    private int[][][] genome;
     private final HashMap<Integer, Types.ACTIONS> action_mapping;
     private final HashMap<Types.ACTIONS, Integer> r_action_mapping;
     protected Random randomGenerator;
@@ -51,8 +52,8 @@ public class Agent extends AbstractPlayer {
 
         randomGenerator = new Random();
 
-        action_mapping = new HashMap<Integer, Types.ACTIONS>();
-        r_action_mapping = new HashMap<Types.ACTIONS, Integer>();
+        action_mapping = new HashMap<>();
+        r_action_mapping = new HashMap<>();
         int i = 0;
         for (Types.ACTIONS action : stateObs.getAvailableActions()) {
             action_mapping.put(i, action);
@@ -145,8 +146,7 @@ public class Agent extends AbstractPlayer {
         }
 
         numSimulations++;
-        double score = Math.pow(GAMMA, depth) * heuristic.evaluateState(stateObs);
-        return score;
+        return Math.pow(GAMMA, depth) * heuristic.evaluateState(stateObs);
 
 
     }
@@ -155,9 +155,7 @@ public class Agent extends AbstractPlayer {
 
         double[] maxScores = new double[stateObs.getAvailableActions().size()];
 
-        for (int i = 0; i < maxScores.length; i++) {
-            maxScores[i] = Double.NEGATIVE_INFINITY;
-        }
+        Arrays.fill(maxScores, Double.NEGATIVE_INFINITY);
 
 
         outerloop:
@@ -186,10 +184,8 @@ public class Agent extends AbstractPlayer {
             }
         }
 
-        Types.ACTIONS maxAction = this.action_mapping.get(Utils.argmax(maxScores));
 
-
-        return maxAction;
+        return this.action_mapping.get(Utils.argmax(maxScores));
 
     }
 
@@ -206,9 +202,7 @@ public class Agent extends AbstractPlayer {
         this.timer = elapsedTimer;
         numSimulations = 0;
 
-        Types.ACTIONS lastGoodAction = microbial(stateObs, SIMULATION_DEPTH, new WinScoreHeuristic(stateObs), 100);
-
-        return lastGoodAction;
+        return microbial(stateObs, SIMULATION_DEPTH, new WinScoreHeuristic(stateObs), 100);
     }
 
 

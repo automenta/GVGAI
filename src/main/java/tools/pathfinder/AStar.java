@@ -12,12 +12,12 @@ public class AStar
     public static PriorityQueue<Node> closedList, openList;
     public HashMap<Integer, ArrayList<Node>> pathCache;
     public PathFinder pathfinder;
-    public boolean visited[][];
+    public boolean[][] visited;
 
     public AStar(PathFinder pathfinder)
     {
         this.pathfinder = pathfinder;
-        pathCache = new HashMap<Integer, ArrayList<Node>>();
+        pathCache = new HashMap<>();
         visited = new boolean[pathfinder.grid.length][pathfinder.grid[0].length];
     }
 
@@ -41,7 +41,7 @@ public class AStar
 
     private ArrayList<Node> calculatePath(Node node)
     {
-        ArrayList<Node> path = new ArrayList<Node>();
+        ArrayList<Node> path = new ArrayList<>();
         while(node != null)
         {
             if(node.parent != null) //to avoid adding the start node.
@@ -85,7 +85,7 @@ public class AStar
     private void _dijkstraa(Node start)
     {
 
-        ArrayList<Node> destinationsFromStart = new ArrayList<Node>();
+        ArrayList<Node> destinationsFromStart = new ArrayList<>();
         //All unvisited at the beginning.
         visited = new boolean[pathfinder.grid.length][pathfinder.grid[0].length];
         //...except the starting node
@@ -93,12 +93,12 @@ public class AStar
 
         Node node = null;
 
-        openList = new PriorityQueue<Node>();
+        openList = new PriorityQueue<>();
         start.totalCost = 0.0f;
 
         openList.add(start);
 
-        while(openList.size() != 0)
+        while(!openList.isEmpty())
         {
             node = openList.poll();
             //System.out.println("Remaining in list: " + openList.size());
@@ -110,19 +110,15 @@ public class AStar
 
             ArrayList<Node> neighbours = pathfinder.getNeighbours(node);
 
-            for(int i = 0; i < neighbours.size(); ++i)
-            {
-                Node neighbour = neighbours.get(i);
+            for (Node neighbour : neighbours) {
                 double curDistance = neighbour.totalCost;
-                if (! visited[(int)neighbour.position.x][(int)neighbour.position.y] )
-                {
-                    visited[(int)neighbour.position.x][(int)neighbour.position.y] = true;
+                if (!visited[(int) neighbour.position.x][(int) neighbour.position.y]) {
+                    visited[(int) neighbour.position.x][(int) neighbour.position.y] = true;
                     neighbour.totalCost = curDistance + node.totalCost;
                     neighbour.parent = node;
                     openList.add(neighbour);
 
-                }else if(curDistance + node.totalCost < neighbour.totalCost)
-                {
+                } else if (curDistance + node.totalCost < neighbour.totalCost) {
                     neighbour.totalCost = curDistance + node.totalCost;
                     neighbour.parent = node;
                 }
@@ -142,15 +138,15 @@ public class AStar
     private ArrayList<Node> _findPath(Node start, Node goal)
     {
         Node node = null;
-        openList = new PriorityQueue<Node>();
-        closedList = new PriorityQueue<Node>();
+        openList = new PriorityQueue<>();
+        closedList = new PriorityQueue<>();
 
         start.totalCost = 0.0f;
         start.estimatedCost = heuristicEstimatedCost(start, goal);
 
         openList.add(start);
 
-        while(openList.size() != 0)
+        while(!openList.isEmpty())
         {
             node = openList.poll();
             closedList.add(node);
@@ -160,29 +156,23 @@ public class AStar
 
             ArrayList<Node> neighbours = pathfinder.getNeighbours(node);
 
-            for(int i = 0; i < neighbours.size(); ++i)
-            {
-                Node neighbour = neighbours.get(i);
+            for (Node neighbour : neighbours) {
                 double curDistance = neighbour.totalCost;
 
-                if(!openList.contains(neighbour) && !closedList.contains(neighbour))
-                {
+                if (!openList.contains(neighbour) && !closedList.contains(neighbour)) {
                     neighbour.totalCost = curDistance + node.totalCost;
                     neighbour.estimatedCost = heuristicEstimatedCost(neighbour, goal);
                     neighbour.parent = node;
 
                     openList.add(neighbour);
 
-                }else if(curDistance + node.totalCost < neighbour.totalCost)
-                {
+                } else if (curDistance + node.totalCost < neighbour.totalCost) {
                     neighbour.totalCost = curDistance + node.totalCost;
                     neighbour.parent = node;
 
-                    if(openList.contains(neighbour))
-                        openList.remove(neighbour);
+                    openList.remove(neighbour);
 
-                    if(closedList.contains(neighbour))
-                        closedList.remove(neighbour);
+                    closedList.remove(neighbour);
 
                     openList.add(neighbour);
                 }

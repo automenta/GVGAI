@@ -13,23 +13,23 @@ public class GameAnalyzer {
 	/**
 	 * List of all different types of spawners
 	 */
-	public final ArrayList<String> spawnerTypes = new ArrayList<String>(Arrays.asList(new String[]{"SpawnPoint", "Bomber", "RandomBomber", "Spreader", "ShootAvatar", "FlakAvatar"}));
+	public final ArrayList<String> spawnerTypes = new ArrayList<>(Arrays.asList("SpawnPoint", "Bomber", "RandomBomber", "Spreader", "ShootAvatar", "FlakAvatar"));
 	/**
 	 * List of all different interactions cause spawning
 	 */
-	public final ArrayList<String> spawnInteractions = new ArrayList<String>(Arrays.asList(new String[]{"TransformTo", "SpawnIfHasMore", "SpawnIfHasLess"}));
+	public final ArrayList<String> spawnInteractions = new ArrayList<>(Arrays.asList("TransformTo", "SpawnIfHasMore", "SpawnIfHasLess"));
 	/**
 	 * List of all different interactions cause an object to be solid
 	 */
-	public final ArrayList<String> solidInteractions = new ArrayList<String>(Arrays.asList(new String[]{"StepBack", "UndoAll"}));
+	public final ArrayList<String> solidInteractions = new ArrayList<>(Arrays.asList("StepBack", "UndoAll"));
 	/**
 	 * List of all different interactions cause an object to die
 	 */
-	public final ArrayList<String> deathInteractions = new ArrayList<String>(Arrays.asList(new String[]{"KillSprite", "KillIfHasMore", "KillIfHasLess", "KillIfFromAbove", "KillIfOtherHasMore"}));
+	public final ArrayList<String> deathInteractions = new ArrayList<>(Arrays.asList("KillSprite", "KillIfHasMore", "KillIfHasLess", "KillIfFromAbove", "KillIfOtherHasMore"));
 	/**
 	 * List of all horizontal moving avatar
 	 */
-	public final ArrayList<String> horzAvatar = new ArrayList<String>(Arrays.asList(new String[]{"FlakAvatar", "HorizontalAvatar"}));
+	public final ArrayList<String> horzAvatar = new ArrayList<>(Arrays.asList("FlakAvatar", "HorizontalAvatar"));
 	/**
 	 * Resource string
 	 */
@@ -123,7 +123,7 @@ public class GameAnalyzer {
 				minRequiredNumber.put(sprite.name, 0);
 			}
 			else{
-				if(getAllInteractions(sprite.name, InteractionType.ALL, game).size() > 0 || 
+				if(!getAllInteractions(sprite.name, InteractionType.ALL, game).isEmpty() ||
 						spawnerTypes.contains(sprite.type)){
 					if(sprite.isSingleton){
 						minRequiredNumber.put(sprite.name, 1);
@@ -180,7 +180,7 @@ public class GameAnalyzer {
 					}
 				}
 				
-				if(isSolid && interactions.size() > 0 && !solidSprites.contains(solid.name)){
+				if(isSolid && !interactions.isEmpty() && !solidSprites.contains(solid.name)){
 					solidSprites.add(solid.name);
 				}
 			}
@@ -196,7 +196,7 @@ public class GameAnalyzer {
 	 */
 	private ArrayList<InteractionData> getAllInteractions(String stype, InteractionType type, GameDescription game){
 		ArrayList<SpriteData> allSprites = game.getAllSpriteData();
-		ArrayList<InteractionData> data = new ArrayList<InteractionData>();
+		ArrayList<InteractionData> data = new ArrayList<>();
 		
 		for (SpriteData sd:allSprites){
 			if(type == InteractionType.FIRST || type == InteractionType.ALL){
@@ -301,7 +301,7 @@ public class GameAnalyzer {
 	 */
 	private void findOtherSprites(GameDescription game){
 		ArrayList<SpriteData> allSprites = game.getAllSpriteData();
-		ArrayList<String> combinedLists = new ArrayList<String>();
+		ArrayList<String> combinedLists = new ArrayList<>();
 		combinedLists.addAll(avatarSprites);
 		combinedLists.addAll(harmfulSprites);
 		combinedLists.addAll(solidSprites);
@@ -353,12 +353,12 @@ public class GameAnalyzer {
 	 */
 	private void removeUselessObjects(GameDescription game){
 		HashMap<Character, ArrayList<String>> levelMapping = game.getLevelMapping();
-		ArrayList<String> allowedObjs = new ArrayList<String>();
+		ArrayList<String> allowedObjs = new ArrayList<>();
 		for(ArrayList<String> data:levelMapping.values()){
 			allowedObjs.addAll(data);
 		}
 		
-		ArrayList<String> removeObjs = new ArrayList<String>();
+		ArrayList<String> removeObjs = new ArrayList<>();
 		for(String s:avatarSprites){
 			if(!allowedObjs.contains(s)){
 				removeObjs.add(s);
@@ -369,7 +369,7 @@ public class GameAnalyzer {
 			avatarSprites.add("avatar");
 		}
 		
-		if(solidSprites.size() > 0){
+		if(!solidSprites.isEmpty()){
 			removeObjs.clear();
 			for(String s:solidSprites){
 				if(!allowedObjs.contains(s)){
@@ -420,15 +420,15 @@ public class GameAnalyzer {
 	 * @param game	game description object for the current game
 	 */
 	public GameAnalyzer(GameDescription game){
-		minRequiredNumber = new HashMap<String, Integer>();
-		priorityValue = new HashMap<String, Integer>();
+		minRequiredNumber = new HashMap<>();
+		priorityValue = new HashMap<>();
 		
-		solidSprites = new ArrayList<String>();
-		avatarSprites = new ArrayList<String>();
-		harmfulSprites = new ArrayList<String>();
-		collectableSprites = new ArrayList<String>();
-		goalSprites = new ArrayList<String>();
-		otherSprites = new ArrayList<String>();
+		solidSprites = new ArrayList<>();
+		avatarSprites = new ArrayList<>();
+		harmfulSprites = new ArrayList<>();
+		collectableSprites = new ArrayList<>();
+		goalSprites = new ArrayList<>();
+		otherSprites = new ArrayList<>();
 		
 		calculateMinRequiredNumber(game);
 		calculatePriorityValues(game);

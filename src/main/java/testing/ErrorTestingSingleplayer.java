@@ -20,7 +20,7 @@ public class ErrorTestingSingleplayer {
 	String gridGamesPath = "examples/gridphysics/";
 	String contGamesPath = "examples/contphysics/";
 	String gamesPath;
-	String games[];
+	String[] games;
 	boolean GRID_PHYSICS = true;
 
 	// All public games (gridphysics)

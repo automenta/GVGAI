@@ -56,8 +56,8 @@ public class MovingAvatar extends VGDLSprite {
 
     protected void loadDefaults() {
         super.loadDefaults();
-        actions = new ArrayList<Types.ACTIONS>();
-        actionsNIL = new ArrayList<Types.ACTIONS>();
+        actions = new ArrayList<>();
+        actionsNIL = new ArrayList<>();
 
         color = Types.WHITE;
         speed = 1;
@@ -68,7 +68,7 @@ public class MovingAvatar extends VGDLSprite {
     public void postProcess() {
 
         //Define actions here first.
-        if(actions.size()==0)
+        if(actions.isEmpty())
         {
             actions.add(Types.ACTIONS.ACTION_LEFT);
             actions.add(Types.ACTIONS.ACTION_RIGHT);
@@ -79,10 +79,7 @@ public class MovingAvatar extends VGDLSprite {
         super.postProcess();
 
         //A separate array with the same actions, plus NIL.
-        for(Types.ACTIONS act : actions)
-        {
-            actionsNIL.add(act);
-        }
+        actionsNIL.addAll(actions);
         actionsNIL.add(Types.ACTIONS.ACTION_NIL);
     }
 
@@ -262,8 +259,8 @@ public class MovingAvatar extends VGDLSprite {
 
     public void copyTo(VGDLSprite target) {
         MovingAvatar targetSprite = (MovingAvatar) target;
-        targetSprite.actions = new ArrayList<Types.ACTIONS>();
-        targetSprite.actionsNIL = new ArrayList<Types.ACTIONS>();
+        targetSprite.actions = new ArrayList<>();
+        targetSprite.actionsNIL = new ArrayList<>();
         targetSprite.playerID = this.playerID;
         targetSprite.winState = this.winState;
         targetSprite.score = this.score;

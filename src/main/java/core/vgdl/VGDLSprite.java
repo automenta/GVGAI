@@ -15,7 +15,6 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.geom.AffineTransform;
 import java.io.File;
-import java.io.IOException;
 import java.util.*;
 
 /**
@@ -429,12 +428,8 @@ public abstract class VGDLSprite {
     private Physics determinePhysics(int physicstype, Dimension size) {
         this.physicstype = physicstype;
         switch (physicstype) {
-            case Types.GRID:
-                physics = new GridPhysics(size);
-                break;
-            case Types.CONT:
-                physics = new ContinuousPhysics();
-                break;
+            case Types.GRID -> physics = new GridPhysics(size);
+            case Types.CONT -> physics = new ContinuousPhysics();
         }
         return physics;
     }
@@ -484,7 +479,7 @@ public abstract class VGDLSprite {
 
             ArrayList<Image> allImages;
             boolean isOrientedImg = (orientedImg != null);
-            allImages = !isOrientedImg ? images.get("NONE") : images.get(Types.v2DirStr(orientation.getVector()));
+            allImages = isOrientedImg ? images.get(Types.v2DirStr(orientation.getVector())) : images.get("NONE");
 
             if(!allImages.isEmpty()) {
                 if (frameRate > 0 && frameRemaining <= 0) {
@@ -1042,8 +1037,6 @@ public abstract class VGDLSprite {
             }
 
             return ImageIO.read(this.getClass().getResource("/" + image_file));
-        } catch (IOException e) {
-            //e.printStackTrace();
         } catch (Exception e) {
             //e.printStackTrace();
         }
@@ -1160,12 +1153,12 @@ public abstract class VGDLSprite {
         toSprite.img = this.img;
         toSprite.orientedImg = this.orientedImg;
 
-//        toSprite.itypes = new ArrayList<>(itypes.size());
-//        toSprite.itypes.addAll(this.itypes);
-        toSprite.itypes = this.itypes;
+        toSprite.itypes = new ArrayList<>(itypes.size());
+        toSprite.itypes.addAll(this.itypes);
+        //toSprite.itypes = this.itypes;
 
-        //toSprite.resources = new TreeMap<>(this.resources);
-        toSprite.resources = this.resources;
+        toSprite.resources = new TreeMap<>(this.resources);
+        //toSprite.resources = this.resources;
 
     }
 

@@ -22,7 +22,7 @@ public class SingleTreeNode
 	public int[][] visitedTiles;
     public static Random m_rnd;
     private int m_depth;
-    protected static double[] bounds = new double[]{Double.MAX_VALUE, -Double.MAX_VALUE};
+    protected static double[] bounds = {Double.MAX_VALUE, -Double.MAX_VALUE};
     public SingleTreeNode(Random rnd, int[][] visSpace) {
         this(null, null, rnd, visSpace);
     }
@@ -32,7 +32,7 @@ public class SingleTreeNode
     public SingleTreeNode(StateObservation state, SingleTreeNode parent, Random rnd, int[][] visSpace) {
         this.state = state;
         this.parent = parent;
-        this.m_rnd = rnd;
+        m_rnd = rnd;
         this.visitedTiles = visSpace;
         if(state != null){
 	        this.visitedTiles = Helper.updateTilesValue(visSpace, (int)(state.getAvatarPosition().x / state.getBlockSize()), 
@@ -85,9 +85,8 @@ public class SingleTreeNode
                 return cur.expand();
 
             } else {
-                SingleTreeNode next = cur.uct();
                 //SingleTreeNode next = cur.egreedy();
-                cur = next;
+                cur = cur.uct();
             }
         }
 
@@ -162,14 +161,14 @@ public class SingleTreeNode
     
     public int getMaxVisitedValue(){
     	int result = 0;
-    	
-    	for(int i=0; i<visitedTiles.length; i++){
-    		for(int j=0; j<visitedTiles[i].length; j++){
-    			if(visitedTiles[i][j] > result){
-    				result = visitedTiles[i][j];
-    			}
-    		}
-    	}
+
+        for (int[] visitedTile : visitedTiles) {
+            for (int i : visitedTile) {
+                if (i > result) {
+                    result = i;
+                }
+            }
+        }
     	
     	return result;
     }
@@ -190,7 +189,7 @@ public class SingleTreeNode
         StateObservation nextState = state.copy();
         nextState.advance(Agent.actions[bestAction]);
 
-        SingleTreeNode tn = new SingleTreeNode(nextState, this, this.m_rnd, visitedTiles);
+        SingleTreeNode tn = new SingleTreeNode(nextState, this, m_rnd, visitedTiles);
         children[bestAction] = tn;
         return tn;
 
@@ -203,11 +202,11 @@ public class SingleTreeNode
         double[] values = new double[32];
         for (SingleTreeNode child : this.children)
         {
-        	values[Helper.TREE_CHILD_DEPTH] = Double.valueOf(child.m_depth);        	
-        	values[Helper.TREE_CHILD_VALUE] = Double.valueOf(child.totValue);
-        	values[Helper.TREE_PARENT_VISITS] = Double.valueOf(this.nVisits);
-        	values[Helper.TREE_CHILD_VISITS] = Double.valueOf(child.nVisits);
-        	values[Helper.TREE_CHILD_MAX_VALUE] = Double.valueOf(child.maxValue);
+        	values[Helper.TREE_CHILD_DEPTH] = child.m_depth;
+        	values[Helper.TREE_CHILD_VALUE] = child.totValue;
+        	values[Helper.TREE_PARENT_VISITS] = this.nVisits;
+        	values[Helper.TREE_CHILD_VISITS] = child.nVisits;
+        	values[Helper.TREE_CHILD_MAX_VALUE] = child.maxValue;
         	
         	//Game related variables
         	values[Helper.HISTORY_REVERSE_VALUE] = getNumberOfReverseActions(child);
@@ -274,7 +273,7 @@ public class SingleTreeNode
             double uctValue = Agent.ucb.evaluate(values, Agent.parameters);
 
             // small sampleRandom numbers: break ties in unexpanded nodes
-            uctValue = Utils.noise(uctValue, this.epsilon, this.m_rnd.nextDouble());     //break ties randomly
+            uctValue = Utils.noise(uctValue, epsilon, m_rnd.nextDouble());     //break ties randomly
 
             // small sampleRandom numbers: break ties in unexpanded nodes
             if (uctValue > bestValue) {
@@ -306,7 +305,7 @@ public class SingleTreeNode
             for (SingleTreeNode child : this.children)
             {
                 double hvVal = child.totValue;
-                hvVal = Utils.noise(hvVal, this.epsilon, this.m_rnd.nextDouble());     //break ties randomly
+                hvVal = Utils.noise(hvVal, epsilon, m_rnd.nextDouble());     //break ties randomly
                 // small sampleRandom numbers: break ties in unexpanded nodes
                 if (hvVal > bestValue) {
                     selected = child;
@@ -368,10 +367,8 @@ public class SingleTreeNode
         if(depth >= Agent.ROLLOUT_DEPTH)      //rollout end condition.
             return true;
 
-        if(rollerState.isGameOver())               //end of game
-            return true;
-
-        return false;
+        //end of game
+        return rollerState.isGameOver();
     }
 
     public void backUp(SingleTreeNode node, double result)
@@ -407,7 +404,7 @@ public class SingleTreeNode
                 }
 
                 double childValue = children[i].nVisits;
-                childValue = Utils.noise(childValue, this.epsilon, this.m_rnd.nextDouble());     //break ties randomly
+                childValue = Utils.noise(childValue, epsilon, m_rnd.nextDouble());     //break ties randomly
                 if (childValue > bestValue) {
                     bestValue = childValue;
                     selected = i;
@@ -435,8 +432,8 @@ public class SingleTreeNode
         for (int i=0; i<children.length; i++) {
 
             if(children[i] != null) {
-                double childValue = children[i].totValue / (children[i].nVisits + this.epsilon);
-                childValue = Utils.noise(childValue, this.epsilon, this.m_rnd.nextDouble());     //break ties randomly
+                double childValue = children[i].totValue / (children[i].nVisits + epsilon);
+                childValue = Utils.noise(childValue, epsilon, m_rnd.nextDouble());     //break ties randomly
                 if (childValue > bestValue) {
                     bestValue = childValue;
                     selected = i;

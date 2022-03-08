@@ -26,7 +26,7 @@ public class RuleGenerator extends AbstractRuleGenerator{
 	private void constructAgent(SLDescription sl){
 		try{
 			Class agentClass = Class.forName(SharedData.BEST_AGENT_NAME);
-			Constructor agentConst = agentClass.getConstructor(new Class[]{StateObservation.class, ElapsedCpuTimer.class});
+			Constructor agentConst = agentClass.getConstructor(StateObservation.class, ElapsedCpuTimer.class);
 			SharedData.automatedAgent = (AbstractPlayer)agentConst.newInstance(sl.testRules(new String[]{}, new String[]{}), null);
 		}
 		catch(Exception e){
@@ -35,7 +35,7 @@ public class RuleGenerator extends AbstractRuleGenerator{
 
 		try{
 			Class agentClass = Class.forName(SharedData.NAIVE_AGENT_NAME);
-			Constructor agentConst = agentClass.getConstructor(new Class[]{StateObservation.class, ElapsedCpuTimer.class});
+			Constructor agentConst = agentClass.getConstructor(StateObservation.class, ElapsedCpuTimer.class);
 			SharedData.naiveAgent = (AbstractPlayer)agentConst.newInstance(sl.testRules(new String[]{}, new String[]{}), null);
 		}
 		catch(Exception e){
@@ -44,7 +44,7 @@ public class RuleGenerator extends AbstractRuleGenerator{
 
 		try{
 			Class agentClass = Class.forName(SharedData.DO_NOTHING_AGENT_NAME);
-			Constructor agentConst = agentClass.getConstructor(new Class[]{StateObservation.class, ElapsedCpuTimer.class});
+			Constructor agentConst = agentClass.getConstructor(StateObservation.class, ElapsedCpuTimer.class);
 			SharedData.doNothingAgent = (AbstractPlayer)agentConst.newInstance(sl.testRules(new String[]{}, new String[]{}), null);
 		}
 		catch(Exception e){
@@ -52,7 +52,7 @@ public class RuleGenerator extends AbstractRuleGenerator{
 		}
 		try{
 			Class agentClass = Class.forName(SharedData.RANDOM_AGENT_NAME);
-			Constructor agentConst = agentClass.getConstructor(new Class[]{StateObservation.class, ElapsedCpuTimer.class});
+			Constructor agentConst = agentClass.getConstructor(StateObservation.class, ElapsedCpuTimer.class);
 			SharedData.randomAgent = (AbstractPlayer)agentConst.newInstance(sl.testRules(new String[]{}, new String[]{}), null);
 		}
 		catch(Exception e){
@@ -66,25 +66,25 @@ public class RuleGenerator extends AbstractRuleGenerator{
 	 * @param time	amount of time allowed to generate
 	 */
 	public RuleGenerator(SLDescription sl, ElapsedCpuTimer time) {
-		SharedData.usefulSprites = new ArrayList<String>();
+		SharedData.usefulSprites = new ArrayList<>();
 		SharedData.random = new Random();
 		SharedData.la = new LevelAnalyzer(sl);
 		
 		String[][] currentLevel = sl.getCurrentLevel();
 		// Just get the useful sprites from the current level
-		for (int y = 0; y < currentLevel.length; y++) {
-			for (int x = 0; x < currentLevel[y].length; x++) {
-				String[] parts = currentLevel[y][x].split(",");
-				for (int i = 0; i < parts.length; i++) {
-					if (parts[i].trim().length() > 0) {
-						// Add the sprite if it doesn't exisit
-						if (!SharedData.usefulSprites.contains(parts[i].trim())) {
-						    SharedData.usefulSprites.add(parts[i].trim());
-						}
-					}
-				}
-			}
-		}
+        for (String[] strings : currentLevel) {
+            for (String string : strings) {
+                String[] parts = string.split(",");
+                for (String part : parts) {
+                    if (!part.trim().isEmpty()) {
+                        // Add the sprite if it doesn't exisit
+                        if (!SharedData.usefulSprites.contains(part.trim())) {
+                            SharedData.usefulSprites.add(part.trim());
+                        }
+                    }
+                }
+            }
+        }
 		SharedData.usefulSprites.add("EOS");
 		constructAgent(sl);
 		SharedData.constGen = new tracks.ruleGeneration.constructiveRuleGenerator.RuleGenerator(sl, time);
@@ -92,10 +92,10 @@ public class RuleGenerator extends AbstractRuleGenerator{
 	}
 	
 	private ArrayList<Chromosome> getFirstPopulation(SLDescription sl, String name, int amount, int mutations){
-	    	ArrayList<Chromosome> chromosomes = new ArrayList<Chromosome>();
+	    	ArrayList<Chromosome> chromosomes = new ArrayList<>();
 	    	try{
         	    	Class genClass = Class.forName(name);
-        	    	Constructor genConst = genClass.getConstructor(new Class[]{SLDescription.class, ElapsedCpuTimer.class});
+        	    	Constructor genConst = genClass.getConstructor(SLDescription.class, ElapsedCpuTimer.class);
         	    	AbstractRuleGenerator ruleGen = (AbstractRuleGenerator)genConst.newInstance(sl, null);
             	 	for(int i = 0; i < amount; i++) {
         	 		Chromosome c = new Chromosome(ruleGen.generateRules(sl, null), sl);
@@ -120,16 +120,16 @@ public class RuleGenerator extends AbstractRuleGenerator{
 	 * @return				array of the new chromosomes at the new population
 	 */
 	private ArrayList<Chromosome> getNextPopulation(ArrayList<Chromosome> fPopulation, ArrayList<Chromosome> iPopulation){
-		ArrayList<Chromosome> newPopulation = new ArrayList<Chromosome>();
+		ArrayList<Chromosome> newPopulation = new ArrayList<>();
 
 		//collect some statistics about the current generation
-		ArrayList<Double> fitnessArray = new ArrayList<Double>();
-		for(int i=0;i<fPopulation.size();i++){
-			fitnessArray.add(fPopulation.get(i).getFitness().get(0));
-		}
+		ArrayList<Double> fitnessArray = new ArrayList<>();
+        for (Chromosome chromosome : fPopulation) {
+            fitnessArray.add(chromosome.getFitness().get(0));
+        }
 
 		Collections.sort(fitnessArray);
-		if(fitnessArray.size() > 0){
+		if(!fitnessArray.isEmpty()){
 			bestFitness.add(fitnessArray.get(fitnessArray.size() - 1));
 		}
 		else{
@@ -265,14 +265,14 @@ public class RuleGenerator extends AbstractRuleGenerator{
 	public String[][] generateRules(SLDescription sl, ElapsedCpuTimer time) {
 		
 		//initialize the statistics objects
- 		bestFitness = new ArrayList<Double>();
-		numOfFeasible = new ArrayList<Integer>();
-		numOfInFeasible = new ArrayList<Integer>();
+ 		bestFitness = new ArrayList<>();
+		numOfFeasible = new ArrayList<>();
+		numOfInFeasible = new ArrayList<>();
 
 		System.out.println("Generation #0: ");
-		ArrayList<Chromosome> fChromosomes = new ArrayList<Chromosome>();
-		ArrayList<Chromosome> iChromosomes = new ArrayList<Chromosome>();
-		ArrayList<Chromosome> allChromosomes = new ArrayList<Chromosome>();
+		ArrayList<Chromosome> fChromosomes = new ArrayList<>();
+		ArrayList<Chromosome> iChromosomes = new ArrayList<>();
+		ArrayList<Chromosome> allChromosomes = new ArrayList<>();
 		
 		allChromosomes.addAll(getFirstPopulation(sl, "tracks.ruleGeneration.constructiveRuleGenerator.RuleGenerator", 
 			(int)(SharedData.POPULATION_SIZE * SharedData.INIT_CONSTRUCT_PERCENT), 0));
@@ -314,9 +314,9 @@ public class RuleGenerator extends AbstractRuleGenerator{
 
 		//return the best infeasible chromosome
 		if(fChromosomes.isEmpty()){
-			for(int i=0;i<iChromosomes.size();i++){
-				iChromosomes.get(i).calculateFitness(SharedData.EVALUATION_TIME);
-			}
+            for (Chromosome iChromosome : iChromosomes) {
+                iChromosome.calculateFitness(SharedData.EVALUATION_TIME);
+            }
 
 			Collections.sort(iChromosomes);
 			System.out.println("Best Fitness: " + iChromosomes.get(0).getConstrainFitness());
@@ -324,9 +324,9 @@ public class RuleGenerator extends AbstractRuleGenerator{
 		}
 
 		//return the best feasible chromosome otherwise and print some statistics
-		for(int i=0;i<fChromosomes.size();i++){
-			fChromosomes.get(i).calculateFitness(SharedData.EVALUATION_TIME);
-		}
+        for (Chromosome fChromosome : fChromosomes) {
+            fChromosome.calculateFitness(SharedData.EVALUATION_TIME);
+        }
 		Collections.sort(fChromosomes);
 		System.out.println("Best Chromosome Fitness: " + fChromosomes.get(0).getFitness());
 		System.out.println(bestFitness);

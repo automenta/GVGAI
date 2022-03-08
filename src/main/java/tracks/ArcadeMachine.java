@@ -18,6 +18,7 @@ import java.io.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
@@ -99,7 +100,7 @@ public class ArcadeMachine {
 		toPlay.buildLevel(level_file, randomSeed);
 
 		// Warm the game up.
-		ArcadeMachine.warmUp(toPlay, CompetitionParameters.WARMUP_TIME);
+		warmUp(toPlay, CompetitionParameters.WARMUP_TIME);
 
 		// Create the players.
 		String[] names = agentNames.split(" ");
@@ -113,7 +114,7 @@ public class ArcadeMachine {
 			names = newNames;
 		}
 
-		boolean humans[] = new boolean[no_players];
+		boolean[] humans = new boolean[no_players];
 		boolean anyHuman = false;
 
 		// System.out.println("Number of players: " + no_players);
@@ -134,11 +135,11 @@ public class ArcadeMachine {
 
 			if (no_players > 1) {
 			// multi player
-			players[i] = ArcadeMachine.createMultiPlayer(names[i], actionFile, toPlay.getObservationMulti(i),
+			players[i] = createMultiPlayer(names[i], actionFile, toPlay.getObservationMulti(i),
 				randomSeed, i, humans[i]);
 			} else {
 			// single player
-			players[i] = ArcadeMachine.createPlayer(names[i], actionFile, toPlay.getObservation(), randomSeed,
+			players[i] = createPlayer(names[i], actionFile, toPlay.getObservation(), randomSeed,
 				humans[i]);
 			}
 
@@ -168,7 +169,7 @@ public class ArcadeMachine {
 			score = toPlay.runGame(players, randomSeed);
 
 		// Finally, when the game is over, we need to tear the players down.
-		ArcadeMachine.tearPlayerDown(toPlay, players, actionFile, randomSeed, true);
+		tearPlayerDown(toPlay, players, actionFile, randomSeed, true);
 
 		// This, the last thing to do in this method, always:
 		toPlay.handleResult();
@@ -230,11 +231,11 @@ public class ArcadeMachine {
 		for (int i = 0; i < no_players; i++) {
 			if (no_players > 1) {
 			// multi player
-			players[i] = ArcadeMachine.createMultiPlayer(agentName, null, toPlay.getObservationMulti(i), -1, i,
+			players[i] = createMultiPlayer(agentName, null, toPlay.getObservationMulti(i), -1, i,
 				false);
 			} else {
 			// single player
-			players[i] = ArcadeMachine.createPlayer(agentName, null, toPlay.getObservation(), -1, false);
+			players[i] = createPlayer(agentName, null, toPlay.getObservation(), -1, false);
 			}
 
 			if (players[i] == null) {
@@ -249,7 +250,7 @@ public class ArcadeMachine {
 			}
 
 			// Get the score for the result.
-			double result[] = toPlay.handleResult();
+			double[] result = toPlay.handleResult();
 			toPlay.printResult();
 			return result;
 			}
@@ -259,7 +260,7 @@ public class ArcadeMachine {
 		int[] win = new int[no_players];
 		double[] loggedScore = new double[no_players];
 		int timesteps = 0;
-		ArrayList<Types.ACTIONS> actions = new ArrayList<Types.ACTIONS>();
+		ArrayList<Types.ACTIONS> actions = new ArrayList<>();
 
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(actionFile));
@@ -330,7 +331,7 @@ public class ArcadeMachine {
 				// separated by spaces.
 				ArrayList<ArrayList<Types.ACTIONS>> act = new ArrayList<>();
 				for (int i = 0; i < no_players; i++) {
-					act.add(new ArrayList<Types.ACTIONS>());
+					act.add(new ArrayList<>());
 				}
 				String line = br.readLine();
 				while (line != null) {
@@ -363,7 +364,7 @@ public class ArcadeMachine {
 
 		// Finally, when the game is over, we need to tear the player down.
 		// Actually in this case this might never do anything.
-		ArcadeMachine.tearPlayerDown(toPlay, players, actionFile, seed, false);
+		tearPlayerDown(toPlay, players, actionFile, seed, false);
 
 		for (int i = 0; i < toPlay.getNoPlayers(); i++) {
 			int actualWinner = (toPlay.getWinner(i) == Types.WINNER.PLAYER_WINS ? 1 : 0);
@@ -371,7 +372,7 @@ public class ArcadeMachine {
 				throw new RuntimeException("ERROR: Game Replay Failed.");
 		}
 
-		double result[] = toPlay.handleResult();
+		double[] result = toPlay.handleResult();
 		toPlay.printResult();
 		return result;
     }
@@ -430,7 +431,7 @@ public class ArcadeMachine {
 		String filename = recordActions ? actionFiles[levelIdx * level_times + i] : null;
 
 		// Warm the game up.
-		ArcadeMachine.warmUp(toPlay, CompetitionParameters.WARMUP_TIME);
+		warmUp(toPlay, CompetitionParameters.WARMUP_TIME);
 
 		// Create the player.
 		String[] agentNames = agentName.split(" ");
@@ -452,11 +453,11 @@ public class ArcadeMachine {
 		for (int j = 0; j < no_players; j++) {
 		    if (no_players > 1) {
 			// multi player
-			players[j] = ArcadeMachine.createMultiPlayer(agentNames[j], filename,
+			players[j] = createMultiPlayer(agentNames[j], filename,
 				toPlay.getObservationMulti(j), randomSeed, j, false);
 		    } else {
 			// single player
-			players[j] = ArcadeMachine.createPlayer(agentNames[j], filename, toPlay.getObservation(),
+			players[j] = createPlayer(agentNames[j], filename, toPlay.getObservation(),
 				randomSeed, false);
 		    }
 		    score[j] = -1;
@@ -485,7 +486,7 @@ public class ArcadeMachine {
 
 		// Finally, when the game is over, we need to tear the players
 		// down.
-		if (!ArcadeMachine.tearPlayerDown(toPlay, players, filename, randomSeed, true)) {
+		if (!tearPlayerDown(toPlay, players, filename, randomSeed, true)) {
 		    score = toPlay.handleResult();
 		    toPlay.printResult();
 		}
@@ -628,11 +629,11 @@ public class ArcadeMachine {
 				// (StateObservation, long).
 				Class<? extends AbstractPlayer> controllerClass = Class.forName(playerName)
 					.asSubclass(AbstractPlayer.class);
-				Class[] gameArgClass = new Class[] { StateObservation.class, ElapsedCpuTimer.class };
+				Class[] gameArgClass = { StateObservation.class, ElapsedCpuTimer.class };
 				Constructor controllerArgsConstructor = controllerClass.getConstructor(gameArgClass);
 
 				// Call the constructor with the appropriate parameters.
-				Object[] constructorArgs = new Object[] { so, ect.copy() };
+				Object[] constructorArgs = { so, ect.copy() };
 
 				player = (AbstractPlayer) controllerArgsConstructor.newInstance(constructorArgs);
 				player.setPlayerID(playerID);
@@ -642,11 +643,11 @@ public class ArcadeMachine {
 				// (StateObservation, long, int).
 				Class<? extends AbstractMultiPlayer> controllerClass = Class.forName(playerName)
 					.asSubclass(AbstractMultiPlayer.class);
-				Class[] gameArgClass = new Class[] { StateObservationMulti.class, ElapsedCpuTimer.class, int.class };
+				Class[] gameArgClass = { StateObservationMulti.class, ElapsedCpuTimer.class, int.class };
 				Constructor controllerArgsConstructor = controllerClass.getConstructor(gameArgClass);
 
 				// Call the constructor with the appropriate parameters.
-				Object[] constructorArgs = new Object[] { (StateObservationMulti) so.copy(), ect.copy(), playerID };
+				Object[] constructorArgs = {so.copy(), ect.copy(), playerID };
 
 				player = (AbstractMultiPlayer) controllerArgsConstructor.newInstance(constructorArgs);
 				player.setPlayerID(playerID);
@@ -837,8 +838,8 @@ public class ArcadeMachine {
         if (toPlay.no_players > 1) {
             // multi player, write actions to files.
             try {
-            if ((actionFile != null && !actionFile.equals("") && record)) {
-                BufferedWriter writer = new BufferedWriter(new FileWriter(new File(actionFile)));
+            if ((actionFile != null && !actionFile.isEmpty() && record)) {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(actionFile));
 
                 // write random seed and game ticks
                 writer.write(randomSeed + " " + toPlay.getGameTick() + "\n");
@@ -847,9 +848,7 @@ public class ArcadeMachine {
 
                 String scores = "", winState = "";
                 String[] actions = new String[toPlay.getGameTick() + 1];
-                for (int i = 0; i < actions.length; i++) {
-                actions[i] = "";
-                }
+				Arrays.fill(actions, "");
 
                 for (Player p : players) {
                 // scores for all players
@@ -913,10 +912,8 @@ public class ArcadeMachine {
     }
 
     public static final boolean isHuman(String agentName) {
-		if (agentName.equalsIgnoreCase("tracks.multiPlayer.tools.human.Agent")
-			|| agentName.equalsIgnoreCase("tracks.singlePlayer.tools.human.Agent"))
-			return true;
-		return false;
+		return agentName.equalsIgnoreCase("tracks.multiPlayer.tools.human.Agent")
+				|| agentName.equalsIgnoreCase("tracks.singlePlayer.tools.human.Agent");
 	}
 
 }

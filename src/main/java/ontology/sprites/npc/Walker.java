@@ -56,7 +56,7 @@ public class Walker extends VGDLSprite
     			d = -1;
     		}
     		else{
-    		    int[] choices = new int[]{-1,1};
+    		    int[] choices = {-1,1};
     			d = choices[game.getRandomGenerator().nextInt(choices.length)];
     		}
     		Direction dir = new Direction(d,0);

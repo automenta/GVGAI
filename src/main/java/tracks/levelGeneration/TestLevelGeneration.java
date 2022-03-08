@@ -14,10 +14,9 @@ public class TestLevelGeneration {
 
 		String gamesPath = "examples/gridphysics/";
 		String physicsGamesPath = "examples/contphysics/";
-		String generateLevelPath = gamesPath;
 
 
-		String games[] = new String[] { "aliens", "angelsdemons", "assemblyline", "avoidgeorge", "bait", // 0-4
+		String[] games = { "aliens", "angelsdemons", "assemblyline", "avoidgeorge", "bait", // 0-4
 				"beltmanager", "blacksmoke", "boloadventures", "bomber", "bomberman", // 5-9
 				"boulderchase", "boulderdash", "brainman", "butterflies", "cakybaky", // 10-14
 				"camelRace", "catapults", "chainreaction", "chase", "chipschallenge", // 15-19
@@ -46,8 +45,8 @@ public class TestLevelGeneration {
 		// Other settings
 		int seed = new Random().nextInt();
 		int gameIdx = 11;
-		String recordLevelFile = generateLevelPath + games[gameIdx] + "_glvl.txt";
-		String game = generateLevelPath + games[gameIdx] + ".txt";
+		String recordLevelFile = gamesPath + games[gameIdx] + "_glvl.txt";
+		String game = gamesPath + games[gameIdx] + ".txt";
 
 
 		// 1. This starts a game, in a generated level created by a specific level generator

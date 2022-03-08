@@ -46,9 +46,9 @@ public class Helper {
 		if(list == null) return 0;
 		
     	int result = 0;
-    	for(int i=0; i<list.length; i++){
-    		result += list[i].size();
-    	}
+        for (ArrayList<Observation> observations : list) {
+            result += observations.size();
+        }
     	return result;
     }
     
@@ -56,15 +56,15 @@ public class Helper {
     	if(list == null) return 0;
     	
     	double result = 0;
-    	
-    	for(int i=0; i<list.length; i++){
-    		for(int j=0; j<list[i].size(); j++){
-    			double distance = list[i].get(j).position.dist(reference);
-    			if(distance > result){
-    				result = distance;
-    			}
-    		}
-    	}
+
+        for (ArrayList<Observation> observations : list) {
+			for (Observation observation : observations) {
+				double distance = observation.position.dist(reference);
+				if (distance > result) {
+					result = distance;
+				}
+			}
+        }
     	
     	return result;
     }
@@ -73,15 +73,15 @@ public class Helper {
     	if(list == null) return 0;
     	
     	double result = Double.MAX_VALUE;
-    	
-    	for(int i=0; i<list.length; i++){
-    		for(int j=0; j<list[i].size(); j++){
-    			double distance = list[i].get(j).position.dist(reference);
-    			if(distance < result){
-    				result = distance;
-    			}
-    		}
-    	}
+
+        for (ArrayList<Observation> observations : list) {
+			for (Observation observation : observations) {
+				double distance = observation.position.dist(reference);
+				if (distance < result) {
+					result = distance;
+				}
+			}
+        }
     	
     	if(result == Double.MAX_VALUE){
     		return 0;
@@ -94,13 +94,13 @@ public class Helper {
     	if(list == null) return 0;
     	
     	double result = 0;
-    	
-    	for(int i=0; i<list.length; i++){
-    		for(int j=0; j<list[i].size(); j++){
-    			double distance = list[i].get(j).position.dist(reference);
-    			result += distance;
-    		}
-    	}
+
+        for (ArrayList<Observation> observations : list) {
+			for (Observation observation : observations) {
+				double distance = observation.position.dist(reference);
+				result += distance;
+			}
+        }
     	
     	return result;
     }
@@ -116,20 +116,14 @@ public class Helper {
     	if(a1 == Types.ACTIONS.ACTION_UP && a2 == Types.ACTIONS.ACTION_DOWN){
     		return true;
     	}
-    	if(a2 == Types.ACTIONS.ACTION_UP && a1 == Types.ACTIONS.ACTION_DOWN){
-    		return true;
-    	}
-    	
-    	return false;
+        return a2 == Types.ACTIONS.ACTION_UP && a1 == Types.ACTIONS.ACTION_DOWN;
     }
     
     public static int[][] updateTilesValue(int[][] tiles, int x, int y){
     	int[][] result = new int[tiles.length][tiles[0].length];
     	
     	for(int i=0; i<tiles.length; i++){
-    		for(int j=0; j<tiles[i].length; j++){
-    			result[i][j] = tiles[i][j];
-    		}
+            System.arraycopy(tiles[i], 0, result[i], 0, tiles[i].length);
     	}
     	
     	if(x >= 0 && y >= 0 && x < tiles.length && y < tiles[0].length) tiles[x][y] += 1;

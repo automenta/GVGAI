@@ -30,10 +30,9 @@ public class Individual implements Comparable{
 
     @Override
     public boolean equals(Object o) {
-        if (!(o instanceof Individual)) return false;
+        if (!(o instanceof Individual b)) return false;
 
         Individual a = this;
-        Individual b = (Individual)o;
 
         for (int i = 0; i < actions.length; i++) {
             if (a.actions[i] != b.actions[i]) return false;
@@ -51,7 +50,7 @@ public class Individual implements Comparable{
 
     @Override
     public String toString() {
-        StringBuilder s = new StringBuilder("" + value + ": ");
+        StringBuilder s = new StringBuilder(value + ": ");
         for (int action : actions) s.append(action).append(" ");
         return s.toString();
     }

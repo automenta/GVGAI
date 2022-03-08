@@ -26,6 +26,7 @@ import java.awt.*;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -40,83 +41,77 @@ public class VGDLFactory
     /**
      * Available sprites for VGDL.
      */
-    private String[] spriteStrings = new String[]
-            {"Conveyor", "Flicker", "Immovable", "OrientedFlicker", "Passive", "Resource", "Spreader",
-             "ErraticMissile", "Missile", "RandomMissile", "Walker", "WalkerJumper",
-             "ResourcePack", "Chaser", "PathChaser", "Fleeing", "RandomInertial",
-             "RandomNPC", "AlternateChaser", "RandomAltChaser","PathAltChaser", "RandomPathAltChaser",
-             "Bomber", "RandomBomber", "Portal", "SpawnPoint", "SpriteProducer", "Door",
-             "FlakAvatar", "HorizontalAvatar", "VerticalAvatar", "MovingAvatar","MissileAvatar",
-             "OrientedAvatar","ShootAvatar", "OngoingAvatar", "OngoingTurningAvatar", "BomberRandomMissile",
-             "OngoingShootAvatar", "NullAvatar", "AimedAvatar", "PlatformerAvatar", "BirdAvatar",
-             "SpaceshipAvatar", "CarAvatar", "WizardAvatar", "LanderAvatar", "ShootOnlyAvatar", "SpawnPointMultiSprite",
-                    "LOSChaser"};
+    private String[] spriteStrings = {"Conveyor", "Flicker", "Immovable", "OrientedFlicker", "Passive", "Resource", "Spreader",
+     "ErraticMissile", "Missile", "RandomMissile", "Walker", "WalkerJumper",
+     "ResourcePack", "Chaser", "PathChaser", "Fleeing", "RandomInertial",
+     "RandomNPC", "AlternateChaser", "RandomAltChaser","PathAltChaser", "RandomPathAltChaser",
+     "Bomber", "RandomBomber", "Portal", "SpawnPoint", "SpriteProducer", "Door",
+     "FlakAvatar", "HorizontalAvatar", "VerticalAvatar", "MovingAvatar","MissileAvatar",
+     "OrientedAvatar","ShootAvatar", "OngoingAvatar", "OngoingTurningAvatar", "BomberRandomMissile",
+     "OngoingShootAvatar", "NullAvatar", "AimedAvatar", "PlatformerAvatar", "BirdAvatar",
+     "SpaceshipAvatar", "CarAvatar", "WizardAvatar", "LanderAvatar", "ShootOnlyAvatar", "SpawnPointMultiSprite",
+            "LOSChaser"};
 
 
     /**
      * Available Sprite classes for VGDL.
      */
-    private Class[] spriteClasses = new Class[]
-            {Conveyor.class, Flicker.class, Immovable.class, OrientedFlicker.class, Passive.class, Resource.class, Spreader.class,
-             ErraticMissile.class, Missile.class, RandomMissile.class, Walker.class, WalkerJumper.class,
-             ResourcePack.class, Chaser.class, PathChaser.class, Fleeing.class, RandomInertial.class,
-             RandomNPC.class, AlternateChaser.class, RandomAltChaser.class, PathAltChaser.class, RandomPathAltChaser.class,
-             Bomber.class, RandomBomber.class, Portal.class, SpawnPoint.class, SpriteProducer.class, Door.class,
-             FlakAvatar.class, HorizontalAvatar.class, VerticalAvatar.class, MovingAvatar.class,MissileAvatar.class,
-             OrientedAvatar.class,ShootAvatar.class, OngoingAvatar.class, OngoingTurningAvatar.class, BomberRandomMissile.class,
-             OngoingShootAvatar.class, NullAvatar.class, AimedAvatar.class, PlatformerAvatar.class, BirdAvatar.class,
-             SpaceshipAvatar.class, CarAvatar.class, WizardAvatar.class, LanderAvatar.class, ShootOnlyAvatar.class, SpawnPointMultiSprite.class,
-                    LOSChaser.class};
+    private Class[] spriteClasses = {Conveyor.class, Flicker.class, Immovable.class, OrientedFlicker.class, Passive.class, Resource.class, Spreader.class,
+     ErraticMissile.class, Missile.class, RandomMissile.class, Walker.class, WalkerJumper.class,
+     ResourcePack.class, Chaser.class, PathChaser.class, Fleeing.class, RandomInertial.class,
+     RandomNPC.class, AlternateChaser.class, RandomAltChaser.class, PathAltChaser.class, RandomPathAltChaser.class,
+     Bomber.class, RandomBomber.class, Portal.class, SpawnPoint.class, SpriteProducer.class, Door.class,
+     FlakAvatar.class, HorizontalAvatar.class, VerticalAvatar.class, MovingAvatar.class,MissileAvatar.class,
+     OrientedAvatar.class,ShootAvatar.class, OngoingAvatar.class, OngoingTurningAvatar.class, BomberRandomMissile.class,
+     OngoingShootAvatar.class, NullAvatar.class, AimedAvatar.class, PlatformerAvatar.class, BirdAvatar.class,
+     SpaceshipAvatar.class, CarAvatar.class, WizardAvatar.class, LanderAvatar.class, ShootOnlyAvatar.class, SpawnPointMultiSprite.class,
+            LOSChaser.class};
 
     /**
      * Available effects for VGDL.
      */
-    private String[] effectStrings = new String[]
-            {
-                    "stepBack", "turnAround", "killSprite", "killBoth", "killAll", "transformTo", "transformToSingleton", "transformIfCount",
-                    "wrapAround", "changeResource", "killIfHasLess", "killIfHasMore", "cloneSprite",
-                    "flipDirection", "reverseDirection", "shieldFrom", "undoAll", "spawn", "spawnIfHasMore", "spawnIfHasLess",
-                    "pullWithIt", "wallStop", "collectResource", "collectResourceIfHeld", "killIfOtherHasMore", "killIfFromAbove",
-                    "teleportToExit", "bounceForward", "attractGaze", "align", "subtractHealthPoints", "addHealthPoints",
-                    "transformToAll", "addTimer", "killIfFrontal", "killIfNotFrontal", "spawnBehind",
-                    "updateSpawnType", "removeScore", "increaseSpeedToAll", "decreaseSpeedToAll", "setSpeedForAll", "transformToRandomChild",
-                    "addHealthPointsToMax", "spawnIfCounterSubTypes", "bounceDirection", "wallBounce", "killIfSlow", "killIfAlive",
-                    "waterPhysics", "halfSpeed", "killIfNotUpright", "killIfFast", "wallReverse", "spawnAbove", "spawnLeft", "spawnRight", "spawnBelow"
-            };
+    private String[] effectStrings = {
+            "stepBack", "turnAround", "killSprite", "killBoth", "killAll", "transformTo", "transformToSingleton", "transformIfCount",
+            "wrapAround", "changeResource", "killIfHasLess", "killIfHasMore", "cloneSprite",
+            "flipDirection", "reverseDirection", "shieldFrom", "undoAll", "spawn", "spawnIfHasMore", "spawnIfHasLess",
+            "pullWithIt", "wallStop", "collectResource", "collectResourceIfHeld", "killIfOtherHasMore", "killIfFromAbove",
+            "teleportToExit", "bounceForward", "attractGaze", "align", "subtractHealthPoints", "addHealthPoints",
+            "transformToAll", "addTimer", "killIfFrontal", "killIfNotFrontal", "spawnBehind",
+            "updateSpawnType", "removeScore", "increaseSpeedToAll", "decreaseSpeedToAll", "setSpeedForAll", "transformToRandomChild",
+            "addHealthPointsToMax", "spawnIfCounterSubTypes", "bounceDirection", "wallBounce", "killIfSlow", "killIfAlive",
+            "waterPhysics", "halfSpeed", "killIfNotUpright", "killIfFast", "wallReverse", "spawnAbove", "spawnLeft", "spawnRight", "spawnBelow"
+    };
 
     /**
      * Available effect classes for VGDL.
      */
-    private Class[] effectClasses = new Class[]
-            {
-                    StepBack.class, TurnAround.class, KillSprite.class, KillBoth.class, KillAll.class, TransformTo.class, TransformToSingleton.class, TransformIfCount.class,
-                    WrapAround.class,ChangeResource.class, KillIfHasLess.class, KillIfHasMore.class, CloneSprite.class,
-                    FlipDirection.class, ReverseDirection.class, ShieldFrom.class, UndoAll.class, Spawn.class, SpawnIfHasMore.class, SpawnIfHasLess.class,
-                    PullWithIt.class, WallStop.class, CollectResource.class, CollectResourceIfHeld.class, KillIfOtherHasMore.class, KillIfFromAbove.class,
-                    TeleportToExit.class, BounceForward.class, AttractGaze.class, Align.class, SubtractHealthPoints.class, AddHealthPoints.class,
-                    TransformToAll.class, AddTimer.class, KillIfFrontal.class, KillIfNotFrontal.class, SpawnBehind.class, UpdateSpawnType.class,
-                    RemoveScore.class, IncreaseSpeedToAll.class, DecreaseSpeedToAll.class, SetSpeedForAll.class, TransformToRandomChild.class,
-                    AddHealthPointsToMax.class, SpawnIfCounterSubTypes.class, BounceDirection.class, WallBounce.class, KillIfSlow.class,
-                    KillIfAlive.class, WaterPhysics.class, HalfSpeed.class, KillIfNotUpright.class, KillIfFast.class, WallReverse.class,
-                    SpawnAbove.class, SpawnLeft.class, SpawnRight.class, SpawnBelow.class
-            };
+    private Class[] effectClasses = {
+            StepBack.class, TurnAround.class, KillSprite.class, KillBoth.class, KillAll.class, TransformTo.class, TransformToSingleton.class, TransformIfCount.class,
+            WrapAround.class,ChangeResource.class, KillIfHasLess.class, KillIfHasMore.class, CloneSprite.class,
+            FlipDirection.class, ReverseDirection.class, ShieldFrom.class, UndoAll.class, Spawn.class, SpawnIfHasMore.class, SpawnIfHasLess.class,
+            PullWithIt.class, WallStop.class, CollectResource.class, CollectResourceIfHeld.class, KillIfOtherHasMore.class, KillIfFromAbove.class,
+            TeleportToExit.class, BounceForward.class, AttractGaze.class, Align.class, SubtractHealthPoints.class, AddHealthPoints.class,
+            TransformToAll.class, AddTimer.class, KillIfFrontal.class, KillIfNotFrontal.class, SpawnBehind.class, UpdateSpawnType.class,
+            RemoveScore.class, IncreaseSpeedToAll.class, DecreaseSpeedToAll.class, SetSpeedForAll.class, TransformToRandomChild.class,
+            AddHealthPointsToMax.class, SpawnIfCounterSubTypes.class, BounceDirection.class, WallBounce.class, KillIfSlow.class,
+            KillIfAlive.class, WaterPhysics.class, HalfSpeed.class, KillIfNotUpright.class, KillIfFast.class, WallReverse.class,
+            SpawnAbove.class, SpawnLeft.class, SpawnRight.class, SpawnBelow.class
+    };
 
 
     /**
      * Available terminations for VGDL.
      */
-    private String[] terminationStrings = new String[]
-            {
-                    "MultiSpriteCounter", "SpriteCounter", "SpriteCounterMore", "MultiSpriteCounterSubTypes", "Timeout", "StopCounter"
-            };
+    private String[] terminationStrings = {
+            "MultiSpriteCounter", "SpriteCounter", "SpriteCounterMore", "MultiSpriteCounterSubTypes", "Timeout", "StopCounter"
+    };
 
     /**
      * Available termination classes for VGDL.
      */
-    private Class[] terminationClasses = new Class[]
-            {
-                    MultiSpriteCounter.class, SpriteCounter.class, SpriteCounterMore.class, MultiSpriteCounterSubTypes.class, Timeout.class, StopCounter.class
-            };
+    private Class[] terminationClasses = {
+            MultiSpriteCounter.class, SpriteCounter.class, SpriteCounterMore.class, MultiSpriteCounterSubTypes.class, Timeout.class, StopCounter.class
+    };
 
 
     /**
@@ -154,23 +149,23 @@ public class VGDLFactory
      */
     public void init()
     {
-        registeredGames = new HashMap<String, Class>();
+        registeredGames = new HashMap<>();
         registeredGames.put("BasicGame", BasicGame.class);
         registeredGames.put("GameSpace", GameSpace.class);
 
-        registeredSprites = new HashMap<String, Class>();
+        registeredSprites = new HashMap<>();
         for(int i = 0;  i < spriteStrings.length; ++i)
         {
             registeredSprites.put(spriteStrings[i], spriteClasses[i]);
         }
 
-        registeredEffects  = new HashMap<String, Class>();
+        registeredEffects  = new HashMap<>();
         for(int i = 0;  i < effectStrings.length; ++i)
         {
             registeredEffects.put(effectStrings[i], effectClasses[i]);
         }
 
-        registeredTerminations = new HashMap<String, Class>();
+        registeredTerminations = new HashMap<>();
         for(int i = 0;  i < terminationStrings.length; ++i)
         {
             registeredTerminations.put(terminationStrings[i], terminationClasses[i]);
@@ -198,14 +193,10 @@ public class VGDLFactory
     {
         try{
             Class gameClass = registeredGames.get(content.referenceClass);
-            Constructor gameConstructor = gameClass.getConstructor(new Class[] {GameContent.class});
+            Constructor gameConstructor = gameClass.getConstructor(GameContent.class);
             return (Game) gameConstructor.newInstance(new Object[]{content});
 
-        }catch (NoSuchMethodException e)
-        {
-            e.printStackTrace();
-            System.out.println("Error creating game of class " + content.referenceClass);
-        }catch (Exception e)
+        } catch (Exception e)
         {
             e.printStackTrace();
             System.out.println("Error creating game of class " + content.referenceClass);
@@ -231,17 +222,11 @@ public class VGDLFactory
         try{
             Class spriteClass = registeredSprites.get(content.referenceClass);
             Constructor spriteConstructor = spriteClass.getConstructor
-                    (new Class[] {Vector2d.class, Dimension.class, SpriteContent.class});
+                    (Vector2d.class, Dimension.class, SpriteContent.class);
             return (VGDLSprite) spriteConstructor.newInstance(new Object[]{position, dim, content});
 
-        }catch (NoSuchMethodException e)
-        {
-            e.printStackTrace();
-            System.out.println("Error creating sprite " + content.identifier + " of class " + content.referenceClass);
-        }
-        catch (NullPointerException e){
-        }
-        catch (Exception e)
+        } catch (NullPointerException e){
+        } catch (Exception e)
         {
             e.printStackTrace();
             System.out.println("Error creating sprite " + content.identifier + " of class " + content.referenceClass);
@@ -281,7 +266,7 @@ public class VGDLFactory
         try{
             Class effectClass = registeredEffects.get(content.function);
             Constructor effectConstructor = effectClass.getConstructor
-                    (new Class[] {InteractionContent.class});
+                    (InteractionContent.class);
             Effect ef = (Effect) effectConstructor.newInstance(new Object[]{content});
 
             if( content.object1.equalsIgnoreCase("TIME") ||
@@ -290,16 +275,7 @@ public class VGDLFactory
 
             return ef;
 
-        }catch (NoSuchMethodException e)
-        {
-            String message = "Error creating effect " + content.function + " between "
-            		+ content.object1 + " and ";
-            for(String obj : content.object2) {
-            	message += obj + " ";
-            }
-            message += "\n** Line: " + content.lineNumber + " ** " + content.line;
-            throw new Exception(message);
-        }catch (Exception e)
+        } catch (Exception e)
         {
             String message = "Error creating effect " + content.function + " between "
             		+ content.object1 + " and ";
@@ -326,14 +302,10 @@ public class VGDLFactory
         try{
             Class terminationClass = registeredTerminations.get(content.identifier);
             Constructor terminationConstructor = terminationClass.getConstructor
-                    (new Class[] {TerminationContent.class});
-            Termination ter = (Termination) terminationConstructor.newInstance(new Object[]{content});
-            return ter;
+                    (TerminationContent.class);
+            return (Termination) terminationConstructor.newInstance(new Object[]{content});
 
-        }catch (NoSuchMethodException e)
-        {
-            throw new Exception("Line: " + content.lineNumber + " Error creating termination condition " + content.identifier);
-        }catch (Exception e)
+        } catch (Exception e)
         {
             throw new Exception("Line: " + content.lineNumber + " Error creating termination condition " + content.identifier);
         }
@@ -349,11 +321,11 @@ public class VGDLFactory
     {
         //Get all fields from the class and store it as key->field
         Field[] fields = obj.getClass().getFields();
-        HashMap<String, Field> fieldMap = new HashMap<String, Field>();
+        HashMap<String, Field> fieldMap = new HashMap<>();
         for (Field field : fields)
         {
             String strField = field.toString();
-            int lastDot = strField.lastIndexOf(".");
+            int lastDot = strField.lastIndexOf('.');
             String fieldName = strField.substring(lastDot + 1).trim();
 
             fieldMap.put(fieldName, field);
@@ -361,9 +333,10 @@ public class VGDLFactory
         Object objVal = null;
         Field cfield = null;
         //Check all parameters from content
-        for (String parameter : content.parameters.keySet())
+        for (Map.Entry<String, String> entry : content.parameters.entrySet())
         {
-            String value = content.parameters.get(parameter);
+            String parameter = entry.getKey();
+            String value = entry.getValue();
             if (fieldMap.containsKey(parameter))
             {
 
@@ -394,11 +367,9 @@ public class VGDLFactory
                 }
                 try {
                     fieldMap.get(parameter).set(obj, objVal);
-                } catch (IllegalAccessException e) {
-                    //TODO: Do it later
-                    
                 } catch (Exception e) {
                     //TODO: Do it later
+
                 }
             }
             else
@@ -410,13 +381,13 @@ public class VGDLFactory
                 {
                     boolean isTimeEffect = ((InteractionContent)content).object2[0].equalsIgnoreCase("TIME") ||
                                             ((InteractionContent)content).object1.equalsIgnoreCase("TIME") ||
-                                            (((InteractionContent) content).line.contains("addTimer")) ;
+                                            (content.line.contains("addTimer")) ;
                     if(isTimeEffect) warn = false;
                 }
 
                 if( warn ){
                     Logger.getInstance().addMessage(new Message(Message.ERROR, "Unknown field (" + parameter + "=" + value +
-                            ") from " + content.toString()));
+                            ") from " + content));
                 }
             }
         }
@@ -440,7 +411,7 @@ public class VGDLFactory
             {
                 try{
                     Object objVal = field.get(obj);
-                    return ((Integer)objVal).intValue();
+                    return (Integer) objVal;
                 }catch(Exception e)
                 {
                     System.out.println("ERROR: invalid requested int parameter " + fieldName);

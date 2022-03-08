@@ -37,8 +37,8 @@ public class LevelMapping {
 	public LevelMapping(GameDescription game){
 		ArrayList<SpriteData> allSprites = game.getAllSpriteData();
 		
-		allSpriteCodes = new HashMap<String, Long>();
-		allCodeSprites = new HashMap<Long, String>();
+		allSpriteCodes = new HashMap<>();
+		allCodeSprites = new HashMap<>();
 		
 		for(SpriteData sprite:allSprites){
 			allSpriteCodes.put(sprite.name, index);
@@ -46,7 +46,7 @@ public class LevelMapping {
 			index *= 2;
 		}
 		
-		charMapping = new HashMap<Long, Character>();
+		charMapping = new HashMap<>();
 	}
 	
 	/**
@@ -83,11 +83,11 @@ public class LevelMapping {
 	 * @return		arraylist for the sprite names from the decryption process
 	 */
 	private ArrayList<String> reverseHash(long data){
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		
-		for(long mask:allCodeSprites.keySet()){
-			if((data & mask) != 0){
-				result.add(allCodeSprites.get(mask));
+		for(Entry<Long, String> entry : allCodeSprites.entrySet()){
+			if((data & entry.getKey()) != 0){
+				result.add(entry.getValue());
 			}
 		}
 		
@@ -122,7 +122,7 @@ public class LevelMapping {
 	public ArrayList<String> fixArrayList(ArrayList<String> data){
 		ArrayList<String> result = (ArrayList<String>) data.clone();
 		for(int i=0; i<result.size(); i++){
-			if(result.get(i).trim().length() == 0){
+			if(result.get(i).trim().isEmpty()){
 				result.remove(i);
 				i--;
 			}
@@ -137,7 +137,7 @@ public class LevelMapping {
 	 */
 	public Character getCharacter(ArrayList<String> data){
 		ArrayList<String> result = fixArrayList(data);
-		if(result.size() == 0){
+		if(result.isEmpty()){
 			return ' ';
 		}
 		
@@ -163,7 +163,7 @@ public class LevelMapping {
 	 * @return	hashmap of characters and the corresponding sprite names
 	 */
 	public HashMap<Character, ArrayList<String>> getCharMapping(){
-		HashMap<Character, ArrayList<String>> result = new HashMap<Character, ArrayList<String>>();
+		HashMap<Character, ArrayList<String>> result = new HashMap<>();
 		
 		for(Entry<Long, Character> entry:charMapping.entrySet()){
 			result.put(entry.getValue(), reverseHash(entry.getKey()));

@@ -29,7 +29,7 @@ public class WallReverse extends Effect
     {
         super.inBatch = true;
         lastGameTime = -1;
-        spritesThisCycle = new ArrayList<VGDLSprite>();
+        spritesThisCycle = new ArrayList<>();
         this.parseParameters(cnt);
     }
 
@@ -67,7 +67,7 @@ public class WallReverse extends Effect
 
     private void doReverse(VGDLSprite sprite1, Rectangle s2rect, Game g)
     {
-        boolean collisions[] = super.determineCollision(sprite1, s2rect, g);
+        boolean[] collisions = super.determineCollision(sprite1, s2rect, g);
         boolean horizontalBounce = collisions[0];
         boolean verticalBounce = collisions[1];
 

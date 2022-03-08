@@ -28,7 +28,7 @@ public class GVGReplayer {
                 "\t\t[Optional]\n" +
                 "\t\t[Default: 0ms (no delay)]\n" +
                 "\t\t[Ex: -d 15]\n");
-        System.out.printf("\tComplete example:\n" +
+        System.out.print("\tComplete example:\n" +
                 "\t\tjava GVGReplayer -g examples/gridphysics/aliens.txt -l examples/gridphysics/aliens_lvl0.txt -a actionsFile_aliens_lvl0.txt -d 10");
 
     }
@@ -45,7 +45,7 @@ public class GVGReplayer {
             delay = Integer.parseInt(arg2);
     }
 
-    public static void main(String args[])
+    public static void main(String[] args)
     {
         if(args.length < 6 || (args.length % 2 != 0))
         {

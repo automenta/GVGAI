@@ -41,8 +41,7 @@ public abstract class Termination {
     public boolean win (int playerID) {
         try {
             String[] winners = win.split(",");
-            boolean win = Boolean.parseBoolean(winners[playerID]);
-            return win;
+            return Boolean.parseBoolean(winners[playerID]);
         } catch (Exception e) {
             return false;
         }
@@ -83,6 +82,6 @@ public abstract class Termination {
      * @return all termination condition sprites
      */
     public ArrayList<String> getTerminationSprites(){
-    	return new ArrayList<String>();
+    	return new ArrayList<>();
     }
 }

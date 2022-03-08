@@ -1,6 +1,7 @@
 package core.content;
 
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,8 +54,8 @@ public abstract class Content
 
     protected void _decorate(HashMap<String, ParameterContent> pcs)
     {
-        for (String parameter : this.parameters.keySet()) {
-            String value = this.parameters.get(parameter);
+        for (Map.Entry<String, String> entry : this.parameters.entrySet()) {
+            String value = entry.getValue();
             String[] tokens = value.split(",");
             String[] allValues = new String[tokens.length];
             int idx = 0;
@@ -75,8 +76,8 @@ public abstract class Content
                     builtStValue += ","; //We want the exact number of comas here.
             }
 
-            if(builtStValue.length() > 0)
-                this.parameters.put(parameter, builtStValue);
+            if(!builtStValue.isEmpty())
+                this.parameters.put(entry.getKey(), builtStValue);
 
         }
     }

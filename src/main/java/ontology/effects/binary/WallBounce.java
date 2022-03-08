@@ -67,21 +67,18 @@ public class WallBounce extends Effect
 
     private void doBounce(VGDLSprite sprite1, Rectangle s2rect, Game g)
     {
-        boolean collisions[] = super.determineCollision(sprite1, s2rect, g);
+        boolean[] collisions = super.determineCollision(sprite1, s2rect, g);
         boolean horizontalBounce = collisions[0];
         boolean verticalBounce = collisions[1];
 
         if(verticalBounce)
         {
             sprite1.orientation = new Direction(sprite1.orientation.x(), -sprite1.orientation.y());
-            return;
         }
         else if(horizontalBounce){
             sprite1.orientation = new Direction(-sprite1.orientation.x(), sprite1.orientation.y());
-            return;
         }else{
             sprite1.orientation = new Direction(-sprite1.orientation.x(), -sprite1.orientation.y());
-            return;
         }
 
 

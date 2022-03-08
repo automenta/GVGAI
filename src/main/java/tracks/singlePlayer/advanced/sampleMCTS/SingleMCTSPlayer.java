@@ -59,9 +59,8 @@ public class SingleMCTSPlayer
         m_root.mctsSearch(elapsedTimer);
 
         //Determine the best action to take and return it.
-        int action = m_root.mostVisitedAction();
         //int action = m_root.bestAction();
-        return action;
+        return m_root.mostVisitedAction();
     }
 
 }

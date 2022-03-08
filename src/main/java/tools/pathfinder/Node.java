@@ -28,11 +28,7 @@ public class Node implements Comparable<Node> {
 
     @Override
     public int compareTo(Node n) {
-        if(this.estimatedCost + this.totalCost < n.estimatedCost + n.totalCost)
-            return -1;
-        if(this.estimatedCost + this.totalCost > n.estimatedCost + n.totalCost)
-            return 1;
-        return 0;
+        return Double.compare(this.estimatedCost + this.totalCost, n.estimatedCost + n.totalCost);
     }
 
     @Override

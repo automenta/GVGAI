@@ -28,6 +28,7 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by dperez on 19/03/2017.
@@ -109,7 +110,7 @@ public class RuleGenMachine
 			names = newNames;
 		}
 
-		boolean humans[] = new boolean[no_players];
+		boolean[] humans = new boolean[no_players];
 		boolean anyHuman = false;
 
 		// System.out.println("Number of players: " + no_players);
@@ -196,18 +197,19 @@ public class RuleGenMachine
 			rules = sl.modifyRules(rules[0], rules[1], randomSeed);
 
 			SpriteData[] data = sl.getGameSprites();
-			HashMap<String, String> msprites = new HashMap<String, String>();
-			for(int i=0; i<data.length; i++){
-				String decodedLine = sl.modifyRules(new String[]{data[i].toString()}, new String[]{}, randomSeed)[0][0];
-				msprites.put(sl.decodeName(data[i].name, randomSeed), decodedLine);
-			}
-			HashMap<String, ArrayList<String>> msetStructure = new HashMap<String, ArrayList<String>>();
+			HashMap<String, String> msprites = new HashMap<>();
+            for (SpriteData datum : data) {
+                String decodedLine = sl.modifyRules(new String[]{datum.toString()}, new String[]{}, randomSeed)[0][0];
+                msprites.put(sl.decodeName(datum.name, randomSeed), decodedLine);
+            }
+			HashMap<String, ArrayList<String>> msetStructure = new HashMap<>();
 			if(spriteSetStructure != null){
-				for(String key:spriteSetStructure.keySet()){
-					msetStructure.put(key, new ArrayList<String>());
-					for(int i=0; i<spriteSetStructure.get(key).size(); i++){
-						String decodedName = sl.decodeName(spriteSetStructure.get(key).get(i), randomSeed);
-						if(decodedName.length() > 0){
+				for(Map.Entry<String, ArrayList<String>> entry : spriteSetStructure.entrySet()){
+                    String key = entry.getKey();
+                    msetStructure.put(key, new ArrayList<>());
+					for(int i = 0; i< entry.getValue().size(); i++){
+						String decodedName = sl.decodeName(entry.getValue().get(i), randomSeed);
+						if(!decodedName.isEmpty()){
 							msetStructure.get(key).add(decodedName);
 						}
 					}
@@ -244,7 +246,7 @@ public class RuleGenMachine
 			// (StateObservation, long).
 			Class<? extends AbstractRuleGenerator> controllerClass = Class.forName(ruleGenerator)
 					.asSubclass(AbstractRuleGenerator.class);
-			Class[] gameArgClass = new Class[] { SLDescription.class, ElapsedCpuTimer.class };
+			Class[] gameArgClass = { SLDescription.class, ElapsedCpuTimer.class };
 			Constructor controllerArgsConstructor = controllerClass.getConstructor(gameArgClass);
 
 			// Determine the time due for the controller creation.
@@ -252,7 +254,7 @@ public class RuleGenMachine
 			ect.setMaxTimeMillis(CompetitionParameters.RULE_INITIALIZATION_TIME);
 
 			// Call the constructor with the appropriate parameters.
-			Object[] constructorArgs = new Object[] { sl, ect.copy() };
+			Object[] constructorArgs = { sl, ect.copy() };
 			generator = (AbstractRuleGenerator) controllerArgsConstructor.newInstance(constructorArgs);
 
 			// Check if we returned on time, and act in consequence.
@@ -354,16 +356,16 @@ public class RuleGenMachine
 			}
 		}
 		else if(n.content instanceof SpriteContent){
-			ArrayList<String> msprites = new ArrayList<String>();
-			for(String key:setStructure.keySet()){
-				msprites.add(template + key + " >");
-				for(int i=0; i<setStructure.get(key).size(); i++){
-					if(sprites.containsKey(setStructure.get(key).get(i).trim())){
-						msprites.add(template + template + sprites.get(setStructure.get(key).get(i).trim()).trim());
-						sprites.remove(setStructure.get(key).get(i).trim());
+			ArrayList<String> msprites = new ArrayList<>();
+			for(Map.Entry<String, ArrayList<String>> entry : setStructure.entrySet()){
+				msprites.add(template + entry.getKey() + " >");
+				for(int i = 0; i< entry.getValue().size(); i++){
+					if(sprites.containsKey(entry.getValue().get(i).trim())){
+						msprites.add(template + template + sprites.get(entry.getValue().get(i).trim()).trim());
+						sprites.remove(entry.getValue().get(i).trim());
 					}
 					else{
-						Logger.getInstance().addMessage(new Message(Message.ERROR, "Undefined " + setStructure.get(key).get(i) + " in the provided sprite set."));
+						Logger.getInstance().addMessage(new Message(Message.ERROR, "Undefined " + entry.getValue().get(i) + " in the provided sprite set."));
 					}
 				}
 			}
@@ -402,10 +404,8 @@ public class RuleGenMachine
 	}
 
 	private static final boolean isHuman(String agentName) {
-		if (agentName.equalsIgnoreCase("tracks.multiPlayer.tools.human.Agent")
-				|| agentName.equalsIgnoreCase("tracks.singlePlayer.tools.human.Agent"))
-			return true;
-		return false;
+		return agentName.equalsIgnoreCase("tracks.multiPlayer.tools.human.Agent")
+				|| agentName.equalsIgnoreCase("tracks.singlePlayer.tools.human.Agent");
 	}
 
 }

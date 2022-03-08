@@ -46,8 +46,8 @@ public class PathAltChaser extends AlternateChaser
         super.loadDefaults();
         fleeing = false;
         randomTarget = false;
-        targets = new ArrayList<VGDLSprite>();
-        actions = new ArrayList<Direction>();
+        targets = new ArrayList<>();
+        actions = new ArrayList<>();
         lastKnownTargetPosition = null;
     }
 
@@ -75,7 +75,7 @@ public class PathAltChaser extends AlternateChaser
         }
 
         Direction act = Types.DNONE;
-        if(!fleeing && targets.size() > 0)
+        if(!fleeing && !targets.isEmpty())
         {
             //If there's a target, get the path to it and take the first action.
             VGDLSprite target = targets.get(0);
@@ -91,7 +91,7 @@ public class PathAltChaser extends AlternateChaser
                 lastKnownTargetPosition = target.getPosition().copy();
             }
 
-            if(path!=null && path.size()>0)
+            if(path!=null && !path.isEmpty())
             {
                 //lastKnownTargetPosition = target.getPosition().copy();
                 Vector2d v = path.get(0).comingFrom;
@@ -108,7 +108,7 @@ public class PathAltChaser extends AlternateChaser
             }
 
             //Choose randomly an action among the ones that allows me to chase.
-            if(actions.size() == 0)
+            if(actions.isEmpty())
             {
                 //unless, no actions really take me closer to anybody!
                 act = (Direction) Utils.choice(Types.DBASEDIRS,game.getRandomGenerator());
@@ -136,8 +136,8 @@ public class PathAltChaser extends AlternateChaser
     {
         PathAltChaser targetSprite = (PathAltChaser) target;
         targetSprite.fleeing = this.fleeing;
-        targetSprite.targets = new ArrayList<VGDLSprite>();
-        targetSprite.actions = new ArrayList<Direction>();
+        targetSprite.targets = new ArrayList<>();
+        targetSprite.actions = new ArrayList<>();
         targetSprite.lastKnownTargetPosition = lastKnownTargetPosition != null ?
                         lastKnownTargetPosition.copy() : null;
         targetSprite.randomTarget = this.randomTarget;

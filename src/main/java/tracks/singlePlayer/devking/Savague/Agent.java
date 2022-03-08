@@ -56,7 +56,7 @@ public class Agent extends AbstractPlayer {
 	Node root;
 	int[][] positionCount;
 
-	public class Node {
+	public static class Node {
 
 		Node (StateObservation s, Node par) {
 			thisState = s;
@@ -95,7 +95,7 @@ public class Agent extends AbstractPlayer {
 
 	// T - initialize the root and begin the UCT search
 	public int runMCTS (StateObservation origState, ElapsedCpuTimer origTime) {
-		root = new Node (origState, null);
+		root = new Node(origState, null);
 		//System.out.println(root.children.length);
 		while (origTime.remainingTimeMillis() > 3.0) {
 			// expanded should be a child of 'root'
@@ -153,7 +153,7 @@ public class Agent extends AbstractPlayer {
 		//System.out.println( roNode.thisState.getAvailableActions().get(childNo) );
 		childState.advance( roNode.thisState.getAvailableActions().get(childNo) );
 		// add that child to the root node
-		roNode.children[childNo] = new Node (childState, roNode);
+		roNode.children[childNo] = new Node(childState, roNode);
 		// return child node
 		return roNode.children[childNo];
 	}
@@ -199,9 +199,11 @@ public class Agent extends AbstractPlayer {
 		}*/
 		// also encourage movement towards NPCs?
 		ArrayList<Observation>[] movingNPCs = finalState.getNPCPositions(myPosition);
-		if (movingNPCs != null && movingNPCs.length > 0 && movingNPCs[0].size() > 0) {
+		if (movingNPCs != null && movingNPCs.length > 0 && !movingNPCs[0].isEmpty()) {
 			int totalNPCs = 0;
-			for (int i = 0; i < movingNPCs.length; i++) { totalNPCs += movingNPCs[i].size(); }
+			for (ArrayList<Observation> movingNPC : movingNPCs) {
+				totalNPCs += movingNPC.size();
+			}
 			// if we can have less NPCs, then this is good as well?
 			stateVal -= totalNPCs*2;
 			Vector2d closestNPC = movingNPCs[0].get(0).reference;

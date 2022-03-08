@@ -34,7 +34,7 @@ public class Agent extends AbstractPlayer {
      */
     public Agent(StateObservation so, ElapsedCpuTimer elapsedTimer)
     {
-        actions = new ArrayList<Types.ACTIONS>();
+        actions = new ArrayList<>();
     }
 
     /**

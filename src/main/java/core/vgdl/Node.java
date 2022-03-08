@@ -51,7 +51,7 @@ public class Node
      */
     public Node(String contentLine, int indent, Node parent, int set) throws Exception
     {
-        children = new ArrayList<Node>();
+        children = new ArrayList<>();
         this.content = createContent(contentLine, set);
         this.indent = indent;
         if(parent == null)
@@ -61,7 +61,7 @@ public class Node
     }
 
     public Node(String contentLine, int indent, Node parent, int set, int lineNumber) throws Exception {
-        children = new ArrayList<Node>();
+        children = new ArrayList<>();
         this.content = createContent(contentLine, set);
         this.indent = indent;
         if(parent == null)
@@ -78,29 +78,19 @@ public class Node
      * @return the line parsed in a content object.
      * @throws Exception 
      */
-    private Content createContent(String line, int set) throws Exception
+    private static Content createContent(String line, int set) throws Exception
     {
         line = Utils.formatString(line);
-        switch(set){
-            case Types.VGDL_GAME_DEF:
-                return new GameContent(line);
-
-            case Types.VGDL_SPRITE_SET:
-                return new SpriteContent(line);
+        return switch (set) {
+            case Types.VGDL_GAME_DEF -> new GameContent(line);
+            case Types.VGDL_SPRITE_SET -> new SpriteContent(line);
             //
-            case Types.VGDL_INTERACTION_SET:
-                return new InteractionContent(line);
-
-            case Types.VGDL_LEVEL_MAPPING:
-                return new MappingContent(line);
-
-            case Types.VGDL_TERMINATION_SET:
-                return new TerminationContent(line);
-
-            case Types.VGDL_PARAMETER_SET:
-                return ParameterContent.create(line);
-        }
-        return null;
+            case Types.VGDL_INTERACTION_SET -> new InteractionContent(line);
+            case Types.VGDL_LEVEL_MAPPING -> new MappingContent(line);
+            case Types.VGDL_TERMINATION_SET -> new TerminationContent(line);
+            case Types.VGDL_PARAMETER_SET -> ParameterContent.create(line);
+            default -> null;
+        };
     }
 
 
@@ -113,7 +103,7 @@ public class Node
     {
         if(this.indent < node.indent)
         {
-            if(this.children.size() > 0)
+            if(!this.children.isEmpty())
             {
                 if(this.children.get(0).indent != node.indent)
                     Logger.getInstance().addMessage(new Message(Message.ERROR, "children indentations must match."));
@@ -136,7 +126,7 @@ public class Node
     public String toString()
     {
         String allStr = content.toString();
-        if(this.children.size() == 0)
+        if(this.children.isEmpty())
             return allStr;
 
 

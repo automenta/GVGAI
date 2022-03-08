@@ -8,7 +8,6 @@ import tools.ElapsedCpuTimer;
 
 import java.awt.*;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -120,8 +119,8 @@ public abstract class Player {
      */
     final public void teardown(Game played) {
         try {
-            if((this.actionFile != null && !actionFile.equals("")) && SHOULD_LOG) {
-                writer = new BufferedWriter(new FileWriter(new File(this.actionFile)));
+            if((this.actionFile != null && !actionFile.isEmpty()) && SHOULD_LOG) {
+                writer = new BufferedWriter(new FileWriter(this.actionFile));
                 writer.write(randomSeed +
                         " " + (played.getWinner() == Types.WINNER.PLAYER_WINS ? 1 : 0) +
                         " " + played.getScore() + " " + played.getGameTick() + "\n");

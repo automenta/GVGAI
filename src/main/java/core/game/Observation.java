@@ -106,15 +106,13 @@ public class Observation implements Comparable<Observation>
      */
     public boolean equals(Object other)
     {
-        if(other == null || !(other instanceof Observation))
+        if(!(other instanceof Observation o))
             return false;
 
-        Observation o = (Observation) other;
         if(this.itype != o.itype) return false;
         if(this.obsID != o.obsID) return false;
-        if(!this.position.equals(o.position)) return false;
         if(this.category != o.category) return false;
-        return true;
+        return this.position.equals(o.position);
     }
 
     @Override

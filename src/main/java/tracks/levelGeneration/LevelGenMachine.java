@@ -339,7 +339,7 @@ public class LevelGenMachine
             // (StateObservation, long).
             Class<? extends AbstractLevelGenerator> controllerClass = Class.forName(levelGenerator)
                     .asSubclass(AbstractLevelGenerator.class);
-            Class[] gameArgClass = new Class[] { GameDescription.class, ElapsedCpuTimer.class };
+            Class[] gameArgClass = { GameDescription.class, ElapsedCpuTimer.class };
             Constructor controllerArgsConstructor = controllerClass.getConstructor(gameArgClass);
 
             // Determine the time due for the controller creation.
@@ -347,7 +347,7 @@ public class LevelGenMachine
             ect.setMaxTimeMillis(CompetitionParameters.LEVEL_INITIALIZATION_TIME);
 
             // Call the constructor with the appropriate parameters.
-            Object[] constructorArgs = new Object[] { gd, ect.copy() };
+            Object[] constructorArgs = { gd, ect.copy() };
             generator = (AbstractLevelGenerator) controllerArgsConstructor.newInstance(constructorArgs);
 
             // Check if we returned on time, and act in consequence.
@@ -462,7 +462,7 @@ public class LevelGenMachine
      * @return Level String to be loaded
      */
     protected static String loadGeneratedFile(Game currentGame, String levelFile) {
-        HashMap<Character, ArrayList<String>> levelMapping = new HashMap<Character, ArrayList<String>>();
+        HashMap<Character, ArrayList<String>> levelMapping = new HashMap<>();
         String level = "";
         int mode = 0;
         String[] lines = new IO().readFile(levelFile);
@@ -473,24 +473,21 @@ public class LevelGenMachine
                 mode = 1;
             } else {
                 switch (mode) {
-                    case 0:
-                        if (line.trim().length() == 0) {
+                    case 0 -> {
+                        if (line.trim().isEmpty()) {
                             continue;
                         }
                         String[] sides = line.split(">");
-                        ArrayList<String> sprites = new ArrayList<String>();
+                        ArrayList<String> sprites = new ArrayList<>();
                         for (String sprite : sides[1].trim().split(" ")) {
-                            if (sprite.trim().length() == 0) {
-                                continue;
+                            if (sprite.trim().isEmpty()) {
                             } else {
                                 sprites.add(sprite.trim());
                             }
                         }
                         levelMapping.put(sides[0].trim().charAt(0), sprites);
-                        break;
-                    case 1:
-                        level += line + "\n";
-                        break;
+                    }
+                    case 1 -> level += line + "\n";
                 }
             }
         }

@@ -50,91 +50,86 @@ public class LevelAnalyzer {
 		SpriteData[] gameSprites = description.getGameSprites();
 		level = description.getCurrentLevel();
 
-		usefulSprites = new ArrayList<SpriteData>();
-		borderSprites = new ArrayList<SpriteData>();
-		spawnerSprites = new ArrayList<SpriteData>();
+		usefulSprites = new ArrayList<>();
+		borderSprites = new ArrayList<>();
+		spawnerSprites = new ArrayList<>();
 
-		avatarSprites = new ArrayList<SpriteData>();
-		npcSprites = new ArrayList<SpriteData>();
-		immovableSprites = new ArrayList<SpriteData>();
-		movableSprites = new ArrayList<SpriteData>();
-		portalsSprites = new ArrayList<SpriteData>();
-		resourceSprites = new ArrayList<SpriteData>();
+		avatarSprites = new ArrayList<>();
+		npcSprites = new ArrayList<>();
+		immovableSprites = new ArrayList<>();
+		movableSprites = new ArrayList<>();
+		portalsSprites = new ArrayList<>();
+		resourceSprites = new ArrayList<>();
 
-		numberOfSprites = new HashMap<String, Integer>();
-		sameTileSprites = new HashMap<String, ArrayList<SpriteData>>();
+		numberOfSprites = new HashMap<>();
+		sameTileSprites = new HashMap<>();
 
-		for(int i=0; i<gameSprites.length; i++){
-			numberOfSprites.put(gameSprites[i].name, 0);
+        for (SpriteData gameSprite : gameSprites) {
+            numberOfSprites.put(gameSprite.name, 0);
 
-			if(gameSprites[i].isStatic){
-				immovableSprites.add(gameSprites[i]);
-				if(gameSprites[i].type.equalsIgnoreCase("SpawnPoint")){
-					spawnerSprites.add(gameSprites[i]);
-				}
-			}
-			else if(gameSprites[i].isAvatar){
-				avatarSprites.add(gameSprites[i]);
-			}
-			else if(gameSprites[i].isNPC){
-				npcSprites.add(gameSprites[i]);
-			}
-			else if(gameSprites[i].isPortal){
-				portalsSprites.add(gameSprites[i]);
-			}
-			else if(gameSprites[i].isResource){
-				resourceSprites.add(gameSprites[i]);
-			}
-			else{
-				movableSprites.add(gameSprites[i]);
-			}
-		}
+            if (gameSprite.isStatic) {
+                immovableSprites.add(gameSprite);
+                if (gameSprite.type.equalsIgnoreCase("SpawnPoint")) {
+                    spawnerSprites.add(gameSprite);
+                }
+            } else if (gameSprite.isAvatar) {
+                avatarSprites.add(gameSprite);
+            } else if (gameSprite.isNPC) {
+                npcSprites.add(gameSprite);
+            } else if (gameSprite.isPortal) {
+                portalsSprites.add(gameSprite);
+            } else if (gameSprite.isResource) {
+                resourceSprites.add(gameSprite);
+            } else {
+                movableSprites.add(gameSprite);
+            }
+        }
 
 		for(int y=0; y<level.length; y++){
 			for(int x=0; x<level[y].length; x++){
 				String[] parts = level[y][x].split(",");
 				if(parts != null){
-					for(int i=0; i<parts.length; i++){
-						SpriteData s = getSpriteData(gameSprites, parts[i].trim());
-						if(s == null){
-							continue;
-						}
+                    for (String part : parts) {
+                        SpriteData s = getSpriteData(gameSprites, part.trim());
+                        if (s == null) {
+                            continue;
+                        }
 
-						if(!borderSprites.contains(s) && (x==0 || y==0 || x==getWidth()-1 || y==getLength()-1)){
-							borderSprites.add(s);
-						}
-						if(!usefulSprites.contains(s)){
-							usefulSprites.add(s);
-						}
-						numberOfSprites.put(s.name, numberOfSprites.get(s.name) + 1);
-					}
+                        if (!borderSprites.contains(s) && (x == 0 || y == 0 || x == getWidth() - 1 || y == getLength() - 1)) {
+                            borderSprites.add(s);
+                        }
+                        if (!usefulSprites.contains(s)) {
+                            usefulSprites.add(s);
+                        }
+                        numberOfSprites.put(s.name, numberOfSprites.get(s.name) + 1);
+                    }
 				}
 			}
 		}
 
-		for(int i=0; i<usefulSprites.size(); i++){
-			sameTileSprites.put(usefulSprites.get(i).name, new ArrayList<SpriteData>());
-		}
+        for (SpriteData usefulSprite : usefulSprites) {
+            sameTileSprites.put(usefulSprite.name, new ArrayList<>());
+        }
 
-		for(int y=0; y<level.length; y++){
-			for(int x=0; x<level[y].length; x++){
-				String[] parts = level[y][x].split(",");
-				if(parts != null){
-					for(int i=0; i<parts.length; i++){
-						SpriteData s1 = getSpriteData(gameSprites, parts[i].trim());
-						if (s1 != null) {
-							for (int j = 0; j < parts.length; j++) {
-								SpriteData s2 = getSpriteData(gameSprites, parts[j].trim());
-								if (s1.name.equals(s2.name)) {
-									continue;
-								}
-								sameTileSprites.get(s1.name).add(s2);
-							}
-						}
-					}
-				}
-			}
-		}
+        for (String[] strings : level) {
+            for (String string : strings) {
+                String[] parts = string.split(",");
+                if (parts != null) {
+                    for (String s : parts) {
+                        SpriteData s1 = getSpriteData(gameSprites, s.trim());
+                        if (s1 != null) {
+                            for (String part : parts) {
+                                SpriteData s2 = getSpriteData(gameSprites, part.trim());
+                                if (s1.name.equals(s2.name)) {
+                                    continue;
+                                }
+                                sameTileSprites.get(s1.name).add(s2);
+                            }
+                        }
+                    }
+                }
+            }
+        }
 	}
 
 	/**
@@ -145,11 +140,11 @@ public class LevelAnalyzer {
 	 * 				spritename or null if doesn't exist
 	 */
 	private SpriteData getSpriteData(SpriteData[] gameSprites, String spriteName){
-		for(int i=0; i<gameSprites.length; i++){
-			if(gameSprites[i].name.equals(spriteName)){
-				return gameSprites[i];
-			}
-		}
+        for (SpriteData gameSprite : gameSprites) {
+            if (gameSprite.name.equals(spriteName)) {
+                return gameSprite;
+            }
+        }
 		return null;
 	}
 
@@ -207,16 +202,15 @@ public class LevelAnalyzer {
 	 * @return			array of the found sprites that satisfy the constraints
 	 */
 	private SpriteData[] getSpriteData (ArrayList<SpriteData> list, int lowThreshold, int highThreshold){
-		ArrayList<SpriteData> temp = new ArrayList<SpriteData>();
+		ArrayList<SpriteData> temp = new ArrayList<>();
 
-		for(int i=0; i<list.size(); i++){
-			SpriteData s = list.get(i);
-			if(numberOfSprites.get(s.name) < lowThreshold || numberOfSprites.get(s.name) > highThreshold){
-				continue;
-			}
+        for (SpriteData s : list) {
+            if (numberOfSprites.get(s.name) < lowThreshold || numberOfSprites.get(s.name) > highThreshold) {
+                continue;
+            }
 
-			temp.add(s);
-		}
+            temp.add(s);
+        }
 
 		return convertToArray(temp);
 	}

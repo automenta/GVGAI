@@ -42,7 +42,7 @@ public class StepController{
 	 * @param elapsedTimer	amount of time that can be spent in this function
 	 */
 	public void playGame(StateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
-		solution = new ArrayList<Types.ACTIONS>();
+		solution = new ArrayList<>();
 		finalState = stateObs;
 		
 		while(elapsedTimer.remainingTimeMillis() > stepTime && !finalState.isGameOver()){
@@ -61,7 +61,7 @@ public class StepController{
 	 * @param SOs			List of stateobservations to be cached
 	 */
 	public void playGame(StateObservation stateObs, ElapsedCpuTimer elapsedTimer, ArrayList<Vector2d> SOs) {
-		solution = new ArrayList<Types.ACTIONS>();
+		solution = new ArrayList<>();
 		finalState = stateObs;
 		
 		while(elapsedTimer.remainingTimeMillis() > stepTime && !finalState.isGameOver()){

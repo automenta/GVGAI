@@ -51,14 +51,13 @@ public class TransformToRandomChild extends TransformTo {
             }
             catch(Exception e){
         	Logger.getInstance().addMessage(new Message(Message.WARNING, "Can't construct a parent node to the child " + stype + " sprite in TransformToRandomChild interaction."));
-        	return;
             }
         }
     }
 
     @Override
     public ArrayList<String> getEffectSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(stype!=null) result.add(stype);
     	
     	return result;

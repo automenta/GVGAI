@@ -49,8 +49,8 @@ public class PathChaser extends RandomNPC
         super.loadDefaults();
         fleeing = false;
         maxDistance = -1;
-        targets = new ArrayList<VGDLSprite>();
-        actions = new ArrayList<Direction>();
+        targets = new ArrayList<>();
+        actions = new ArrayList<>();
     }
 
     public void postProcess()
@@ -71,13 +71,13 @@ public class PathChaser extends RandomNPC
         closestTargets(game);
 
         Direction act = Types.DNONE;
-        if(targets.size() > 0)
+        if(!targets.isEmpty())
         {
             //If there's a target, get the path to it and take the first action.
             VGDLSprite target = targets.get(0);
             ArrayList<Node> path = game.getPath(this.getPosition(), target.getPosition());
 
-            if(path!=null && path.size()>0)
+            if(path!=null && !path.isEmpty())
             {
                 Vector2d v = path.get(0).comingFrom;
                 act = new Direction(v.x, v.y);
@@ -137,14 +137,14 @@ public class PathChaser extends RandomNPC
         targetSprite.stype = this.stype;
         targetSprite.itype = this.itype;
         targetSprite.maxDistance = this.maxDistance;
-        targetSprite.targets = new ArrayList<VGDLSprite>();
-        targetSprite.actions = new ArrayList<Direction>();
+        targetSprite.targets = new ArrayList<>();
+        targetSprite.actions = new ArrayList<>();
         super.copyTo(targetSprite);
     }
     
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(stype != null) result.add(stype);
     	
     	return result;

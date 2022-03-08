@@ -77,7 +77,7 @@ public class MultiSpriteCounter extends Termination
     
     @Override
 	public ArrayList<String> getTerminationSprites() {
-		ArrayList<String> result = new ArrayList<String>();
+		ArrayList<String> result = new ArrayList<>();
 		if(stype1 != null) result.add(stype1);
         if(stype2 != null) result.add(stype2);
         if(stype3 != null) result.add(stype3);

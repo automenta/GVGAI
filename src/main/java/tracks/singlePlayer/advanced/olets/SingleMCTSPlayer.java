@@ -204,7 +204,7 @@ public class SingleMCTSPlayer {
         double bestValue = -1;
 
         for (int i = 0; i < fatherNode.children.length; i++) {
-            double x = SingleMCTSPlayer.randomGenerator.nextDouble();
+            double x = randomGenerator.nextDouble();
             if (x > bestValue && fatherNode.children[i] == null) {
                 bestAction = i;
                 bestValue = x;
@@ -215,7 +215,7 @@ public class SingleMCTSPlayer {
         double _tabooBias = 0.0;
         int i = 0;
         boolean stateFound = false;
-        while ((!stateFound) && (i < SingleMCTSPlayer.memoryLength) && (this.pastAvatarPositions[i] != null)) {
+        while ((!stateFound) && (i < memoryLength) && (this.pastAvatarPositions[i] != null)) {
             if (this.pastAvatarPositions[i].equals(currentObservation.getAvatarPosition())) {
                 //if(this.midLevelManager.pastAvatarOrientations[i].equals(nextState.getAvatarOrientation())) {
                 _tabooBias += 0.5;

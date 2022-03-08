@@ -12,7 +12,7 @@ public class RuleGenerator extends AbstractRuleGenerator {
 	/**
 	 * Array contains all the simple interactions
 	 */
-	private String[] interactions = new String[] { "killSprite", "killAll", "killIfHasMore", "killIfHasLess",
+	private String[] interactions = { "killSprite", "killAll", "killIfHasMore", "killIfHasLess",
 			"killIfFromAbove", "killIfOtherHasMore", "spawnBehind", "stepBack", "spawnIfHasMore", "spawnIfHasLess",
 			"cloneSprite", "transformTo", "undoAll", "flipDirection", "transformToRandomChild", "updateSpawnType",
 			"removeScore", "addHealthPoints", "addHealthPointsToMax", "reverseDirection", "subtractHealthPoints",
@@ -45,24 +45,24 @@ public class RuleGenerator extends AbstractRuleGenerator {
 	 *            amount of time allowed
 	 */
 	public RuleGenerator(SLDescription sl, ElapsedCpuTimer time) {
-		this.usefulSprites = new ArrayList<String>();
+		this.usefulSprites = new ArrayList<>();
 		this.random = new Random();
 		String[][] currentLevel = sl.getCurrentLevel();
 
 		// Just get the useful sprites from the current level
-		for (int y = 0; y < currentLevel.length; y++) {
-			for (int x = 0; x < currentLevel[y].length; x++) {
-				String[] parts = currentLevel[y][x].split(",");
-				for (int i = 0; i < parts.length; i++) {
-					if (parts[i].trim().length() > 0) {
-						// Add the sprite if it doesn't exisit
-						if (!usefulSprites.contains(parts[i].trim())) {
-							usefulSprites.add(parts[i].trim());
-						}
-					}
-				}
-			}
-		}
+        for (String[] strings : currentLevel) {
+            for (String string : strings) {
+                String[] parts = string.split(",");
+                for (String part : parts) {
+                    if (!part.trim().isEmpty()) {
+                        // Add the sprite if it doesn't exisit
+                        if (!usefulSprites.contains(part.trim())) {
+                            usefulSprites.add(part.trim());
+                        }
+                    }
+                }
+            }
+        }
 		this.usefulSprites.add("EOS");
 		this.avatar = this.getAvatar(sl);
 	}
@@ -92,12 +92,12 @@ public class RuleGenerator extends AbstractRuleGenerator {
 	 */
 	private String getAvatar(SLDescription sl) {
 		SpriteData[] sprites = sl.getGameSprites();
-		for (int i = 0; i < this.usefulSprites.size(); i++) {
-			SpriteData s = this.getSpriteData(sprites, this.usefulSprites.get(i));
-			if (s != null && s.isAvatar) {
-				return this.usefulSprites.get(i);
-			}
-		}
+        for (String usefulSprite : this.usefulSprites) {
+            SpriteData s = this.getSpriteData(sprites, usefulSprite);
+            if (s != null && s.isAvatar) {
+                return usefulSprite;
+            }
+        }
 		return "";
 	}
 
@@ -111,11 +111,11 @@ public class RuleGenerator extends AbstractRuleGenerator {
 	 * @return current sprite data
 	 */
 	private SpriteData getSpriteData(SpriteData[] sprites, String name) {
-		for (int i = 0; i < sprites.length; i++) {
-			if (sprites[i].name.equalsIgnoreCase(name)) {
-				return sprites[i];
-			}
-		}
+        for (SpriteData sprite : sprites) {
+            if (sprite.name.equalsIgnoreCase(name)) {
+                return sprite;
+            }
+        }
 
 		return null;
 	}
@@ -130,8 +130,8 @@ public class RuleGenerator extends AbstractRuleGenerator {
 	 */
 	@Override
 	public String[][] generateRules(SLDescription sl, ElapsedCpuTimer time) {
-		ArrayList<String> interaction = new ArrayList<String>();
-		ArrayList<String> termination = new ArrayList<String>();
+		ArrayList<String> interaction = new ArrayList<>();
+		ArrayList<String> termination = new ArrayList<>();
 
 		// number of interactions in the game based on the number of sprites
 		int numberOfInteractions = (int) (this.usefulSprites.size() * (0.5 + 0.5 * this.random.nextDouble()));
@@ -151,7 +151,7 @@ public class RuleGenerator extends AbstractRuleGenerator {
 			interaction.add(this.usefulSprites.get(i1) + " " + this.usefulSprites.get(i2) + " > " +
 					this.interactions[this.random.nextInt(this.interactions.length)] + " " + scoreChange);
 			sl.testRules(getArray(interaction), getArray(termination));
-			while(sl.getErrors().size() > 0){
+			while(!sl.getErrors().isEmpty()){
 				interaction.remove(i);
 				interaction.add(this.usefulSprites.get(i1) + " " + this.usefulSprites.get(i2) + " > " +
 						this.interactions[this.random.nextInt(this.interactions.length)] + " " + scoreChange);
@@ -165,7 +165,7 @@ public class RuleGenerator extends AbstractRuleGenerator {
 		} else {
 		    String chosen = this.usefulSprites.get(this.random.nextInt(this.usefulSprites.size()));
 		    sl.testRules(getArray(interaction), getArray(termination));
-		    while(sl.getErrors().size() > 0){
+		    while(!sl.getErrors().isEmpty()){
 			termination.remove(termination.size() - 1);
 			termination.add("SpriteCounter stype=" + chosen + " limit=0 win=True");
 			sl.testRules(getArray(interaction), getArray(termination));

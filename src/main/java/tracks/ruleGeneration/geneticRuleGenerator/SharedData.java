@@ -166,7 +166,7 @@ public class SharedData {
 	/**
 	 * Array contains all interactions we want to mutate over
 	 */
-	public static String[] interactions = new String[]{
+	public static String[] interactions = {
 			"killSprite", "killAll", "killIfHasMore", "killIfHasLess", "killIfFromAbove",
 			"killIfOtherHasMore", "transformToSingleton", "spawnBehind",
 			"spawnIfHasMore", "spawnIfHasLess", "cloneSprite", "transformTo", "transformIfCounts", 
@@ -178,16 +178,16 @@ public class SharedData {
 	/** 
 	 * Array contains all terminations
 	 */
-	public static String[] terminations = new String[] {
+	public static String[] terminations = {
 		"SpriteCounter", "SpriteCounterMore", "MultiSpriteCounter",
 		"StopCounter", "Timeout"};
 	/**
 	 * Array contains all possible interaction parameter types
 	 */
-	public static String[] interactionParams = new String[] {
+	public static String[] interactionParams = {
 		"scoreChange", "stype", "limit", "resource", "stype_other", "forceOrientation", "spawnPoint",
 		"value", "geq", "leq"};
-	public static String[] terminationParams = new String[] {
+	public static String[] terminationParams = {
 		"stype", "stype1", "stype2", "stype3"
 	};
 

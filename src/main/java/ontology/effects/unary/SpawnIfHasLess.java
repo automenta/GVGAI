@@ -56,7 +56,7 @@ public class SpawnIfHasLess extends Effect {
     
     @Override
     public ArrayList<String> getEffectSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(stype!=null) result.add(stype);
     	
     	return result;

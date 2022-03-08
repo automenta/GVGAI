@@ -7,7 +7,6 @@ package tracks.singleLearning.utils;
 import core.competition.CompetitionParameters;
 import ontology.Types.LEARNING_SSO_TYPE;
 
-import java.io.IOException;
 import java.io.PrintStream;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -52,7 +51,7 @@ public class SocketComm extends Comm {
 
         } catch(java.net.BindException e)
         {
-            System.out.println(e.toString());
+            System.out.println(e);
             e.printStackTrace();
         }catch(Exception e)
         {
@@ -86,7 +85,7 @@ public class SocketComm extends Comm {
      *
      * @param msg message to send.
      */
-    public void commSend(String msg) throws IOException {
+    public void commSend(String msg) {
         String message = messageId + TOKEN_SEP + msg + lineSep;
         out.format(message);
         out.flush();
@@ -171,8 +170,8 @@ public class SocketComm extends Comm {
         if (in.hasNextLine()) {
             ret = in.nextLine();
             //System.out.println("Received in server: " + ret);
-            if (ret != null && ret.trim().length() > 0) {
-                String messageParts[] = ret.split(TOKEN_SEP);
+            if (ret != null && !ret.trim().isEmpty()) {
+                String[] messageParts = ret.split(TOKEN_SEP);
                 if (messageParts.length < 2) {
                     System.err.println("SocketComm: commRecv(): received message incomplete.");
                     return null;
@@ -183,18 +182,10 @@ public class SocketComm extends Comm {
                 if (messageParts.length >= 3) {
                     String ssoType = messageParts[2];
                     switch (ssoType) {
-                        case "JSON":
-                            this.lastSsoType = LEARNING_SSO_TYPE.JSON;
-                            break;
-                        case "IMAGE":
-                            this.lastSsoType = LEARNING_SSO_TYPE.IMAGE;
-                            break;
-                        case "BOTH":
-                            this.lastSsoType = LEARNING_SSO_TYPE.BOTH;
-                            break;
-                        default:
-                            System.err.println("SocketComm: commRecv(): This should never happen.");
-                            break;
+                        case "JSON" -> this.lastSsoType = LEARNING_SSO_TYPE.JSON;
+                        case "IMAGE" -> this.lastSsoType = LEARNING_SSO_TYPE.IMAGE;
+                        case "BOTH" -> this.lastSsoType = LEARNING_SSO_TYPE.BOTH;
+                        default -> System.err.println("SocketComm: commRecv(): This should never happen.");
                     }
                 }
 

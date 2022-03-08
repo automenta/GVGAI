@@ -49,8 +49,8 @@ public class Chaser extends RandomNPC
         super.loadDefaults();
         fleeing = false;
         maxDistance = -1;
-        targets = new ArrayList<VGDLSprite>();
-        actions = new ArrayList<Direction>();
+        targets = new ArrayList<>();
+        actions = new ArrayList<>();
     }
 
     public void postProcess()
@@ -77,7 +77,7 @@ public class Chaser extends RandomNPC
 
         //Choose randomly an action among the ones that allows me to chase.
         Direction act;
-        if(actions.size() == 0)
+        if(actions.isEmpty())
         {
             //unless, no actions really take me closer to anybody!
             act = getRandomMove(game);
@@ -157,14 +157,14 @@ public class Chaser extends RandomNPC
         targetSprite.stype = this.stype;
         targetSprite.itype = this.itype;
         targetSprite.maxDistance = this.maxDistance;
-        targetSprite.targets = new ArrayList<VGDLSprite>();
-        targetSprite.actions = new ArrayList<Direction>();
+        targetSprite.targets = new ArrayList<>();
+        targetSprite.actions = new ArrayList<>();
         super.copyTo(targetSprite);
     }
     
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(stype != null) result.add(stype);
     	
     	return result;

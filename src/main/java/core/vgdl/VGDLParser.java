@@ -63,9 +63,9 @@ public class VGDLParser {
 	 */
 	public VGDLParser() {
 		currentSet = Types.VGDL_GAME_DEF;
-		spriteOrderTmp = new ArrayList<Integer>();
-		singletonTmp = new ArrayList<Integer>();
-		constructors = new HashMap<Integer, SpriteContent>();
+		spriteOrderTmp = new ArrayList<>();
+		singletonTmp = new ArrayList<>();
+		constructors = new HashMap<>();
 		logger = Logger.getInstance();
 	}
 
@@ -92,7 +92,7 @@ public class VGDLParser {
 			try {
 				parseNodes(rootNode);
 			} catch (Exception e) {
-			    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e.toString()));
+			    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e));
 			}
 		}
 
@@ -120,7 +120,7 @@ public class VGDLParser {
 			try {
 				parseNodes(rootNode);
 			} catch (Exception e) {
-			    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e.toString()));
+			    logger.addMessage(new Message(Message.ERROR, "[PARSE ERROR] " + e));
 			}
 		}
 
@@ -138,30 +138,35 @@ public class VGDLParser {
 		for (Node n : rootNode.children) {
 			if (n.content.identifier.equals("ParameterSet")) {
 				parseParameterSet(n.children);
-				if (n.content.identifier.equals("SpriteSet")) {
-					try {
-						parseSpriteSet(n.children);
-					} catch (Exception e) {
-						logger.addMessage(new Message(Message.ERROR, "Sprite Set Error: " + e.toString()));
-					}
-				} else if (n.content.identifier.equals("InteractionSet")) {
-					try {
-						parseInteractionSet(n.children);
-					} catch (Exception e) {
-						logger.addMessage(new Message(Message.ERROR, "Interaction Set Error: " + e.getMessage()));
-					}
-				} else if (n.content.identifier.equals("LevelMapping")) {
-					try {
-						parseLevelMapping(n.children);
-					} catch (Exception e) {
-						logger.addMessage(new Message(Message.ERROR, "Level Mapping Error: " + e.toString()));
-					}
-				} else if (n.content.identifier.equals("TerminationSet")) {
-					try {
-						parseTerminationSet(n.children);
-					} catch (Exception e) {
-						logger.addMessage(new Message(Message.ERROR, "Termination Set Error: " + e.toString()));
-					}
+				switch (n.content.identifier) {
+					case "SpriteSet":
+						try {
+							parseSpriteSet(n.children);
+						} catch (Exception e) {
+							logger.addMessage(new Message(Message.ERROR, "Sprite Set Error: " + e));
+						}
+						break;
+					case "InteractionSet":
+						try {
+							parseInteractionSet(n.children);
+						} catch (Exception e) {
+							logger.addMessage(new Message(Message.ERROR, "Interaction Set Error: " + e.getMessage()));
+						}
+						break;
+					case "LevelMapping":
+						try {
+							parseLevelMapping(n.children);
+						} catch (Exception e) {
+							logger.addMessage(new Message(Message.ERROR, "Level Mapping Error: " + e));
+						}
+						break;
+					case "TerminationSet":
+						try {
+							parseTerminationSet(n.children);
+						} catch (Exception e) {
+							logger.addMessage(new Message(Message.ERROR, "Termination Set Error: " + e));
+						}
+						break;
 				}
 			}
 			// logger.printMessages();
@@ -177,14 +182,11 @@ public class VGDLParser {
 	private void parseNodes(Node rootNode) throws Exception {
 		// Parse here the normal blocks of VGDL.
 		for (Node n : rootNode.children) {
-			if (n.content.identifier.equals("SpriteSet")) {
-				parseSpriteSet(n.children);
-			} else if (n.content.identifier.equals("InteractionSet")) {
-				parseInteractionSet(n.children);
-			} else if (n.content.identifier.equals("LevelMapping")) {
-				parseLevelMapping(n.children);
-			} else if (n.content.identifier.equals("TerminationSet")) {
-				parseTerminationSet(n.children);
+			switch (n.content.identifier) {
+				case "SpriteSet" -> parseSpriteSet(n.children);
+				case "InteractionSet" -> parseInteractionSet(n.children);
+				case "LevelMapping" -> parseLevelMapping(n.children);
+				case "TerminationSet" -> parseTerminationSet(n.children);
 			}
 		}
 	}
@@ -199,17 +201,17 @@ public class VGDLParser {
 		this.game = currentGame;
 		String template = "    ";
 
-		ArrayList<String> msprites = new ArrayList<String>();
+		ArrayList<String> msprites = new ArrayList<>();
 		msprites.add("SpriteSet");
-		for(String key:spriteStruct.keySet()){
-			msprites.add(template + key + " >");
-			for(int i=0; i<spriteStruct.get(key).size(); i++){
-				if(sprites.containsKey(spriteStruct.get(key).get(i).trim())){
-					msprites.add(template + template + sprites.get(spriteStruct.get(key).get(i).trim()).trim());
-					sprites.remove(spriteStruct.get(key).get(i).trim());
+		for(Map.Entry<String, ArrayList<String>> entry : spriteStruct.entrySet()){
+			msprites.add(template + entry.getKey() + " >");
+			for(int i = 0; i< entry.getValue().size(); i++){
+				if(sprites.containsKey(entry.getValue().get(i).trim())){
+					msprites.add(template + template + sprites.get(entry.getValue().get(i).trim()).trim());
+					sprites.remove(entry.getValue().get(i).trim());
 				}
 				else{
-					Logger.getInstance().addMessage(new Message(Message.ERROR, "Undefined " + spriteStruct.get(key).get(i) + " in the provided sprite set."));
+					Logger.getInstance().addMessage(new Message(Message.ERROR, "Undefined " + entry.getValue().get(i) + " in the provided sprite set."));
 				}
 			}
 		}
@@ -217,7 +219,7 @@ public class VGDLParser {
 			msprites.add(template + value.trim());
 		}
 
-		Node spriteNode = indentTreeParser(msprites.toArray(new String[msprites.size()]));
+		Node spriteNode = indentTreeParser(msprites.toArray(new String[0]));
 		try {
 			parseSpriteSet(spriteNode.children);
 		} catch (Exception e) {
@@ -287,7 +289,7 @@ public class VGDLParser {
 			// handle whitespace and indentation
 			String content = line.trim();
 
-			if (content.length() > 0) {
+			if (!content.isEmpty()) {
 				updateSet(content); // Identify the set we are in.
 				char firstChar = content.charAt(0);
 				// figure out the indent of the line.
@@ -337,7 +339,7 @@ public class VGDLParser {
 		spriteOrderTmp.add(VGDLRegistry.GetInstance().getRegisteredSpriteValue("wall"));
 		spriteOrderTmp.add(VGDLRegistry.GetInstance().getRegisteredSpriteValue("avatar"));
 
-		_parseSprites(elements, null, new HashMap<String, String>(), new ArrayList<String>());
+		_parseSprites(elements, null, new HashMap<>(), new ArrayList<>());
 
 		// Set the order of sprites.
 		game.initSprites(spriteOrderTmp, singletonTmp, constructors);
@@ -367,11 +369,9 @@ public class VGDLParser {
 
 			// If this is a leaf node, set the information on Game to create
 			// objects of this type.
-			if (el.children.size() == 0) {
-				if (spriteOrderTmp.contains(intId)) {
-					// last one counts
-					spriteOrderTmp.remove(intId);
-				}
+			if (el.children.isEmpty()) {
+                // last one counts
+                spriteOrderTmp.remove(intId);
 				spriteOrderTmp.add(intId);
 			} else {
 				// This is the parent class of the next.
@@ -457,15 +457,13 @@ public class VGDLParser {
 
 			// If this is a leaf node, set the information on Game to create
 			// objects of this type.
-			if (el.children.size() == 0) {
+			if (el.children.isEmpty()) {
 				if (VERBOSE_PARSER)
 					System.out
 							.println("Defining: " + identifier + " " + sc.referenceClass + " " + el.content.toString());
 
-				if (spriteOrderTmp.contains(intId)) {
-					// last one counts
-					spriteOrderTmp.remove(intId);
-				}
+                // last one counts
+                spriteOrderTmp.remove(intId);
 				spriteOrderTmp.add(intId);
 
 				// Reset the parameters to the ones from the parent

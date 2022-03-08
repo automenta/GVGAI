@@ -100,9 +100,9 @@ public class WizardAvatar extends MovingAvatar
                 last_block_time+5 <= game.getGameTick()){
             this.physics.activeMovement(this, new Direction(0,1), -1);
 
-            for (int i = 0; i < itype.length; i++) {
-                    game.addSprite(itype[i], new Vector2d(this.rect.x + facing_dir.x()*this.lastrect.width*1.2,
-                        this.rect.y + facing_dir.y()*this.lastrect.height));
+            for (int j : itype) {
+                game.addSprite(j, new Vector2d(this.rect.x + facing_dir.x() * this.lastrect.width * 1.2,
+                        this.rect.y + facing_dir.y() * this.lastrect.height));
 
             }
             last_block_time = game.getGameTick();
@@ -123,7 +123,7 @@ public class WizardAvatar extends MovingAvatar
     public void postProcess()
     {
         //Define actions here first.
-        if(actions.size()==0)
+        if(actions.isEmpty())
         {
             actions.add(Types.ACTIONS.ACTION_LEFT);
             actions.add(Types.ACTIONS.ACTION_RIGHT);

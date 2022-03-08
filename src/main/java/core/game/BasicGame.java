@@ -47,10 +47,10 @@ public class BasicGame extends Game {
 		super();
 
 		// Add here whatever mappings are common for all BasicGames.
-		charMapping.put('w', new ArrayList<String>());
+		charMapping.put('w', new ArrayList<>());
 		charMapping.get('w').add("wall");
 
-		charMapping.put('A', new ArrayList<String>());
+		charMapping.put('A', new ArrayList<>());
 		charMapping.get('A').add("avatar");
 
 		// Default values for frame rate and maximum number of sprites allowed.
@@ -76,7 +76,7 @@ public class BasicGame extends Game {
 
 		if (obs != null) {
 			doPathf = true;
-			int obsArray[] = VGDLRegistry.GetInstance().explode(obs);
+			int[] obsArray = VGDLRegistry.GetInstance().explode(obs);
 			for (Integer it : obsArray)
 				obstacles.add(it);
 		}
@@ -103,11 +103,10 @@ public class BasicGame extends Game {
 	 */
 	public void buildStringLevel(String[] lines, int randomSeed) {
 		// Read the level description
-		String[] desc_lines = lines;
 
 		// Dimensions of the level read from the file.
-		size.width = desc_lines[0].length();
-		size.height = desc_lines.length;
+		size.width = lines[0].length();
+		size.height = lines.length;
 
 		if (square_size != -1) {
 			block_size = square_size;
@@ -121,17 +120,17 @@ public class BasicGame extends Game {
 		screenSize = new Dimension(size.width * block_size, size.height * block_size);
 
 		for (int i = 0; i < size.height; ++i) {
-			String line = desc_lines[i];
+			String line = lines[i];
 			if (line.length() < size.width) {
 				// This might happen. We just concat ' ' until size.
-				desc_lines[i] = completeLine(line, size.width - line.length(), " ");
+				lines[i] = completeLine(line, size.width - line.length(), " ");
 			}
 		}
 
-		ArrayList<VGDLSprite> avatars = new ArrayList<VGDLSprite>();
+		ArrayList<VGDLSprite> avatars = new ArrayList<>();
 		// All sprites are created and placed here:
 		for (int i = 0; i < size.height; ++i) {
-			String line = desc_lines[i];
+			String line = lines[i];
 
 			// For each character
 			for (int j = 0; j < size.width; ++j) {
@@ -145,9 +144,9 @@ public class BasicGame extends Game {
 							for (int y = -1; y <= 1; y++) {
 								if (Math.abs(x) != Math.abs(y)
 										&& (j + x >= 0 && j + x < size.width && i + y >= 0 && i + y < size.height)) {
-									if (charMapping.containsKey(desc_lines[i + y].charAt(j + x))) {
+									if (charMapping.containsKey(lines[i + y].charAt(j + x))) {
 										ArrayList<String> neighborTiles = charMapping
-												.get(desc_lines[i + y].charAt(j + x));
+												.get(lines[i + y].charAt(j + x));
 										if (neighborTiles.contains(obj)) {
 											similarTiles += Math.floor(Math.abs(x) * (x + 3) / 2)
 													+ Math.abs(y) * (y + 3) * 2;
@@ -169,13 +168,13 @@ public class BasicGame extends Game {
 						if (s.autotiling) {
 
 							ArrayList<Image> images = s.images.get("NONE");
-							if(images.size() > 0)
+							if(!images.isEmpty())
 								s.image = images.get(similarTiles);
 						}
 						if (s.randomtiling >= 0) {
 							Random random = new Random(randomSeed);
 							ArrayList<Image> allImages = s.images.get("NONE");
-							if (random.nextDouble() > s.randomtiling && allImages.size() > 0) {
+							if (random.nextDouble() > s.randomtiling && !allImages.isEmpty()) {
 								s.image = allImages.get(random.nextInt(allImages.size()));
 							}
 						}
@@ -190,15 +189,15 @@ public class BasicGame extends Game {
 		if (avatars.size() > no_players) {
 			Logger.getInstance().addMessage(new Message(Message.WARNING,
 					"No more than " + no_players + " avatar(s) allowed (Others are destroyed)."));
-			for(int i=0; i<this.spriteGroups.length; i++){
-				for(int j=no_players; j<avatars.size(); j++){
-					this.spriteGroups[i].removeSprite(avatars.get(j));
-				}
-			}
+            for (core.vgdl.SpriteGroup spriteGroup : this.spriteGroups) {
+                for (int j = no_players; j < avatars.size(); j++) {
+                    spriteGroup.removeSprite(avatars.get(j));
+                }
+            }
 		}
 
 		// Nobody has been killed... yet!
-		kill_list = new ArrayList<VGDLSprite>();
+		kill_list = new ArrayList<>();
 
 		// Generate the initial state observation.
 		this.createAvatars(-1);

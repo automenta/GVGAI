@@ -48,7 +48,7 @@ public class Agent extends AbstractPlayer {
 	final int totalGenerations = 30;
 	Random rng = new Random();
 
-	public class StateTuple implements Comparable<StateTuple> {
+	public static class StateTuple implements Comparable<StateTuple> {
 		public StateTuple(int x, double y) {
 			stateno = x;
 			statescore = y;
@@ -60,7 +60,7 @@ public class Agent extends AbstractPlayer {
 		public double statescore;
 	}
 
-	public class StateAndAncestor {
+	public static class StateAndAncestor {
 		public StateAndAncestor(StateObservation me, int ances) {
 			myState = me;
 			ancesNo = ances;
@@ -99,13 +99,13 @@ public class Agent extends AbstractPlayer {
 		// but even better if less resources (means we picked it up)
 		int noResources = 0;
 		if (resourcesPositions != null) {
-			for (int i = 0; i < resourcesPositions.length; i++) {
-				noResources += resourcesPositions[i].size();
-				if (resourcesPositions[i].size() > 0) {
-					Vector2d closestResPos = resourcesPositions[i].get(0).position;
+			for (ArrayList<Observation> resourcesPosition : resourcesPositions) {
+				noResources += resourcesPosition.size();
+				if (!resourcesPosition.isEmpty()) {
+					Vector2d closestResPos = resourcesPosition.get(0).position;
 					double distToResource = myPosition.dist(closestResPos);
 					// the farther away it is, the worst the stateVal will be
-					stateVal -= distToResource*5;
+					stateVal -= distToResource * 5;
 				}
 			}
 		}
@@ -114,9 +114,9 @@ public class Agent extends AbstractPlayer {
 		// better value if closer to closest portal of each type
 		// what if there is a wall between us and the portal? --> in 'zelda' this is why we die
 		if (portalPositions != null) {
-			for (int i = 0; i < portalPositions.length; i++) {
-				if (portalPositions[i].size() > 0) {
-					Vector2d closestPorPos = portalPositions[i].get(0).position;
+			for (ArrayList<Observation> portalPosition : portalPositions) {
+				if (!portalPosition.isEmpty()) {
+					Vector2d closestPorPos = portalPosition.get(0).position;
 					double distToPortal = myPosition.dist(closestPorPos);
 					// the farther away it is, the worst the stateVal will be
 					stateVal -= distToPortal / 5;
@@ -127,18 +127,18 @@ public class Agent extends AbstractPlayer {
 		// better value if less NPCs
 		int noNPC = 0;
 		if (npcPositions != null) {
-			for (int i = 0; i < npcPositions.length; i++) {
-				noNPC = npcPositions[i].size();
-				if (npcPositions[i].size() > 0) {
-					Vector2d closestNPCPos = npcPositions[i].get(0).position;
+			for (ArrayList<Observation> npcPosition : npcPositions) {
+				noNPC = npcPosition.size();
+				if (!npcPosition.isEmpty()) {
+					Vector2d closestNPCPos = npcPosition.get(0).position;
 					double distToNPC = myPosition.dist(closestNPCPos);
 					// to be a bit more *aggressive* on the gameplay, we will
 					// make our heuristic move us *closer* to NPCs, regardless of
 					// whether they are harmful or not
 					stateVal -= distToNPC / 80;
 				}
-				if (npcPositions[i].size() > 1) {
-					Vector2d farthestNPCPos = npcPositions[i].get(npcPositions[i].size()-1).position;
+				if (npcPosition.size() > 1) {
+					Vector2d farthestNPCPos = npcPosition.get(npcPosition.size() - 1).position;
 					double distToFar = myPosition.dist(farthestNPCPos);
 					//stateVal -= distToFar / 50;
 				}
@@ -155,12 +155,12 @@ public class Agent extends AbstractPlayer {
 	public Types.ACTIONS act(StateObservation origState, ElapsedCpuTimer origTime) {
 
 		// generate arraylist of potential future states
-		ArrayList<StateAndAncestor> population = new ArrayList<StateAndAncestor>();
-		for (int i = 0; i < populationSize; i++) { population.add( new StateAndAncestor (origState.copy(),i)); }
+		ArrayList<StateAndAncestor> population = new ArrayList<>();
+		for (int i = 0; i < populationSize; i++) { population.add(new StateAndAncestor(origState.copy(), i)); }
 
 		// for each of the generated states, make a randomized move, based on how many moves are available
 		int numAvailMoves = origState.getAvailableActions().size();
-		ArrayList<Types.ACTIONS> firstMove = new ArrayList<Types.ACTIONS>();
+		ArrayList<Types.ACTIONS> firstMove = new ArrayList<>();
 		for (int i = 0; i < populationSize; i++) {
 			int actNo = rng.nextInt(numAvailMoves);
 			//System.out.println("RNG: " + actNo);
@@ -175,13 +175,13 @@ public class Agent extends AbstractPlayer {
 		double remainingtime = origTime.remainingTimeMillis();
 		int bestActor = 0; 	// the index of the individual in the population who is best
 
-		ArrayList<StateTuple> stateScore = new ArrayList<StateTuple>();
+		ArrayList<StateTuple> stateScore = new ArrayList<>();
 		while ( generationNo < totalGenerations && remainingtime > 5.0 ) {
 			stateScore.clear();
 			// evaluate how good each of the individuals are
 			for (int i = 0; i < populationSize; i++) {
 				// state tuples have two things: an id (int) and a score (double)
-				stateScore.add( new StateTuple( i, stateEval(population.get(i).myState) ) );
+				stateScore.add(new StateTuple(i, stateEval(population.get(i).myState)));
 				remainingtime = origTime.remainingTimeMillis();
 				if (remainingtime < 3.0) break;
 			}
@@ -190,9 +190,9 @@ public class Agent extends AbstractPlayer {
 			if (remainingtime < 3.0) break;
 
 			// pick the best 'mu' individuals and replace the remaining 'lambda' individuals
-			ArrayList<StateTuple> toSortScores = new ArrayList<StateTuple>();
+			ArrayList<StateTuple> toSortScores = new ArrayList<>();
 
-			for (StateTuple p : stateScore) { toSortScores.add( new StateTuple(p.stateno, p.statescore) ); }
+			for (StateTuple p : stateScore) { toSortScores.add(new StateTuple(p.stateno, p.statescore)); }
 
 			// this will sort them in ascending order of their score
 			Collections.sort(toSortScores);
@@ -244,7 +244,6 @@ public class Agent extends AbstractPlayer {
 		}
 
 		// Return the 'next action' of the best individual in the population
-		Types.ACTIONS finalAction = firstMove.get(bestActor);
 
 		//System.out.println("Best actor: " + bestActor);
 		//System.out.println(origTime.remainingTimeMillis()); // if this is 0, then we are out of time
@@ -252,7 +251,7 @@ public class Agent extends AbstractPlayer {
 		//System.out.println("-------");
 		//System.out.println("-------");
 
-		return finalAction;
+		return firstMove.get(bestActor);
 	}
 
 }

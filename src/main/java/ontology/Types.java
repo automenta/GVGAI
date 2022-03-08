@@ -33,7 +33,7 @@ public class Types {
     public static final Vector2d LEFT = new Vector2d(-1, 0);
     public static final Vector2d UP = new Vector2d(0, -1);
     public static final Vector2d DOWN = new Vector2d(0, 1);
-    public static final Vector2d[] BASEDIRS = new Vector2d[]{UP, LEFT, DOWN, RIGHT};
+    public static final Vector2d[] BASEDIRS = {UP, LEFT, DOWN, RIGHT};
 
     public static final Direction DNIL = new Direction(-1, -1);
     public static final Direction DNONE = new Direction(0, 0);
@@ -41,7 +41,7 @@ public class Types {
     public static final Direction DLEFT = new Direction(-1, 0);
     public static final Direction DUP = new Direction(0, -1);
     public static final Direction DDOWN = new Direction(0, 1);
-    public static final Direction[] DBASEDIRS = new Direction[]{DUP, DLEFT, DDOWN, DRIGHT};
+    public static final Direction[] DBASEDIRS = {DUP, DLEFT, DDOWN, DRIGHT};
 
     public static final int NUM_LEARNING_LEVELS = 5;
     public static final int NUM_TRAINING_LEVELS = 3; //NUM_EVALUATION = NUM_LEARNING_LEVELS - NUM_TRAINING_LEVELS
@@ -87,12 +87,12 @@ public class Types {
     }
 
     public static int DEFAULT_SINGLE_PLAYER_KEYIDX = 0;
-    public static int[][] ALL_ACTIONS = new int[][]{    {KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN,
+    public static int[][] ALL_ACTIONS = {    {KeyEvent.VK_UP, KeyEvent.VK_LEFT, KeyEvent.VK_DOWN,
                                                          KeyEvent.VK_RIGHT, KeyEvent.VK_SPACE, KeyEvent.VK_ESCAPE},
                                                         {KeyEvent.VK_W, KeyEvent.VK_A, KeyEvent.VK_S,
                                                          KeyEvent.VK_D, KeyEvent.VK_SHIFT, KeyEvent.VK_ESCAPE}};
 
-    public static enum ACTIONS {
+    public enum ACTIONS {
         ACTION_NIL(new int[]{0, 0}),
         ACTION_UP(new int[]{KeyEvent.VK_UP, KeyEvent.VK_W}),
         ACTION_LEFT(new int[]{KeyEvent.VK_LEFT, KeyEvent.VK_A}),
@@ -132,24 +132,24 @@ public class Types {
         }
         
         public static boolean isMoving(ACTIONS value){
-        	return value == ACTIONS.ACTION_UP || value == ACTIONS.ACTION_DOWN ||
-        			value == ACTIONS.ACTION_LEFT || value == ACTIONS.ACTION_RIGHT;
+        	return value == ACTION_UP || value == ACTION_DOWN ||
+        			value == ACTION_LEFT || value == ACTION_RIGHT;
         }
 
         public static ACTIONS reverseACTION(ACTIONS value){
-        	if(value == ACTIONS.ACTION_DOWN){
-        		return ACTIONS.ACTION_UP;
+        	if(value == ACTION_DOWN){
+        		return ACTION_UP;
         	}
-        	if(value == ACTIONS.ACTION_UP){
-        		return ACTIONS.ACTION_DOWN;
+        	if(value == ACTION_UP){
+        		return ACTION_DOWN;
         	}
-        	if(value == ACTIONS.ACTION_RIGHT){
-        		return ACTIONS.ACTION_LEFT;
+        	if(value == ACTION_RIGHT){
+        		return ACTION_LEFT;
         	}
-        	if(value == ACTIONS.ACTION_LEFT){
-        		return ACTIONS.ACTION_RIGHT;
+        	if(value == ACTION_LEFT){
+        		return ACTION_RIGHT;
         	}
-        	return ACTIONS.ACTION_NIL;
+        	return ACTION_NIL;
         }
 
         public static ACTIONS fromVector(Direction move) {
@@ -165,7 +165,7 @@ public class Types {
     }
 
 
-    public static enum WINNER {
+    public enum WINNER {
         PLAYER_DISQ(-100),
         NO_WINNER(-1),
         PLAYER_LOSES(0),
@@ -179,11 +179,11 @@ public class Types {
     /**
      * This is an enum type that describes the potential states of the game
      */
-    public static enum GAMESTATES{
+    public enum GAMESTATES{
         INIT_STATE, ACT_STATE, END_STATE, ABORT_STATE, CHOOSE_LEVEL
     }
 
-    public static enum MOVEMENT {
+    public enum MOVEMENT {
         STILL,
         ROTATE,
         MOVE
@@ -192,7 +192,7 @@ public class Types {
     /**
      * This is an enum type that specifies the type of sso required
      */
-    public static enum LEARNING_SSO_TYPE {
+    public enum LEARNING_SSO_TYPE {
         IMAGE,
         JSON,
         BOTH
@@ -224,7 +224,7 @@ public class Types {
     public static final Color RANDOM = new Color(new Random().nextInt(256), new Random().nextInt(256), new Random().nextInt(256));
 
 
-    public static final Integer[] COLOR_DISC = new Integer[]{20, 80, 140, 200};
+    public static final Integer[] COLOR_DISC = {20, 80, 140, 200};
 
     public static final int TYPE_AVATAR = 0;
     public static final int TYPE_RESOURCE = 1;

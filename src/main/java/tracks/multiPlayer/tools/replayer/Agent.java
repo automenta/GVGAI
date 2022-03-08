@@ -35,7 +35,7 @@ public class Agent extends AbstractMultiPlayer {
      */
     public Agent(StateObservationMulti so, ElapsedCpuTimer elapsedTimer, int playerID)
     {
-        actions = new ArrayList<Types.ACTIONS>();
+        actions = new ArrayList<>();
     }
 
     /**

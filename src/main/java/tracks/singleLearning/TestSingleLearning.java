@@ -28,8 +28,7 @@ public class TestSingleLearning {
         /** Get arguments */
         Map<String, List<String>> params = new HashMap<>();
         List<String> options = null;
-        for (int i = 0; i < args.length; i++) {
-            final String a = args[i];
+        for (final String a : args) {
             if (a.charAt(0) == '-') {
                 if (a.length() < 2) {
                     System.err.println("Error at argument " + a);
@@ -39,8 +38,7 @@ public class TestSingleLearning {
                 params.put(a.substring(1), options);
             } else if (options != null) {
                 options.add(a);
-            }
-            else {
+            } else {
                 System.err.println("Illegal parameter usage");
                 return;
             }
@@ -92,14 +90,14 @@ public class TestSingleLearning {
 
 
         //Building the command line
-        String cmd[] = new String[]{scriptFile, agentName, port, clientType, clientDir};
+        String[] cmd = {scriptFile, agentName, port, clientType, clientDir};
 
 
         // Available games:
         String gridGamesPath = gamesDir + "/examples/gridphysics/";
         String contGamesPath = gamesDir + "/examples/contphysics/";
         String gamesPath;
-        String games[];
+        String[] games;
         boolean GRID_PHYSICS = true;
 
         // All public games (gridphysics)

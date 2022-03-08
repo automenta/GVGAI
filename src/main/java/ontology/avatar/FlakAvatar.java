@@ -59,7 +59,7 @@ public class FlakAvatar extends HorizontalAvatar
     public void postProcess()
     {
         //Define actions here first.
-        if(actions.size()==0)
+        if(actions.isEmpty())
         {
             actions.add(Types.ACTIONS.ACTION_USE);
             actions.add(Types.ACTIONS.ACTION_LEFT);
@@ -139,7 +139,7 @@ public class FlakAvatar extends HorizontalAvatar
     
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(ammo != null) result.add(ammo);
     	if(stype != null) result.add(stype);
     	

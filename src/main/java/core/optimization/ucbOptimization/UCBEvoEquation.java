@@ -31,23 +31,18 @@ public class UCBEvoEquation implements UCBEquation {
 	public double evaluate(double[] values, double[] parameters) {
 		if(parameters.length < this.lengthParameters()){
 			double[] temp = new double[this.lengthParameters()];
-			for(int i=0; i<parameters.length; i++){
-				temp[i] = parameters[i];
-			}
+            System.arraycopy(parameters, 0, temp, 0, parameters.length);
 			parameters = temp;
 		}
-		
-        double uctValue = 
-        		parameters[0] * (values[Helper.TREE_CHILD_VALUE] / (values[Helper.TREE_CHILD_VISITS] + this.epsilon)) + 
-        		parameters[1] * values[Helper.TREE_CHILD_MAX_VALUE] + 
-        		parameters[2] * Math.pow(Math.log(values[Helper.TREE_PARENT_VISITS])/values[Helper.TREE_CHILD_VISITS] + this.epsilon, parameters[3]) +
-        		parameters[4] * Math.pow(values[Helper.SPACE_EXPLORATION_VALUE] + this.epsilon, parameters[5]) + 
-        		parameters[6] * Math.pow(values[Helper.DISTANCE_MIN_NPC] + this.epsilon, parameters[7]) +
-        		parameters[8] * Math.pow(values[Helper.DISTANCE_MIN_PORTAL] + this.epsilon, parameters[9]) +
-        		parameters[10] * Math.pow(values[Helper.DISTANCE_MIN_MOVABLE] + this.epsilon, parameters[11]) +
-        		parameters[12] * Math.pow(values[Helper.DISTANCE_MIN_RESOURCE] + this.epsilon, parameters[13]);
-		
-		return uctValue;
+
+        return parameters[0] * (values[Helper.TREE_CHILD_VALUE] / (values[Helper.TREE_CHILD_VISITS] + this.epsilon)) + 
+        parameters[1] * values[Helper.TREE_CHILD_MAX_VALUE] + 
+        parameters[2] * Math.pow(Math.log(values[Helper.TREE_PARENT_VISITS])/values[Helper.TREE_CHILD_VISITS] + this.epsilon, parameters[3]) +
+        parameters[4] * Math.pow(values[Helper.SPACE_EXPLORATION_VALUE] + this.epsilon, parameters[5]) + 
+        parameters[6] * Math.pow(values[Helper.DISTANCE_MIN_NPC] + this.epsilon, parameters[7]) +
+        parameters[8] * Math.pow(values[Helper.DISTANCE_MIN_PORTAL] + this.epsilon, parameters[9]) +
+        parameters[10] * Math.pow(values[Helper.DISTANCE_MIN_MOVABLE] + this.epsilon, parameters[11]) +
+        parameters[12] * Math.pow(values[Helper.DISTANCE_MIN_RESOURCE] + this.epsilon, parameters[13]);
 	}
 	/**
 	 * print the ucb equation using the current parameters
@@ -58,16 +53,14 @@ public class UCBEvoEquation implements UCBEquation {
 	public String toString(double[] parameters) {
 		if(parameters.length < this.lengthParameters()){
 			double[] temp = new double[this.lengthParameters()];
-			for(int i=0; i<parameters.length; i++){
-				temp[i] = parameters[i];
-			}
+            System.arraycopy(parameters, 0, temp, 0, parameters.length);
 			parameters = temp;
 		}
 		double[] temp = new double[parameters.length];
 		boolean[] term = new boolean[parameters.length];
 		for(int i=0; i<parameters.length; i++){
 			temp[i] = (int)parameters[i] + ((int)((parameters[i] - (int)parameters[i]) * 1000)) / 1000.0;
-			term[i] = !(Math.abs(temp[i]) <= this.epsilon);
+			term[i] = !(Math.abs(temp[i]) <= epsilon);
 		}
 		
 		String result = "UCB = " +

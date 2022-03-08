@@ -177,7 +177,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	 */
 	private void buildLevelLayout(LevelData level, LevelCoverData coverPercentage){
 		ArrayList<String> solidSprites = gameAnalyzer.getSolidSprites();
-		if(solidSprites.size() > 0){
+		if(!solidSprites.isEmpty()){
 			//picking a random solid object to use
 			String randomSolid = solidSprites.get(random.nextInt(solidSprites.size()));
 			
@@ -209,7 +209,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 				}
 				//start construct a corridor of random length
 				int length = 2 + random.nextInt(3);
-				ArrayList<Point> directions = new ArrayList<Point>(Arrays.asList(new Point[]{new Point(1,0), new Point(-1,0), new Point(0,-1), new Point(0,1)}));
+				ArrayList<Point> directions = new ArrayList<>(Arrays.asList(new Point(1, 0), new Point(-1, 0), new Point(0, -1), new Point(0, 1)));
 				while(length > 0){
 					if(random.nextDouble() < shuffleDirectionPercentage){
 						Collections.shuffle(directions);
@@ -228,8 +228,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 							break;
 						}
 						else{
-							continue;
-						}
+                        }
 					}
 
 					//if no direction can done just stop this corridor
@@ -248,7 +247,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	 * @return		the size of the internal level (without the borders if exists)
 	 */
 	private double getArea(LevelData level){
-		if(gameAnalyzer.getSolidSprites().size() > 0){
+		if(!gameAnalyzer.getSolidSprites().isEmpty()){
 			return (level.getWidth() - 2) * (level.getHeight() - 2);
 		}
 		
@@ -261,7 +260,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	 * @return				return list of all these points
 	 */
 	private ArrayList<Point> getUpperLowerPoints(ArrayList<Point> freePositions){
-		ArrayList<Point> result = new ArrayList<Point>();
+		ArrayList<Point> result = new ArrayList<>();
 		int minY = 100000;
 		int maxY = 0;
 		for(Point p:freePositions){
@@ -327,7 +326,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	 * @return		hashmap for all sprite names with the associated numbers
 	 */
 	private HashMap<String, Integer> calculateNumberOfObjects(GameDescription game, LevelData level){
-		HashMap<String, Integer> objects = new HashMap<String, Integer>();
+		HashMap<String, Integer> objects = new HashMap<>();
 		ArrayList<SpriteData> allSprites = game.getAllSpriteData();
 
 		//add all sprite names as keys in the hashmap
@@ -367,8 +366,8 @@ public class LevelGenerator extends AbstractLevelGenerator{
 		int currentNum = 0;
 		int increase = 0;
 		
-		ArrayList<String> currentSprites = new ArrayList<String>();
-		ArrayList<String> totalSprites = new ArrayList<String>();
+		ArrayList<String> currentSprites = new ArrayList<>();
+		ArrayList<String> totalSprites = new ArrayList<>();
 		ArrayList<Point> positions = level.getAllFreeSpots();
 
 		for(TerminationData ter:termination){
@@ -389,7 +388,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 			increase = totalNum + 1 - currentNum;
 			
 			//if the condition is satisfied add more sprites to make till be unstaisfied
-			if(currentSprites.size() > 0){
+			if(!currentSprites.isEmpty()){
 				for(int i = 0; i < increase; i++){
 					int index = random.nextInt(positions.size());
 					Point pos = positions.remove(index);
@@ -424,7 +423,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	 * @return					the index of the possible far position
 	 */
 	private int getFarLocation(ArrayList<Point> freePosition, Point avatarPosition){
-		ArrayList<Double> distProb = new ArrayList<Double>();
+		ArrayList<Double> distProb = new ArrayList<>();
 		double totalValue = 0;
 		distProb.add(avatarPosition.getDistance(freePosition.get(0)));
 		totalValue += distProb.get(0);
@@ -584,7 +583,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	@Override
 	public String generateLevel(GameDescription game, ElapsedCpuTimer elapsedTimer) {
 		int size = 0;
-		if(gameAnalyzer.getSolidSprites().size() > 0){
+		if(!gameAnalyzer.getSolidSprites().isEmpty()){
 			size = 2;
 		}
 		
@@ -592,8 +591,8 @@ public class LevelGenerator extends AbstractLevelGenerator{
 				levelSizeRandomPercentage * random.nextDouble()) + size);
 		int length = (int)Math.max(minSize + size, game.getAllSpriteData().size() * ((levelSizeMaxPercentage - levelSizeRandomPercentage) + 
 				levelSizeRandomPercentage * random.nextDouble()) + size);
-		width = (int)Math.min(width, maxSize + size);
-		length = (int)Math.min(length, maxSize + size);
+		width = Math.min(width, maxSize + size);
+		length = Math.min(length, maxSize + size);
 		
 		return generateLevel(game, elapsedTimer, width, length);
 	}

@@ -1,24 +1,22 @@
 package tools;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 public class OptClearJar {
-    public static void main(String args[]) throws FileNotFoundException, UnsupportedEncodingException {
+    public static void main(String[] args) throws IOException {
 	String dataRuns = "examples/dataRuns.txt";
 	String outputPath = "outputs/";
 
 	String[] data = new tools.IO().readFile(dataRuns);
-	PrintWriter writer = new PrintWriter(dataRuns, "UTF-8");
+	PrintWriter writer = new PrintWriter(dataRuns, StandardCharsets.UTF_8);
 	writer.println(data[0]);
 	writer.println("current runs: 0");
 	writer.close();
 
 	File[] files = new File(outputPath).listFiles();
-	for (int i = 0; i < files.length; i++) {
-	    files[i].delete();
-	}
+        for (File file : files) {
+            file.delete();
+        }
     }
 }

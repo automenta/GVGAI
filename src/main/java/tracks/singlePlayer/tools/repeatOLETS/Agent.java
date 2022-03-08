@@ -76,8 +76,8 @@ public class Agent extends AbstractPlayer {
 	automatedPlayer = new tracks.singlePlayer.advanced.olets.Agent(stateObs, elapsedTimer);
 	random = new Random();
 
-	actDist = new ArrayList<Double>();
-	nilDist = new ArrayList<Double>();
+	actDist = new ArrayList<>();
+	nilDist = new ArrayList<>();
 
 	double[] actionValues = { 0.0, 0.15518707483, 0.459821428571, 0.211734693878, 0.0442176870748, 0.0248724489796,
 		0.0218962585034, 0.0182823129252, 0.014880952381, 0.0108418367347, 0.0112670068027, 0.00914115646259,
@@ -106,7 +106,7 @@ public class Agent extends AbstractPlayer {
      * @return return CDF array
      */
     private ArrayList<Double> getCDF(ArrayList<Double> dist) {
-	ArrayList<Double> array = new ArrayList<Double>();
+	ArrayList<Double> array = new ArrayList<>();
 
 	array.add(dist.get(0));
 	for (int i = 1; i < dist.size(); i++) {
@@ -158,8 +158,8 @@ public class Agent extends AbstractPlayer {
 		automatedPlayer = new tracks.singlePlayer.advanced.olets.Agent(stateObs, elapsedTimer);
 		random = new Random();
 
-		actDist = new ArrayList<Double>();
-		nilDist = new ArrayList<Double>();
+		actDist = new ArrayList<>();
+		nilDist = new ArrayList<>();
 
 		double[] actionValues = { 0.0, 0.15518707483, 0.459821428571, 0.211734693878, 0.0442176870748,
 			0.0248724489796, 0.0218962585034, 0.0182823129252, 0.014880952381, 0.0108418367347,
@@ -194,44 +194,43 @@ public class Agent extends AbstractPlayer {
 	}
 
 	// handling different states of the controller
-	switch (currentState) {
-	// give the control to adrienctx to decide what i gonna do
-	case DECIDE_ACTION:
-	    int temp = getNextEmpericalDist(nilDist);
-
-	    if (pastAction == ACTIONS.ACTION_NIL || (pastAction != ACTIONS.ACTION_NIL && temp == 0)) {
-		currentAction = automatedPlayer.act(stateObs, elapsedTimer);
-		moves = getNextEmpericalDist(actDist);
-		if (moves > 1) {
-		    currentState = REPEAT_MOVE;
-		}
-	    } else {
-		currentAction = ACTIONS.ACTION_NIL;
-		nilMoves = temp;
-		if (temp > 1) {
-		    currentState = REPEAT_NIL;
-		}
-	    }
-	    break;
-	// repeat the previous move multiple time
-	case REPEAT_MOVE:
-	    currentAction = pastAction;
-	    if (moves >= 1) {
-		moves -= 1;
-	    } else {
-		currentState = DECIDE_ACTION;
-	    }
-	    break;
-	// repeat the nil move between two different actions
-	case REPEAT_NIL:
-	    currentAction = ACTIONS.ACTION_NIL;
-	    if (nilMoves >= 1) {
-		nilMoves -= 1;
-	    } else {
-		currentState = DECIDE_ACTION;
-	    }
-	    break;
-	}
+        switch (currentState) {
+            // give the control to adrienctx to decide what i gonna do
+            case DECIDE_ACTION -> {
+                int temp = getNextEmpericalDist(nilDist);
+                if (pastAction == ACTIONS.ACTION_NIL || (pastAction != ACTIONS.ACTION_NIL && temp == 0)) {
+                    currentAction = automatedPlayer.act(stateObs, elapsedTimer);
+                    moves = getNextEmpericalDist(actDist);
+                    if (moves > 1) {
+                        currentState = REPEAT_MOVE;
+                    }
+                } else {
+                    currentAction = ACTIONS.ACTION_NIL;
+                    nilMoves = temp;
+                    if (temp > 1) {
+                        currentState = REPEAT_NIL;
+                    }
+                }
+            }
+            // repeat the previous move multiple time
+            case REPEAT_MOVE -> {
+                currentAction = pastAction;
+                if (moves >= 1) {
+                    moves -= 1;
+                } else {
+                    currentState = DECIDE_ACTION;
+                }
+            }
+            // repeat the nil move between two different actions
+            case REPEAT_NIL -> {
+                currentAction = ACTIONS.ACTION_NIL;
+                if (nilMoves >= 1) {
+                    nilMoves -= 1;
+                } else {
+                    currentState = DECIDE_ACTION;
+                }
+            }
+        }
 
 	pastAction = currentAction;
 

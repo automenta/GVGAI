@@ -50,17 +50,18 @@ public class GTSAlgo {
             while ((line = reader.readLine()) != null) {
                 if (!line.isEmpty()) {
                     // Assumption: There's a colon in each line
-                    String info [] = line.split(": ");
+                    String[] info = line.split(": ");
                     switch (info[0]) {
-                        case "Exploration":     exploration = GTSParams.EXPLORATION.valueOf(info[1]);     break;
-                        case "Expansion":       expansion   = GTSParams.EXPANSION.valueOf(info[1]);       break;
-                        case "Removal":         removal     = GTSParams.REMOVAL.valueOf(info[1]);         break;
-                        case "Simulation":      simulation  = GTSParams.SIMULATION.valueOf(info[1]);      break;
-                        case "Evaluation":      evaluation  = GTSParams.EVALUATION.valueOf(info[1]);      break;
-                        case "Backpropagation": backprop    = GTSParams.BACKPROPAGATION.valueOf(info[1]); break;
-                        case "Selection":       selection   = GTSParams.SELECTION.valueOf(info[1]);       break;
-                        case "Depth Limit":     depthLimit  = Integer.parseInt(info[1]);                  break;
-                        default: break;
+                        case "Exploration" -> exploration = GTSParams.EXPLORATION.valueOf(info[1]);
+                        case "Expansion" -> expansion = GTSParams.EXPANSION.valueOf(info[1]);
+                        case "Removal" -> removal = GTSParams.REMOVAL.valueOf(info[1]);
+                        case "Simulation" -> simulation = GTSParams.SIMULATION.valueOf(info[1]);
+                        case "Evaluation" -> evaluation = GTSParams.EVALUATION.valueOf(info[1]);
+                        case "Backpropagation" -> backprop = GTSParams.BACKPROPAGATION.valueOf(info[1]);
+                        case "Selection" -> selection = GTSParams.SELECTION.valueOf(info[1]);
+                        case "Depth Limit" -> depthLimit = Integer.parseInt(info[1]);
+                        default -> {
+                        }
                     }
                 }
             }
@@ -96,7 +97,7 @@ public class GTSAlgo {
     // (1) Initialize the root, run the algorithm, and return the decision
     public Types.ACTIONS eval (StateObservation stateObs, ElapsedCpuTimer elapsedTimer) {
         // Initialize the frontier collection
-        ArrayList<GTSNode> states = new ArrayList<GTSNode>();
+        ArrayList<GTSNode> states = new ArrayList<>();
 
         // Keep track of the root of the state tree
         GTSNode root = new GTSNode (stateObs, null);
@@ -107,7 +108,7 @@ public class GTSAlgo {
         // While there's still time, explore the tree using GTS
         while (elapsedTimer.remainingTimeMillis() > 3.0) {
             // Check if there are still states to explore
-            if (states.size() == 0) {
+            if (states.isEmpty()) {
                 System.out.println("No more states (we've evaluated all"
                                    + "possibilities in our decision space).");
                 break;
@@ -136,17 +137,13 @@ public class GTSAlgo {
         switch (exploration) {
             // First: Select the node at the front of the ArrayList
             // This mimics the behavior of a FIFO queue (for BFS)
-            case FIRST:
-                nodeIndex   = 0;
-                currentNode = states.get(nodeIndex);
-                break;
 
             // Last: Select the node at the end of the ArrayList
             // This mimics the behavior of a LIFO stack (for DFS)
-            case LAST:
-                nodeIndex   = states.size() - 1;
+            case LAST -> {
+                nodeIndex = states.size() - 1;
                 currentNode = states.get(nodeIndex);
-                break;
+            }
 
             // High: Select the node that has the highest reward in the ArrayList
             // This takes O(n) time to traverse the ArrayList to make a decision!
@@ -154,7 +151,7 @@ public class GTSAlgo {
             //*/ with high reward -- if the branch shares the reward of a leaf, then
             //*/ this will always just pick the leaf
             //**// Need to initialize leaves with values!
-            case HIGH:
+            case HIGH -> {
                 int highIndex = 0;
                 double highReward = states.get(highIndex).getReward();
                 for (int i = 0; i < states.size(); i++) {
@@ -163,16 +160,16 @@ public class GTSAlgo {
                         highReward = states.get(i).getReward();
                     }
                 }
-                nodeIndex   = highIndex;
+                nodeIndex = highIndex;
                 currentNode = states.get(nodeIndex);
-                break;
+            }
 
             // Low: Select the node that has the lowest reward in the ArrayList
             // This takes O(n) time to traverse the ArrayList to make a decision
             // Think about this one: won't low reward just pick the most recently added
             // node in the tree, since it's initialized to a reward of 0?
             //**// Need to initialize leaves with values!
-            case LOW:
+            case LOW -> {
                 int lowIndex = 0;
                 double lowReward = states.get(lowIndex).getReward();
                 for (int i = 0; i < states.size(); i++) {
@@ -181,12 +178,12 @@ public class GTSAlgo {
                         lowReward = states.get(i).getReward();
                     }
                 }
-                nodeIndex   = lowIndex;
+                nodeIndex = lowIndex;
                 currentNode = states.get(nodeIndex);
-                break;
+            }
 
             // UCT: Will pick the deepest unexpanded node in the tree based on UCT
-            case UCT:
+            case UCT -> {
                 // Start traversal at the root node
                 currentNode = states.get(0);
                 boolean hasAllChildren = true;
@@ -214,8 +211,8 @@ public class GTSAlgo {
                         double reward = child.getReward();
                         int childVisits = child.visitCount;
                         // The below is based on the UCT equation!
-                        double thisValue = (reward) / (childVisits + this.epsilon) +
-                                           weight * Math.sqrt(Math.log(totalVisits + 1)/(childVisits + this.epsilon));
+                        double thisValue = (reward) / (childVisits + epsilon) +
+                                weight * Math.sqrt(Math.log(totalVisits + 1) / (childVisits + epsilon));
                         if (thisValue > bestValue) {
                             bestValue = thisValue;
                             bestIndex = i;
@@ -239,14 +236,13 @@ public class GTSAlgo {
                         }
                     }
                 }
-                break;
+            }
 
             // Default: Select first node from frontier
-            default:
-                nodeIndex   = 0;
+            default -> {
+                nodeIndex = 0;
                 currentNode = states.get(nodeIndex);
-                break;
-
+            }
         }
 
         ///////////////////////////////////////////////////////////////////////////////////////////
@@ -256,8 +252,9 @@ public class GTSAlgo {
         // Next, check removal parameter to see whether we remove or not
         if (nodeIndex != -1) {
             switch (removal) {
-                case YES: states.remove(nodeIndex); break;
-                case NO: default: break;
+                case YES -> states.remove(nodeIndex);
+                case NO -> {
+                }
             }
         }
 
@@ -366,9 +363,6 @@ public class GTSAlgo {
             double reward = 0;
             switch (evaluation) {
                 // Points: Reward is just the score
-                case POINTS:
-                    reward = finalState.getGameScore();
-                    break;
 
                 // Win: Add 1 to the reward if this node is a winning state
                 case WIN:
@@ -404,32 +398,27 @@ public class GTSAlgo {
             while (currentNode.parent != null) {
                 switch (backprop) {
                     // High: Propagate the max reward seen so far
-                    case HIGH:
-                        currentNode.setRewardMax(reward);
-                        currentNode.incrementVisitCount();
-                        currentNode = currentNode.parent;
-                        break;
 
                     // Increment: Add reward to each node as you go up the tree
-                    case INCREMENT:
+                    case INCREMENT -> {
                         currentNode.incrementReward(reward);
                         currentNode.incrementVisitCount();
                         currentNode = currentNode.parent;
-                        break;
+                    }
 
                     // Low: Propagate the lowest reward seen so far
-                    case LOW:
+                    case LOW -> {
                         currentNode.setRewardMin(reward);
                         currentNode.incrementVisitCount();
                         currentNode = currentNode.parent;
-                        break;
+                    }
 
                     // Default: Propagate Max
-                    default:
+                    default -> {
                         currentNode.setRewardMax(reward);
                         currentNode.incrementVisitCount();
                         currentNode = currentNode.parent;
-                        break;
+                    }
                 }
             }
         }
@@ -446,7 +435,7 @@ public class GTSAlgo {
 
         switch (selection) {
             // High: Select the node with the highest reward
-            case HIGH:
+            case HIGH -> {
                 double bestReward = -Double.MAX_VALUE;
                 for (int i = 0; i < root.children.length; i++) {
                     if (root.children[i] != null && bestReward < root.children[i].getReward()) {
@@ -454,10 +443,10 @@ public class GTSAlgo {
                         bestReward = root.children[i].getReward();
                     }
                 }
-                break;
+            }
 
             // Low: Select the node with the lowest reward
-            case LOW:
+            case LOW -> {
                 double lowReward = Double.MAX_VALUE;
                 for (int i = 0; i < root.children.length; i++) {
                     if (root.children[i] != null && lowReward > root.children[i].getReward()) {
@@ -465,10 +454,10 @@ public class GTSAlgo {
                         lowReward = root.children[i].getReward();
                     }
                 }
-                break;
+            }
 
             // Most Visits: Select the node that's been visited the most
-            case MOSTVISITS:
+            case MOSTVISITS -> {
                 double mostVisits = -1;
                 for (int i = 0; i < root.children.length; i++) {
                     if (root.children[i] != null && mostVisits < root.children[i].getReward()) {
@@ -476,11 +465,11 @@ public class GTSAlgo {
                         mostVisits = root.children[i].getReward();
                     }
                 }
-                break;
+            }
 
             // Default: Just select first action
-            default:
-                break;
+            default -> {
+            }
         }
 
         return root.thisState.getAvailableActions().get(action);

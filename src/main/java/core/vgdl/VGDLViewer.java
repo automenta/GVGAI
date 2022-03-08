@@ -54,8 +54,7 @@ public class VGDLViewer extends JComponent
         this.game = game;
         this.size = game.getScreenSize();
         this.player = player;
-        if (player instanceof LearningPlayer) {
-            LearningPlayer learningPlayer = (LearningPlayer) player;
+        if (player instanceof LearningPlayer learningPlayer) {
             Types.LEARNING_SSO_TYPE ssoType = learningPlayer.getLearningSsoType();
             if (ssoType == Types.LEARNING_SSO_TYPE.IMAGE ||
                 ssoType == Types.LEARNING_SSO_TYPE.BOTH) {
@@ -114,8 +113,7 @@ public class VGDLViewer extends JComponent
             this.spriteGroups[i].copyAllSprites(spriteGroupsGame[i].getSprites());
         }
         this.repaint();
-        if (player instanceof LearningPlayer) {
-            LearningPlayer learningPlayer = (LearningPlayer) player;
+        if (player instanceof LearningPlayer learningPlayer) {
             Types.LEARNING_SSO_TYPE ssoType = learningPlayer.getLearningSsoType();
 
             if (ssoType == Types.LEARNING_SSO_TYPE.IMAGE ||

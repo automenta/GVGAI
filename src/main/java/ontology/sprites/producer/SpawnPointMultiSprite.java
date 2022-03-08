@@ -40,7 +40,7 @@ public class SpawnPointMultiSprite extends SpriteProducer
         //Parse the arguments.
         this.parseParameters(cnt);
 
-        int notItypesArray[] = VGDLRegistry.GetInstance().explode(stypes);
+        int[] notItypesArray = VGDLRegistry.GetInstance().explode(stypes);
         itypes = new ArrayList<>();
         for(Integer it : notItypesArray)
             itypes.add(it);
@@ -112,8 +112,7 @@ public class SpawnPointMultiSprite extends SpriteProducer
         SpawnPointMultiSprite targetSprite = (SpawnPointMultiSprite) target;
 
         targetSprite.itypes = new ArrayList<>();
-        for(Integer it : this.itypes)
-            targetSprite.itypes.add(it);
+        targetSprite.itypes.addAll(this.itypes);
 
         targetSprite.prob = this.prob;
         targetSprite.total = this.total;

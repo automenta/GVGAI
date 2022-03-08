@@ -64,9 +64,9 @@ public class PipeComm extends Comm {
     public String commRecv() throws IOException {
         String ret = input.readLine();
         //System.out.println("Received in server: " + ret);
-        if(ret != null && ret.trim().length() > 0)
+        if(ret != null && !ret.trim().isEmpty())
         {
-            String messageParts[] = ret.split(TOKEN_SEP);
+            String[] messageParts = ret.split(TOKEN_SEP);
             if(messageParts.length < 2) {
                 return null;
             }
@@ -89,5 +89,3 @@ public class PipeComm extends Comm {
     }
 
 }
-
-

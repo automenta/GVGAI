@@ -68,7 +68,7 @@ public class TransformIfCount extends TransformTo {
     
     @Override
     public ArrayList<String> getEffectSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
         if(stype!=null) result.add(stype);
         if(stypeCount!=null) result.add(stypeCount);
         if(estype!=null) result.add(estype);

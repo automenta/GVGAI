@@ -4,7 +4,6 @@ import core.content.SpriteContent;
 import core.game.Game;
 import core.vgdl.VGDLSprite;
 import ontology.Types;
-import tools.Direction;
 import tools.Vector2d;
 
 import java.awt.*;
@@ -106,14 +105,14 @@ public class LOSChaser extends Chaser
         targetSprite.stype = this.stype;
         targetSprite.itype = this.itype;
         targetSprite.maxDistance = this.maxDistance;
-        targetSprite.targets = new ArrayList<VGDLSprite>();
-        targetSprite.actions = new ArrayList<Direction>();
+        targetSprite.targets = new ArrayList<>();
+        targetSprite.actions = new ArrayList<>();
         super.copyTo(targetSprite);
     }
     
     @Override
     public ArrayList<String> getDependentSprites(){
-    	ArrayList<String> result = new ArrayList<String>();
+    	ArrayList<String> result = new ArrayList<>();
     	if(stype != null) result.add(stype);
     	
     	return result;

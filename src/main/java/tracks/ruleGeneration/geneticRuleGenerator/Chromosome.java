@@ -65,7 +65,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	public Chromosome(String[][] ruleset, SLDescription sl) {
 		this.ruleset = ruleset;
 		this.sl = sl;
-		this.fitness = new ArrayList<Double>();
+		this.fitness = new ArrayList<>();
 		fitness.add(0.0);
 		fitness.add(0.0);
 		this.badFrames = 0;
@@ -150,7 +150,7 @@ public class Chromosome implements Comparable<Chromosome>{
 			    // add the new interaction to the interaction set
 			    interactionSet.add(newInteraction);
 			    // remove weird space from the arrayList
-			    interactionSet.removeIf(s -> s == null);
+			    interactionSet.removeIf(Objects::isNull);
 			    // stream the list back into itself to avoid duplicate rules from having been created
 				interactionSet = (ArrayList<String>) interactionSet.stream().distinct().collect(Collectors.toList());
 				// redefine the interaction array with the interaction array list
@@ -168,7 +168,7 @@ public class Chromosome implements Comparable<Chromosome>{
 				String deleteFromMe = interactionSet.get(point);
 				// find all parameters for this rule, note: there may be none.  In that case we do nothing.
 				String[] splitDeleteFromMe = deleteFromMe.split("\\s+");
-				ArrayList<String> params = new ArrayList<String>();
+				ArrayList<String> params = new ArrayList<>();
 				for(String param : splitDeleteFromMe) {
 					// we can assume that if one of the split strings contains an = sign that it is a parameter
 					if(param.contains("=")){
@@ -176,7 +176,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					}
 				}
 				// if no params do nothing
-				if(params.size() == 0) {
+				if(params.isEmpty()) {
 					
 				} 
 				// if one param, remove it
@@ -201,7 +201,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					interactionSet.set(point, fixedRule);
 				}
 			    // remove weird space from the arrayList
-			    interactionSet.removeIf(s -> s == null);
+			    interactionSet.removeIf(Objects::isNull);
 			    // stream the list back into itself to avoid duplicate rules from having been created
 				interactionSet = (ArrayList<String>) interactionSet.stream().distinct().collect(Collectors.toList());
 				// redefine the interaction array with the interaction array list
@@ -216,7 +216,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					interactionSet.remove(point);
 				}
 			    // remove weird space from the arrayList
-			    interactionSet.removeIf(s -> s == null);
+			    interactionSet.removeIf(Objects::isNull);
 			    // stream the list back into itself to avoid duplicate rules from having been created
 				interactionSet = (ArrayList<String>) interactionSet.stream().distinct().collect(Collectors.toList());
 				// redefine the interaction array with the interaction array list
@@ -236,7 +236,7 @@ public class Chromosome implements Comparable<Chromosome>{
 				String modifyFromMe = interactionSet.get(point);
 				// find all parameters for this rule, note: there may be none.  In that case we do nothing.
 				String[] splitModifyFromMe = modifyFromMe.split("\\s+");
-				ArrayList<String> ps = new ArrayList<String>();
+				ArrayList<String> ps = new ArrayList<>();
 				for(String param : splitModifyFromMe) {
 					// we can assume that if one of the split strings contains an = sign that it is a parameter
 					if(param.contains("=")){
@@ -244,7 +244,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					}
 				}
 				// if no params do nothing
-				if(ps.size() == 0) {
+				if(ps.isEmpty()) {
 					
 				} else {
 					// pick one of the rules and don't include it, but include the others
@@ -274,7 +274,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					interactionSet.set(point, fixedRule);
 				}
 			    // remove weird space from the arrayList
-			    interactionSet.removeIf(s -> s == null);
+			    interactionSet.removeIf(Objects::isNull);
 			    // stream the list back into itself to avoid duplicate rules from having been created
 				interactionSet = (ArrayList<String>) interactionSet.stream().distinct().collect(Collectors.toList());
 				// redefine the interaction array with the interaction array list
@@ -384,7 +384,7 @@ public class Chromosome implements Comparable<Chromosome>{
 			    // add the new termination to the termination set
 			    terminationSet.add(nTermination);
 			    // remove weird space from the arrayList
-			    terminationSet.removeIf(s -> s == null);
+			    terminationSet.removeIf(Objects::isNull);
 			    // stream the list back into itself to avoid duplicate rules from having been created
 				terminationSet = (ArrayList<String>) terminationSet.stream().distinct().collect(Collectors.toList());
 				// redefine the termination array with the termination array list
@@ -411,7 +411,7 @@ public class Chromosome implements Comparable<Chromosome>{
 				String deleteFromMe = terminationSet.get(point);
 				// find all parameters for this rule, note: there may be none.  In that case we do nothing.
 				String[] splitDeleteFromMe = deleteFromMe.split("\\s+");
-				ArrayList<String> params = new ArrayList<String>();
+				ArrayList<String> params = new ArrayList<>();
 				for(String param : splitDeleteFromMe) {
 					// we can assume that if one of the split strings contains an = sign that it is a parameter
 					// the extra rule here is that it is not a "limit" or a "win" param. We cannot remove those!
@@ -420,7 +420,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					}
 				}
 				// if no params do nothing
-				if(params.size() == 0) {
+				if(params.isEmpty()) {
 					
 				} 
 				else {
@@ -435,7 +435,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					terminationSet.set(point, fixedRule);
 				}
 			    // remove weird space from the arrayList
-				terminationSet.removeIf(s -> s == null);
+				terminationSet.removeIf(Objects::isNull);
 			    // stream the list back into itself to avoid duplicate rules from having been created
 				terminationSet = (ArrayList<String>) terminationSet.stream().distinct().collect(Collectors.toList());
 				// redefine the interaction array with the interaction array list
@@ -458,7 +458,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					terminationSet.remove(point);
 				}
 			    // remove weird space from the arrayList
-				terminationSet.removeIf(s -> s == null);
+				terminationSet.removeIf(Objects::isNull);
 			    // stream the list back into itself to avoid duplicate rules from having been created
 				terminationSet = (ArrayList<String>) terminationSet.stream().distinct().collect(Collectors.toList());
 				// redefine the interaction array with the interaction array list
@@ -486,7 +486,7 @@ public class Chromosome implements Comparable<Chromosome>{
 				String modifyFromMe = terminationSet.get(point);
 				// find all parameters for this rule, note: there may be none.  In that case we do nothing.
 				String[] splitModifyFromMe = modifyFromMe.split("\\s+");
-				ArrayList<String> ps = new ArrayList<String>();
+				ArrayList<String> ps = new ArrayList<>();
 				for(String param : splitModifyFromMe) {
 					// we can assume that if one of the split strings contains an = sign that it is a parameter
 					// we can change limit and win parameters now (but this will cause us to have special rules)!
@@ -495,7 +495,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					}
 				}
 				// if no params do nothing
-				if(ps.size() == 0) {
+				if(ps.isEmpty()) {
 					
 				} else {
 					// pick one of the rules and don't include it, but include the others
@@ -542,7 +542,7 @@ public class Chromosome implements Comparable<Chromosome>{
 					terminationSet.set(point, fixedRule);
 				}
 			    // remove weird space from the arrayList
-				terminationSet.removeIf(s -> s == null);
+				terminationSet.removeIf(Objects::isNull);
 			    // stream the list back into itself to avoid duplicate rules from having been created
 				terminationSet = (ArrayList<String>) terminationSet.stream().distinct().collect(Collectors.toList());
 				// redefine the interaction array with the interaction array list
@@ -595,32 +595,21 @@ public class Chromosome implements Comparable<Chromosome>{
 		String[][] nRuleset = new String[ruleset.length][];
 		nRuleset[0] = new String[ruleset[0].length];
 		nRuleset[1] = new String[ruleset[1].length];
-		for(int i = 0; i < ruleset[0].length; i++) {
-			nRuleset[0][i] = ruleset[0][i];
-		}
-		for(int i = 0; i < ruleset[1].length; i++) {
-			nRuleset[1][i] = ruleset[1][i];
-		}
-		Chromosome c = new Chromosome(nRuleset, sl);
-		return c;
+		System.arraycopy(ruleset[0], 0, nRuleset[0], 0, ruleset[0].length);
+		System.arraycopy(ruleset[1], 0, nRuleset[1], 0, ruleset[1].length);
+		return new Chromosome(nRuleset, sl);
 	}
 
 	public void cleanseChromosome() {
-		Set<String> cleanser = new HashSet<String>();
 		// read the rulest into the Set cleanser
-		for(int i = 0; i < ruleset[0].length; i++) {
-			cleanser.add(ruleset[0][i]);
-		}
+		Set<String> cleanser = new HashSet<>(Arrays.asList(ruleset[0]));
 		ruleset[0] = new String[0];
 
 		// read the cleanser back into the ruleset
 		ruleset[0] = cleanser.toArray(ruleset[0]);
 		
 		// read the termination set into the Set cleanser
-		cleanser = new HashSet<String>();
-		for(int i = 0; i < ruleset[1].length; i++) {
-			cleanser.add(ruleset[1][i]);
-		}
+		cleanser = new HashSet<>(Arrays.asList(ruleset[1]));
 		ruleset[1] = new String[0];
 		// read the cleanser back into the ruleset
 		ruleset[1] = cleanser.toArray(ruleset[1]);
@@ -637,9 +626,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		// if the condition doesnt exist, make it so
 		if(!hasCondition) {
 			String[] tempTerm = new String[ruleset[1].length + 1];
-			for(int j = 0; j < ruleset[1].length; j++) {
-				tempTerm[j] = ruleset[1][j];
-			}
+			System.arraycopy(ruleset[1], 0, tempTerm, 0, ruleset[1].length);
 			// add condition
 			String termy = "SpriteCounter stype=" + avatarName[0].name + " limit=0 win=";
 			// roll for win or lose condition
@@ -692,7 +679,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		// reset bad frames
 		this.badFrames = 0;
 		// unique events that occurred in all the game simulations
-		Set<String> events = new HashSet<String>();
+		Set<String> events = new HashSet<>();
 		StateObservation stateObs = feasibilityTest();
 		if(constrainFitness < 0.7) {
 			// failed feasibility
@@ -734,11 +721,9 @@ public class Chromosome implements Comparable<Chromosome>{
 				}
 				
 				TreeSet s1 = tempState.getEventsHistory();
-				Iterator<Event> iter1 = s1.iterator();
-				while(iter1.hasNext()) {
-					Event e = iter1.next();
-					events.add(e.activeTypeId + "" + e.passiveTypeId);
-				}
+                for (Event e : (Iterable<Event>) s1) {
+                    events.add(e.activeTypeId + String.valueOf(e.passiveTypeId));
+                }
 				score = -200;
 			}
 			 
@@ -766,11 +751,9 @@ public class Chromosome implements Comparable<Chromosome>{
 				
 				// gather all unique interactions between objects in the naive agent
 				TreeSet s1 = randomState.getEventsHistory();
-				Iterator<Event> iter1 = s1.iterator();
-				while(iter1.hasNext()) {
-					Event e = iter1.next();
-					events.add(e.activeTypeId + "" + e.passiveTypeId);
-				}
+                for (Event e : (Iterable<Event>) s1) {
+                    events.add(e.activeTypeId + String.valueOf(e.passiveTypeId));
+                }
 				score = -200;
 			}
 			
@@ -799,11 +782,9 @@ public class Chromosome implements Comparable<Chromosome>{
 				
 				// gather all unique interactions between objects in the best agent
 				TreeSet s1 = naiveState.getEventsHistory();
-				Iterator<Event> iter1 = s1.iterator();
-				while(iter1.hasNext()) {
-					Event e = iter1.next();
-					events.add(e.activeTypeId + "" + e.passiveTypeId);
-					}
+                for (Event e : (Iterable<Event>) s1) {
+                    events.add(e.activeTypeId + String.valueOf(e.passiveTypeId));
+                }
 				score = -200;
 			}
 			double badFramePercent = badFrames / (1.0 * frameCount);
@@ -887,7 +868,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	 * @return	the current children from the crossover process
 	 */
 	public ArrayList<Chromosome> crossover(Chromosome c){
-		ArrayList<Chromosome> children = new ArrayList<Chromosome>();
+		ArrayList<Chromosome> children = new ArrayList<>();
 		children.add(this.clone());
 		children.add(c.clone());
 
@@ -915,9 +896,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		nRuleSetTwo[0] = new String[nSizeTwo];
 
 		// swapping interaction for ruleset one
-		for(int i = 0; i < pointOne; i++) {
-			nRuleSetOne[0][i] = ruleset[0][i];
-		}
+		System.arraycopy(ruleset[0], 0, nRuleSetOne[0], 0, pointOne);
 		int counter = pointTwo;
 		for(int i = pointOne; i < nSizeOne; i++) {
 			nRuleSetOne[0][i] = c.getRuleset()[0][counter];
@@ -950,9 +929,7 @@ public class Chromosome implements Comparable<Chromosome>{
 		children.get(1).setRuleset(nRuleSetTwo);
 
 		// swapping terminations for ruleset one
-		for(int i = 0; i < pointOne; i++) {
-			nRuleSetOne[1][i] = ruleset[1][i];
-		}
+		System.arraycopy(ruleset[1], 0, nRuleSetOne[1], 0, pointOne);
 		counter = pointTwo;
 		for(int i = pointOne; i < nSizeOne; i++) {
 			nRuleSetOne[1][i] = c.getRuleset()[1][counter];
@@ -994,7 +971,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	 * @return the number of times sprites were off screen
 	 */
 	private int checkIfOffScreen(StateObservation stateObs) {
-		ArrayList<Observation> allSprites = new ArrayList<Observation>();
+		ArrayList<Observation> allSprites = new ArrayList<>();
 		ArrayList<Observation>[] temp = stateObs.getNPCPositions();
 		if(temp != null) {
 			for(ArrayList<Observation> list : temp) {
@@ -1044,13 +1021,7 @@ public class Chromosome implements Comparable<Chromosome>{
 	@Override
 	public int compareTo(Chromosome o) {
 		if(this.constrainFitness < 1 || o.constrainFitness < 1){
-			if(this.constrainFitness < o.constrainFitness){
-				return 1;
-			}
-			if(this.constrainFitness > o.constrainFitness){
-				return -1;
-			}
-			return 0;
+			return Double.compare(o.constrainFitness, this.constrainFitness);
 		}
 
 		double firstFitness = 0;
@@ -1060,15 +1031,8 @@ public class Chromosome implements Comparable<Chromosome>{
 			secondFitness += o.fitness.get(i);
 		}
 
-		if(firstFitness > secondFitness){
-			return -1;
-		}
+		return Double.compare(secondFitness, firstFitness);
 
-		if(firstFitness < secondFitness){
-			return 1;
-		}
-
-		return 0;
 	}
 	/**
 	 * Returns the fitness of the chromosome

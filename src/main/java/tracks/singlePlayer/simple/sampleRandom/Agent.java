@@ -27,7 +27,7 @@ public class Agent extends AbstractPlayer {
     /**
      * Observation grid.
      */
-    protected ArrayList<Observation> grid[][];
+    protected ArrayList<Observation>[][] grid;
 
     /**
      * block size
@@ -113,8 +113,8 @@ public class Agent extends AbstractPlayer {
     {
         if(positions != null){
             System.out.print(str + ":" + positions.length + "(");
-            for (int i = 0; i < positions.length; i++) {
-                System.out.print(positions[i].size() + ",");
+            for (ArrayList<Observation> position : positions) {
+                System.out.print(position.size() + ",");
             }
             System.out.print("); ");
         }else System.out.print(str + ": 0; ");

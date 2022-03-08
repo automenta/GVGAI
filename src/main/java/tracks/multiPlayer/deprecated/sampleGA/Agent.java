@@ -10,6 +10,7 @@ import tracks.multiPlayer.tools.heuristics.StateHeuristicMulti;
 import tracks.multiPlayer.tools.heuristics.WinScoreHeuristic;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.concurrent.TimeoutException;
@@ -35,7 +36,7 @@ public class Agent extends AbstractMultiPlayer {
 
     private ElapsedCpuTimer timer;
 
-    private int genome[][][][];
+    private int[][][][] genome;
     private HashMap<Integer, Types.ACTIONS>[] action_mapping;
     private HashMap<Types.ACTIONS, Integer>[] r_action_mapping;
     protected Random randomGenerator;
@@ -173,8 +174,7 @@ public class Agent extends AbstractMultiPlayer {
         }
 
         numSimulations++;
-        double score = Math.pow(GAMMA, depth) * heuristic.evaluateState(stateObs, id);
-        return score;
+        return Math.pow(GAMMA, depth) * heuristic.evaluateState(stateObs, id);
 
 
     }
@@ -185,9 +185,7 @@ public class Agent extends AbstractMultiPlayer {
         for (int i = 0; i < no_players; i++) {
             maxScores[i] = new double[stateObs.getAvailableActions(i).size()];
 
-            for (int j = 0; j < maxScores[i].length; j++) {
-                maxScores[i][j] = Double.NEGATIVE_INFINITY;
-            }
+            Arrays.fill(maxScores[i], Double.NEGATIVE_INFINITY);
         }
 
         outerloop:
@@ -228,10 +226,8 @@ public class Agent extends AbstractMultiPlayer {
             }
         }
 
-        Types.ACTIONS maxAction = this.action_mapping[id].get(Utils.argmax(maxScores[id]));
 
-
-        return maxAction;
+        return this.action_mapping[id].get(Utils.argmax(maxScores[id]));
 
     }
 
@@ -255,9 +251,7 @@ public class Agent extends AbstractMultiPlayer {
         this.timer = elapsedTimer;
         numSimulations = 0;
 
-        Types.ACTIONS lastGoodAction = microbial(stateObs, SIMULATION_DEPTH, new WinScoreHeuristic(stateObs), 100);
-
-        return lastGoodAction;
+        return microbial(stateObs, SIMULATION_DEPTH, new WinScoreHeuristic(stateObs), 100);
     }
 
 

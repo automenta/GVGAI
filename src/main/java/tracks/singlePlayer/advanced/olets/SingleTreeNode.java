@@ -145,7 +145,7 @@ public class SingleTreeNode {
      */
     public void refreshTree() {
         for (SingleTreeNode aChildren : this.children) {
-            if (!(aChildren == null)) {
+            if (aChildren != null) {
                 aChildren.setNodeDepth(this.getNodeDepth() + 1);
                 aChildren.totValue = aChildren.totValue / aChildren.nVisits;
                 aChildren.nVisits = 1;

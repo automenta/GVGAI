@@ -161,11 +161,11 @@ public class LevelGenerator extends AbstractLevelGenerator{
 		//and it should be in between maxSize and minSize
 		int width = (int)Math.max(minSize, sprites.size() * (1 + 0.25 * random.nextDouble()));
 		int length = (int)Math.max(minSize, sprites.size() * (1 + 0.25 * random.nextDouble()));
-		width = (int)Math.min(width, maxSize);
-		length = (int)Math.min(length, maxSize);
+		width = Math.min(width, maxSize);
+		length = Math.min(length, maxSize);
 		
-		ArrayList<Character> avatar = new ArrayList<Character>();
-		ArrayList<Character> choices = new ArrayList<Character>();
+		ArrayList<Character> avatar = new ArrayList<>();
+		ArrayList<Character> choices = new ArrayList<>();
 		for(Map.Entry<Character, ArrayList<String>> pair:game.getLevelMapping().entrySet()){
 			boolean avatarExists = false;
 			//check if the avatar is found in this level  mapping
@@ -188,7 +188,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 			}
 		}
 		
-		ArrayList<DataPoint> dataPoints = new ArrayList<DataPoint>();
+		ArrayList<DataPoint> dataPoints = new ArrayList<>();
 
 		//add level borders based on static variable includeBorders
 		if(includeBorders){
@@ -201,7 +201,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 		}
 		
 		//if no avatar is defined in the level mapping section use 'A' to add it
-		if(avatar.size() == 0){
+		if(avatar.isEmpty()){
 			avatar.add('A');
 		}
 		addUnique(dataPoints, width, length, avatar.get(random.nextInt(avatar.size())));
@@ -237,7 +237,7 @@ public class LevelGenerator extends AbstractLevelGenerator{
 	 * character associated with it
 	 * @author AhmedKhalifa
 	 */
-	private class DataPoint{
+	private static class DataPoint{
 		public int x;
 		public int y;
 		public char c;

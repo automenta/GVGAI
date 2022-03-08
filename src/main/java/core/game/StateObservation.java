@@ -50,8 +50,7 @@ public class StateObservation {
      * @return a copy of the state observation.
      */
     public StateObservation copy() {
-        StateObservation copyObs = new StateObservation(model.copy(), this.playerID);
-        return copyObs;
+        return new StateObservation(model.copy(), this.playerID);
     }
 
     /**

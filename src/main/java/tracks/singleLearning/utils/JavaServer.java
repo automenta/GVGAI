@@ -28,8 +28,7 @@ public class JavaServer {
         /** Get arguments */
         Map<String, List<String>> params = new HashMap<>();
         List<String> options = null;
-        for (int i = 0; i < args.length; i++) {
-            final String a = args[i];
+        for (final String a : args) {
             if (a.charAt(0) == '-') {
                 if (a.length() < 2) {
                     System.err.println("Error at argument " + a);
@@ -39,8 +38,7 @@ public class JavaServer {
                 params.put(a.substring(1), options);
             } else if (options != null) {
                 options.add(a);
-            }
-            else {
+            } else {
                 System.err.println("Illegal parameter usage");
                 return;
             }
@@ -66,11 +64,7 @@ public class JavaServer {
             String imgDir = params.get("imgDir").get(0);
             IMG_PATH = imgDir + "/" + IMG_PATH;
         }
-        if (params.containsKey("visuals")) {
-            visuals = true;
-        } else {
-            visuals = false;
-        }
+        visuals = params.containsKey("visuals");
         /** Now prepare to start */
         ElapsedWallTimer wallClock = new ElapsedWallTimer();
 
@@ -78,14 +72,14 @@ public class JavaServer {
         String port = CompetitionParameters.SOCKET_PORT + "";
 
         //Building the command line
-        String cmd[] = new String[]{null, null, port, clientType};
+        String[] cmd = {null, null, port, clientType};
 
 
         // Available games:
         String gridGamesPath = gamesDir + "/examples/gridphysics/";
         String contGamesPath = gamesDir + "/examples/contphysics/";
         String gamesPath;
-        String games[];
+        String[] games;
         boolean GRID_PHYSICS = true;
 
 //        System.out.println("[LOG] Server asked to run at port: " + port + " where games are IN " + new File(gamesDir+ "/examples").getAbsolutePath());

@@ -19,7 +19,7 @@ public class KeyPulse extends KeyHandler {
     private boolean[] pulses = new boolean[1000];
 
     //Queue with pulses, to be mapped into actions as they were created (on key releases).
-    private LinkedList<Pulse> pulsesFIFO[];
+    private LinkedList<Pulse>[] pulsesFIFO;
 
     private HashMap<Integer, Integer> keyRecord;
 
@@ -29,7 +29,7 @@ public class KeyPulse extends KeyHandler {
         keyRecord = new HashMap<>();
         pulsesFIFO = new LinkedList[no_players];
         for(int i = 0; i < no_players; ++i)
-            pulsesFIFO[i] = new LinkedList<Pulse>();
+            pulsesFIFO[i] = new LinkedList<>();
     }
 
     //Sets the mask for this cycle. In this KeyHandler, only one action per frame is guaranteed:
@@ -63,7 +63,7 @@ public class KeyPulse extends KeyHandler {
     //Polls from the FIFO queue, if there's any action to apply.
     private void poll(int playerID)
     {
-        if(pulsesFIFO[playerID].size() > 0)
+        if(!pulsesFIFO[playerID].isEmpty())
             key_mask[pulsesFIFO[playerID].poll().key] = true;
     }
 
@@ -87,7 +87,7 @@ public class KeyPulse extends KeyHandler {
     }
 
     //Private class to handle complete presses (down and up)
-    private class Pulse{
+    private static class Pulse{
         int key;
 
         public Pulse(int key)  {

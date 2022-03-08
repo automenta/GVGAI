@@ -31,7 +31,7 @@ public class SpriteGroup
     public SpriteGroup(int itype)
     {
         this.itype = itype;
-        sprites = new ArrayList<VGDLSprite>(100);
+        sprites = new ArrayList<>(100);
     }
 
     /**
@@ -51,8 +51,7 @@ public class SpriteGroup
      */
     public void addAllSprites(Collection<VGDLSprite> spritesToAdd)
     {
-        for(VGDLSprite sp : spritesToAdd)
-            sprites.add(sp);
+        sprites.addAll(spritesToAdd);
     }
 
 

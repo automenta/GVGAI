@@ -25,7 +25,7 @@ public class IO
      */
     public String[] readFile(String filename)
     {
-        ArrayList<String> lines = new ArrayList<String>();
+        ArrayList<String> lines = new ArrayList<>();
         try{
             BufferedReader in = new BufferedReader(new FileReader(filename));
             String line = null;
@@ -35,10 +35,10 @@ public class IO
             in.close();
         }catch(Exception e)
         {
-            System.out.println("Error reading the file " + filename + ": " + e.toString());
+            System.out.println("Error reading the file " + filename + ": " + e);
             e.printStackTrace();
             return null;
         }
-        return lines.toArray(new String[lines.size()]);
+        return lines.toArray(new String[0]);
     }
 }

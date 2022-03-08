@@ -42,10 +42,10 @@ public class ParameterContent extends Content
         this.line = line;
 
         //Init structures of node content.
-        parameters = new HashMap<String, String>();
+        parameters = new HashMap<>();
 
         //Take the pieces and the first one is the name that defines the content
-        String pieces[] = line.split(" ");
+        String[] pieces = line.split(" ");
 
         if(pieces.length < 2)
         {
@@ -62,7 +62,7 @@ public class ParameterContent extends Content
             String piece = pieces[i].trim();
             if(piece.contains("="))
             {
-                String keyValue[] = piece.split("=");
+                String[] keyValue = piece.split("=");
                 String key = keyValue[0];
                 String value = keyValue[1];
 
@@ -79,7 +79,7 @@ public class ParameterContent extends Content
     public static ParameterContent create(String line)
     {
         ParameterContent pc = new ParameterContent(line);
-        if(pc.parameters.size() == 0)
+        if(pc.parameters.isEmpty())
             return pc; //This happens when parsing lines like "ParameterSet"
 
         String[] valuesToRead = (pc.parameters.get("values")).split(":");

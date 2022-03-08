@@ -16,7 +16,7 @@ public class ErrorTestingMultiplayer {
 
 	// Available games:
 	String gamesPath = "examples/2player/";
-	String games[] = new String[] {};
+	String[] games = {};
 
 	// All public games
 	games = new String[] { "accelerator", "akkaarrh", "asteroids", "beekeeper", "bombergirl", // 0-4
