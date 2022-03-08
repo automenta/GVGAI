@@ -1,0 +1,8 @@
+Exploration: UCT
+Expansion: RANDOM
+Removal: NO
+Simulation: RANDOM
+Evaluation: WINLOSSPOINTS
+Backpropagation: INCREMENT
+Selection: MOSTVISITS
+Depth Limit: 10

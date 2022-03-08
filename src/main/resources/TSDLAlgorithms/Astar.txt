@@ -1,0 +1,8 @@
+Exploration: LOW
+Expansion: ALL
+Removal: YES
+Simulation: NONE
+Evaluation: DISTANCE
+Backpropagation: LOW
+Selection: LOW
+Depth Limit: 10
